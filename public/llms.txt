@@ -1,0 +1,23 @@
+# Tarun Sisodia
+
+> Full stack developer from Greater Noida, India. Builds production systems — APIs, payments, platforms. Final-year MCA (Cyber Security) @ Galgotias University.
+
+## Contact
+- Email: coccoder999@gmail.com
+- GitHub: https://github.com/tarun1sisodia
+- LinkedIn: https://linkedin.com/in/tarun1sisodia
+- Instagram: https://instagram.com/tarun1sisodia
+- X: https://x.com/tarun1sisodia
+
+## Work
+- Backend Developer Intern @ Aarogya Virohan (Apr 2026–Present): FastAPI, SQLAlchemy, PostgreSQL. Patient registration, clinic management, posture diagnostics. JWT auth with clinic-isolation middleware, prescription PDF builder.
+- Freelance Backend Developer (Aug 2026–Present): TypeScript + Fastify 5 backend for a tour & travel business. Fares, bookings, Razorpay payments, dispatch, catalog APIs. JWT auth, Zod validation, rate limiting. PostgreSQL (Supabase) + MongoDB, Dockerized on Render.
+
+## Projects
+- ArenaAI: production travel platform (React, TypeScript, Fastify, PostgreSQL, Razorpay, Cloudflare). Live: https://agraskbagheltourandtravels.com — Repo: https://github.com/tarun1sisodia/ArenaAI
+- FreeTune: scalable music-streaming backend (Node.js, Express, MongoDB, Redis, Cloudflare R2). JWT auth, Redis caching + rate limiting, MongoDB analytics pipelines.
+- CineMatch: full-stack movie recommendation platform (React, FastAPI, scikit-learn, SQLite). Content-based filtering with TF-IDF + cosine similarity.
+- SmartCampus: cross-platform attendance app (Flutter, Node.js, MySQL). Recording, teacher workflows, analytics dashboards.
+
+## Stack
+TypeScript, Python, JavaScript, SQL · FastAPI, Fastify, Express.js, Node.js · PostgreSQL, MongoDB, MySQL, SQLite, Supabase, SQLAlchemy · Razorpay, Redis, Cloudflare R2 · Docker, Render, Git, Linux · Vitest, pytest · React, Flutter · DSA, OOP, DBMS, OS, Networks. Learning: GRC & VAPT (cybersecurity).
