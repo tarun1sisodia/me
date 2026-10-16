@@ -1012,6 +1012,32 @@ p {
   will-change: transform;
 }
 
+/* ---------- 3d avatar stage ---------- */
+
+.hero-avatar {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 10%, rgba(0, 229, 255, 0.07), transparent 60%),
+    radial-gradient(100% 80% at 50% 100%, rgba(255, 45, 120, 0.06), transparent 60%),
+    rgba(255, 255, 255, 0.015);
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.12),
+    0 30px 90px rgba(0, 0, 0, 0.55),
+    0 0 90px rgba(0, 229, 255, 0.08);
+  cursor: pointer;
+}
+
+.hero-avatar canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .connect-title {
   font-size: clamp(58px, 11vw, 150px);
   font-weight: 700;

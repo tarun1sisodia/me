@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
@@ -9,8 +10,18 @@ import Words from "./Words";
 import { PROFILE } from "@/lib/data";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
+const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
 
 export default function Hero({ started }: { started: boolean }) {
+  const [hasAvatar, setHasAvatar] = useState(false);
+
+  useEffect(() => {
+    fetch("/avatar.glb", { method: "HEAD" })
+      .then((r) => {
+        if (r.ok) setHasAvatar(true);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <section className="hero" id="top" aria-label="Introduction">
       <ParticleField />
@@ -48,16 +59,25 @@ export default function Hero({ started }: { started: boolean }) {
           </div>
         </Parallax>
         <Parallax speed={-0.3} className="hero-photo">
-          <div className="duotone hero-frame">
-            <Image
-              src="/photos/hero-night-motion.png"
-              alt="Tarun Sisodia at night, city crowd in motion behind him"
-              fill
-              sizes="(max-width: 900px) 82vw, 32vw"
-              priority
+          {hasAvatar ? (
+            <AvatarStage
+              className="hero-avatar"
+              onError={() => setHasAvatar(false)}
             />
-          </div>
-          <p className="hero-caption">{"// portrait_01 — night session"}</p>
+          ) : (
+            <div className="duotone hero-frame">
+              <Image
+                src="/photos/hero-night-motion.png"
+                alt="Tarun Sisodia at night, city crowd in motion behind him"
+                fill
+                sizes="(max-width: 900px) 82vw, 32vw"
+                priority
+              />
+            </div>
+          )}
+          <p className="hero-caption">
+            {hasAvatar ? "// me_3d — live render, tap to wave" : "// portrait_01 — night session"}
+          </p>
         </Parallax>
       </div>
       <a href="#stack" className="scroll-hint" aria-label="Scroll to content">
