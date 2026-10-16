@@ -1,4 +1,6 @@
+import Parallax from "./Parallax";
 import Reveal from "./Reveal";
+import SplitReveal from "./SplitReveal";
 
 export default function SectionHeading({
   num,
@@ -14,9 +16,11 @@ export default function SectionHeading({
   return (
     <div className="sec-head">
       {num && (
-        <span className="sec-ghost" aria-hidden="true">
-          {num}
-        </span>
+        <Parallax speed={0.12} className="sec-ghost-wrap">
+          <span className="sec-ghost" aria-hidden="true">
+            {num}
+          </span>
+        </Parallax>
       )}
       <Reveal>
         <p className="sec-meta">
@@ -30,9 +34,13 @@ export default function SectionHeading({
           )}
           <span className="sec-label">{label}</span>
         </p>
-        <h2 className="sec-title">{title}</h2>
-        {blurb && <p className="sec-blurb">{blurb}</p>}
       </Reveal>
+      <SplitReveal text={title} className="sec-title" />
+      {blurb && (
+        <Reveal>
+          <p className="sec-blurb">{blurb}</p>
+        </Reveal>
+      )}
     </div>
   );
 }

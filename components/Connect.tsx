@@ -1,9 +1,12 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import { GithubIcon, InstagramIcon, LinkedinIcon, XIcon } from "./BrandIcons";
 import { PROFILE, SOCIALS } from "@/lib/data";
+
+const WaveField = dynamic(() => import("./WaveField"), { ssr: false });
 
 const ICONS = {
   Github: GithubIcon,
@@ -15,7 +18,8 @@ const ICONS = {
 export default function Connect() {
   return (
     <section className="section connect" id="connect" aria-label="Connect">
-      <div className="container">
+      <WaveField />
+      <div className="container connect-front">
         <Reveal>
           <p className="sec-meta">
             <span className="sec-num">04</span>

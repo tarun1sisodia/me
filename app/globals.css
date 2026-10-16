@@ -975,8 +975,41 @@ p {
 /* ---------- connect ---------- */
 
 .connect {
+  position: relative;
   padding-bottom: 0;
   overflow: clip;
+}
+
+.wave-field {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: min(72vh, 640px);
+  opacity: 0.55;
+  pointer-events: none;
+  mask-image: linear-gradient(to top, black 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 55%, transparent 100%);
+}
+
+.connect-front {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- split-text + word reveals ---------- */
+
+.split-mask,
+.w-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.split-char,
+.w-word {
+  display: inline-block;
+  will-change: transform;
 }
 
 .connect-title {

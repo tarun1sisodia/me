@@ -53,6 +53,30 @@ export default function ParticleField() {
     const points = new THREE.Points(geo, mat);
     scene.add(points);
 
+    const ico = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.7, 1),
+      new THREE.MeshBasicMaterial({
+        color: "#00E5FF",
+        wireframe: true,
+        transparent: true,
+        opacity: 0.22,
+      })
+    );
+    ico.position.set(5.4, 0.9, -3);
+    scene.add(ico);
+
+    const ico2 = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.0, 0),
+      new THREE.MeshBasicMaterial({
+        color: "#FF2D78",
+        wireframe: true,
+        transparent: true,
+        opacity: 0.2,
+      })
+    );
+    ico2.position.set(-6.6, -2.2, -4);
+    scene.add(ico2);
+
     const mouse = { x: 0, y: 0 };
     const onMouse = (e: MouseEvent) => {
       mouse.x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -66,6 +90,12 @@ export default function ParticleField() {
       const t = clock.getElapsedTime();
       points.rotation.y = t * 0.02 + mouse.x * 0.14;
       points.rotation.x = mouse.y * 0.07;
+      ico.rotation.x = t * 0.12;
+      ico.rotation.y = t * 0.16 + mouse.x * 0.4;
+      ico.position.y = 0.9 + Math.sin(t * 0.7) * 0.35;
+      ico2.rotation.x = -t * 0.1;
+      ico2.rotation.y = t * 0.14 - mouse.x * 0.3;
+      ico2.position.y = -2.2 + Math.cos(t * 0.6) * 0.3;
       renderer.render(scene, camera);
       raf = requestAnimationFrame(animate);
     };
@@ -85,6 +115,10 @@ export default function ParticleField() {
       window.removeEventListener("resize", onResize);
       geo.dispose();
       mat.dispose();
+      ico.geometry.dispose();
+      (ico.material as THREE.Material).dispose();
+      ico2.geometry.dispose();
+      (ico2.material as THREE.Material).dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) mount.removeChild(renderer.domElement);
     };

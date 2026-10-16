@@ -3,7 +3,9 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import Magnetic from "./Magnetic";
+import Parallax from "./Parallax";
 import Scramble from "./Scramble";
+import Words from "./Words";
 import { PROFILE } from "@/lib/data";
 
 const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
@@ -16,7 +18,7 @@ export default function Hero({ started }: { started: boolean }) {
       <div className="hero-orb orb-a" aria-hidden="true" />
       <div className="hero-orb orb-b" aria-hidden="true" />
       <div className="container hero-inner">
-        <div className="hero-copy">
+        <Parallax speed={-0.14} className="hero-copy">
           <p className="hero-kicker">
             <span className="kicker-num">01</span>
             <span aria-hidden="true"> / </span>INTRO
@@ -24,11 +26,14 @@ export default function Hero({ started }: { started: boolean }) {
           <h1 className="hero-name">
             <Scramble text="TARUN SISODIA" active={started} />
           </h1>
-          <p className="hero-sub">{PROFILE.subline}</p>
-          <p className="hero-desc">
-            I build production systems — APIs, payments, platforms. Full stack,
-            security-minded, shipped not shelved.
-          </p>
+          <Words text={PROFILE.subline} className="hero-sub" active={started} tag="p" />
+          <Words
+            text="I build production systems — APIs, payments, platforms. Full stack, security-minded, shipped not shelved."
+            className="hero-desc"
+            active={started}
+            tag="p"
+            delay={0.25}
+          />
           <div className="hero-ctas">
             <Magnetic>
               <a href="#work" className="btn btn-primary">
@@ -41,8 +46,8 @@ export default function Hero({ started }: { started: boolean }) {
               </a>
             </Magnetic>
           </div>
-        </div>
-        <div className="hero-photo">
+        </Parallax>
+        <Parallax speed={-0.3} className="hero-photo">
           <div className="duotone hero-frame">
             <Image
               src="/photos/hero-night-motion.png"
@@ -53,7 +58,7 @@ export default function Hero({ started }: { started: boolean }) {
             />
           </div>
           <p className="hero-caption">{"// portrait_01 — night session"}</p>
-        </div>
+        </Parallax>
       </div>
       <a href="#stack" className="scroll-hint" aria-label="Scroll to content">
         <ArrowDown size={15} aria-hidden="true" />

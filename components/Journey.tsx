@@ -4,6 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeading from "./SectionHeading";
+import Parallax from "./Parallax";
 import Reveal from "./Reveal";
 import { JOURNEY } from "@/lib/data";
 
@@ -47,17 +48,19 @@ export default function Journey() {
         />
         <div className="journey-grid">
           <div className="journey-visual">
-            <Reveal>
-              <div className="duotone journey-frame">
-                <Image
-                  src="/photos/photo-bw-double-exposure.png"
-                  alt="Artistic double-exposure portrait of Tarun Sisodia"
-                  fill
-                  sizes="(max-width: 900px) 88vw, 30vw"
-                />
-              </div>
-              <p className="journey-visual-cap">{"// every version of me, layered"}</p>
-            </Reveal>
+            <Parallax speed={-0.12}>
+              <Reveal>
+                <div className="duotone journey-frame">
+                  <Image
+                    src="/photos/photo-bw-double-exposure.png"
+                    alt="Artistic double-exposure portrait of Tarun Sisodia"
+                    fill
+                    sizes="(max-width: 900px) 88vw, 30vw"
+                  />
+                </div>
+                <p className="journey-visual-cap">{"// every version of me, layered"}</p>
+              </Reveal>
+            </Parallax>
           </div>
           <div className="journey-list">
             <div className="journey-line" aria-hidden="true">
