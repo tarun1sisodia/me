@@ -769,7 +769,6 @@ p {
   border-radius: 50%;
   border: 2px solid var(--cyan);
   background: var(--bg);
-  transform: translateX(-8px);
   box-shadow: 0 0 14px rgba(0, 229, 255, 0.5);
 }
 

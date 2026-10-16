@@ -83,7 +83,7 @@ export default function Connect() {
       </div>
       <footer className="footer">
         <div className="container footer-inner">
-          <span>© 2026 {PROFILE.name}</span>
+          <span>© 2026&nbsp;{PROFILE.name}</span>
           <span>{PROFILE.location}</span>
           <span>built with next.js — no templates harmed</span>
         </div>
