@@ -1,30 +1,34 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-const BPM = 100;
+const BPM = 128;
 const STEPS = 32;
 const STEP = 60 / BPM / 4;
 
 const mf = (m: number) => 440 * Math.pow(2, (m - 69) / 12);
 
-const KICK = [0, 6, 8, 14, 16, 22, 24, 30];
+const KICK = [0, 4, 8, 12, 16, 20, 24, 28];
 const SNARE = [4, 12, 20, 28];
-const HAT = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30];
+const HAT = [2, 6, 10, 14, 18, 22, 26, 30];
 const OPEN_HAT = [14, 30];
 
 const BASS: [number, number][] = [
-  [0, 50], [3, 50], [6, 62], [8, 50], [11, 55], [14, 57],
-  [16, 43], [19, 43], [22, 59], [24, 48], [27, 52], [30, 61],
+  [0, 45], [2, 45], [6, 45],
+  [8, 41], [10, 41], [14, 41],
+  [16, 48], [18, 48], [22, 48],
+  [24, 43], [26, 43], [30, 43],
 ];
 const CHORDS: [number, number[]][] = [
-  [2, [53, 57, 60, 64]],
-  [10, [53, 57, 60, 64]],
-  [18, [53, 59, 64]],
-  [26, [52, 55, 59, 62]],
-  [30, [55, 61, 64]],
+  [0, [57, 60, 64]],
+  [8, [53, 57, 60]],
+  [16, [52, 55, 60]],
+  [24, [55, 59, 62]],
 ];
 const LEAD: [number, number][] = [
-  [0, 76], [3, 74], [6, 72], [12, 71], [16, 74], [19, 76], [24, 79], [28, 76],
+  [0, 69], [2, 72], [4, 74], [6, 76],
+  [8, 74], [10, 72], [12, 74], [14, 71],
+  [16, 72], [18, 74], [20, 76], [22, 79],
+  [24, 77], [26, 76], [28, 74], [30, 72],
 ];
 
 export default function MusicToggle() {
@@ -44,7 +48,7 @@ export default function MusicToggle() {
       master.current.gain.value = 0.5;
       master.current.connect(ac.current.destination);
       const dl = ac.current.createDelay(1);
-      dl.delayTime.value = 0.45;
+      dl.delayTime.value = 0.35;
       const fb = ac.current.createGain();
       fb.gain.value = 0.32;
       const wet = ac.current.createGain();
@@ -172,13 +176,13 @@ export default function MusicToggle() {
     const o = ctx.createOscillator();
     const g = ctx.createGain();
     const f = ctx.createBiquadFilter();
-    o.type = "square";
+    o.type = "sawtooth";
     o.frequency.value = mf(m);
     f.type = "lowpass";
-    f.frequency.setValueAtTime(3200, t);
-    f.frequency.exponentialRampToValueAtTime(600, t + 0.25);
-    g.gain.setValueAtTime(0.14, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+    f.frequency.setValueAtTime(4200, t);
+    f.frequency.exponentialRampToValueAtTime(700, t + 0.22);
+    g.gain.setValueAtTime(0.11, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
     o.connect(f);
     f.connect(g);
     g.connect(master.current!);
