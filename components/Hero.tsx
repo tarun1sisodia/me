@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import WriteReveal from "./WriteReveal";
 import OrbitWords from "./OrbitWords";
+import DustBurst from "./DustBurst";
 
 const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
 
@@ -96,6 +97,7 @@ export default function Hero({ started }: { started: boolean }) {
                 width={1254}
                 height={1324}
               />
+              <DustBurst />
             </>
           )}
         </div>

@@ -2442,3 +2442,23 @@ p {
     animation: none;
   }
 }
+
+/* ---------- hero dust: Thanos-style disintegration where a trace meets the portrait ---------- */
+
+.dust-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.hero-sticker.is-dusting .dust-canvas {
+  opacity: 1;
+}
+
+.hero-sticker.is-dusting .sticker-ht,
+.hero-sticker.is-dusting .sticker-color {
+  opacity: 0;
+}

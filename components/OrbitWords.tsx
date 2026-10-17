@@ -31,6 +31,7 @@ export default function OrbitWords() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [trace, setTrace] = useState<Trace | null>(null);
   const wordRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const dustRef = useRef<{ x: number; y: number } | null>(null);
 
   const measure = useCallback((i: number) => {
     const word = wordRefs.current[i];
@@ -41,6 +42,7 @@ export default function OrbitWords() {
           (el) => el.textContent?.toUpperCase() === WORDS[i].letter
         )
       : null;
+    const sticker = stage?.querySelector(".hero-sticker") as HTMLElement | null;
     if (!word || !stage || !letterEl) return;
     const sr = stage.getBoundingClientRect();
     const wr = word.getBoundingClientRect();
@@ -49,7 +51,47 @@ export default function OrbitWords() {
     const y1 = wr.top - sr.top + wr.height / 2;
     const x2 = lr.left - sr.left + lr.width / 2;
     const y2 = lr.top - sr.top + 4;
-    setTrace({ d: `M ${x1} ${y1} H ${x2} V ${y2}`, dx: x2, dy: y2 });
+    let d = `M ${x1} ${y1} H ${x2} V ${y2}`;
+    let dx = x2;
+    let dy = y2;
+    dustRef.current = null;
+    if (sticker) {
+      const br = sticker.getBoundingClientRect();
+      const ix = br.width * 0.08;
+      const iy = br.height * 0.08;
+      const sx1 = br.left - sr.left + ix;
+      const sy1 = br.top - sr.top + iy;
+      const sx2 = br.left - sr.left + br.width - ix;
+      const sy2 = br.top - sr.top + br.height - iy;
+      let hx = 0;
+      let hy = 0;
+      let kind: "h" | "v" | null = null;
+      if (y1 >= sy1 && y1 <= sy2) {
+        const lo = Math.min(x1, x2);
+        const hi = Math.max(x1, x2);
+        if (hi >= sx1 && lo <= sx2) {
+          hx = x1 < x2 ? Math.max(lo, sx1) : Math.min(hi, sx2);
+          hy = y1;
+          kind = "h";
+        }
+      }
+      if (!kind && x2 >= sx1 && x2 <= sx2) {
+        const lo = Math.min(y1, y2);
+        const hi = Math.max(y1, y2);
+        if (hi >= sy1 && lo <= sy2) {
+          hx = x2;
+          hy = y1 < y2 ? Math.max(lo, sy1) : Math.min(hi, sy2);
+          kind = "v";
+        }
+      }
+      if (kind) {
+        d = kind === "h" ? `M ${x1} ${y1} H ${hx}` : `M ${x1} ${y1} H ${x2} V ${hy}`;
+        dx = hx;
+        dy = hy;
+        dustRef.current = { x: hx - (br.left - sr.left), y: hy - (br.top - sr.top) };
+      }
+    }
+    setTrace({ d, dx, dy });
   }, []);
 
   const highlight = (letter: string | null) => {
@@ -60,12 +102,19 @@ export default function OrbitWords() {
     measure(i);
     setHovered(i);
     highlight(WORDS[i].letter);
+    if (dustRef.current) {
+      window.dispatchEvent(
+        new CustomEvent("portrait:dust", { detail: dustRef.current })
+      );
+    }
   };
 
   const onLeave = () => {
     setHovered(null);
     setTrace(null);
     highlight(null);
+    dustRef.current = null;
+    window.dispatchEvent(new CustomEvent("portrait:dust-end"));
   };
 
   const onClick = (e: MouseEvent, tech: string) => {
