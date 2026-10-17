@@ -31,10 +31,10 @@ export default function WaveField() {
     const pos = geo.attributes.position as THREE.BufferAttribute;
     const colors = new Float32Array(pos.count * 3);
     const cyan = new THREE.Color("#00E5FF");
-    const magenta = new THREE.Color("#FF2D78");
+    const white = new THREE.Color("#FFFFFF");
     for (let i = 0; i < pos.count; i++) {
       const t = (pos.getX(i) + W / 2) / W;
-      const c = cyan.clone().lerp(magenta, t).multiplyScalar(0.6);
+      const c = cyan.clone().lerp(white, t).multiplyScalar(0.6);
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
