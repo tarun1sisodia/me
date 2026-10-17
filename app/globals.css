@@ -912,6 +912,51 @@ p {
   transition-duration: 0.01ms !important;
 }
 
+/* ---------- orbit words: floating terms around the hero portrait ---------- */
+
+.orbit-words {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.orbit-word {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+  animation: orbit-float 7s ease-in-out infinite alternate;
+}
+
+.orbit-word.c-cyan {
+  color: var(--cyan);
+}
+
+.orbit-word.c-white {
+  color: var(--text);
+}
+
+@keyframes orbit-float {
+  from {
+    transform: translate(0, 0) rotate(-2deg);
+    opacity: 0.5;
+  }
+  to {
+    transform: translate(12px, -20px) rotate(2deg);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 560px) {
+  .orbit-word {
+    font-size: 9px;
+  }
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {

@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 import Scramble from "./Scramble";
 import Words from "./Words";
+import OrbitWords from "./OrbitWords";
 import { PROFILE } from "@/lib/data";
 
 const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
@@ -55,6 +56,7 @@ export default function Hero({ started }: { started: boolean }) {
       </div>
 
       <div className="container hero-stage">
+        <OrbitWords />
         <div className="hero-sticker" data-cursor="HI">
           {hasAvatar ? (
             <AvatarStage
