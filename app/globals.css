@@ -604,6 +604,102 @@ p {
   color: var(--cyan);
 }
 
+/* ---------- services: discipline toggle ---------- */
+
+.disc-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 34px;
+  flex-wrap: wrap;
+}
+
+.disc-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 12px 26px;
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.disc-btn:hover {
+  color: var(--text);
+  border-color: rgba(0, 229, 255, 0.4);
+}
+
+.disc-btn.is-active {
+  color: #04121a;
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.disc-count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.disc-panel {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: clamp(26px, 4vw, 48px);
+  background: rgba(255, 255, 255, 0.015);
+  position: relative;
+  overflow: hidden;
+}
+
+.disc-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 26px;
+  color: var(--cyan);
+}
+
+.disc-head h3 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.4vw, 38px);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.disc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+
+.disc-list li {
+  padding: 16px 4px;
+  border-top: 1px solid var(--border);
+  font-size: 16px;
+  color: var(--muted);
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+}
+
+.disc-list li::before {
+  content: "▸";
+  color: var(--cyan);
+  flex: none;
+}
+
+.disc-list li:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {

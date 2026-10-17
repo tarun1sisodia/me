@@ -12,6 +12,7 @@ import Journey from "@/components/Journey";
 import Work from "@/components/Work";
 import Interlude from "@/components/Interlude";
 import Skills from "@/components/Skills";
+import Services from "@/components/Services";
 import Connect from "@/components/Connect";
 
 export default function Home() {
@@ -39,6 +40,7 @@ export default function Home() {
         <Marquee id="stack" />
         <StatsBand />
         <About />
+        <Services />
         <Journey />
         <Work />
         <Interlude />
