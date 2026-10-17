@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useRef, type ReactNode, type MouseEvent } from "react";
 import Image from "next/image";
-import { ArrowUpRight, Film, GraduationCap, Music } from "lucide-react";
+import { ArrowUpRight, Film, GraduationCap, HeartPulse, Music } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import ClipReveal from "./ClipReveal";
@@ -11,7 +11,7 @@ import { PROJECTS, type Project } from "@/lib/data";
 
 const RippleGrid = dynamic(() => import("./RippleGrid"), { ssr: false });
 
-const ICONS = { Music, Film, GraduationCap };
+const ICONS = { Music, Film, GraduationCap, HeartPulse };
 
 function TiltCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);

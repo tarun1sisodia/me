@@ -78,7 +78,7 @@ export interface Project {
   outcome: string;
   stack: string[];
   image?: string;
-  icon?: "Music" | "Film" | "GraduationCap";
+  icon?: "Music" | "Film" | "GraduationCap" | "HeartPulse";
   links: { label: string; href: string }[];
 }
 
@@ -113,6 +113,13 @@ export const PROJECTS: Project[] = [
     stack: ["Flutter", "Node.js", "MySQL"],
     icon: "GraduationCap",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
+  },
+  {
+    name: "BloodConnect",
+    outcome: "Production-ready backend for a blood-donation connect app.",
+    stack: ["JavaScript", "Node.js"],
+    icon: "HeartPulse",
+    links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia/bloodconnectbackend" }],
   },
 ];
 
