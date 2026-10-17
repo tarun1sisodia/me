@@ -67,8 +67,8 @@ export default function Hero({ started }: { started: boolean }) {
           ) : (
             <div className="duotone hero-frame">
               <Image
-                src="/photos/hero-night-motion.png"
-                alt="Tarun Sisodia at night, city crowd in motion behind him"
+                src="/photos/portrait-hero-clean.jpg"
+                alt="Tarun Sisodia portrait"
                 fill
                 sizes="(max-width: 900px) 82vw, 32vw"
                 priority
@@ -76,7 +76,7 @@ export default function Hero({ started }: { started: boolean }) {
             </div>
           )}
           <p className="hero-caption">
-            {hasAvatar ? "// me_3d — live render, tap to wave" : "// portrait_01 — night session"}
+            {hasAvatar ? "// me_3d — live render, tap to wave" : "// portrait_01 — the dev"}
           </p>
         </Parallax>
       </div>
