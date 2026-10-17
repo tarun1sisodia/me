@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
-import Scramble from "./Scramble";
+import WriteReveal from "./WriteReveal";
 import OrbitWords from "./OrbitWords";
 
 const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
@@ -82,9 +82,9 @@ export default function Hero({ started }: { started: boolean }) {
           )}
         </div>
         <h1 className="hero-giant">
-          <Scramble text="TARUN" active={started} />
+          <WriteReveal text="TARUN" active={started} />
           <br />
-          <Scramble text="SISODIA" active={started} />
+          <WriteReveal text="SISODIA" active={started} delay={1.1} />
         </h1>
         <p className="hero-mono-caption">A BUILDER'S PERSPECTIVE ON SYSTEMS</p>
       </div>

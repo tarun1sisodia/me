@@ -547,6 +547,9 @@ p {
 
 .hero-stage {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   margin-top: clamp(8px, 2vh, 24px);
   padding-bottom: clamp(84px, 11vh, 130px);
@@ -1093,6 +1096,47 @@ p {
 
 .hero-sub-strip .hero-desc {
   margin-top: 18px;
+}
+
+/* ---------- write reveal: letters drawn one by one, like writing ---------- */
+
+.write-reveal {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.write-char {
+  display: inline-block;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+.write-reveal.is-writing .write-char {
+  animation: write-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--wdelay, 0s) + var(--i) * 0.22s);
+}
+
+@keyframes write-in {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-0.1em);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 -2% 0 0);
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .write-char {
+    opacity: 1;
+    clip-path: none;
+  }
+  .write-reveal.is-writing .write-char {
+    animation: none;
+  }
 }
 
 /* ---------- awwwards batch: loader counter ---------- */
