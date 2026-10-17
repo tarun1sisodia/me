@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useRef, useState, type MouseEvent } from "react";
+import { maskReady, solidAt } from "@/lib/stickerMask";
 
 type Word = {
   w: string;
@@ -62,59 +63,64 @@ export default function OrbitWords() {
       const ix = br.width * 0.12;
       const it = br.height * 0.1;
       const ib = br.height * 0.24;
-      const sx1 = bx + ix;
-      const sy1 = by + it;
-      const sx2 = bx + br.width - ix;
-      const sy2 = by + br.height - ib;
+      const boxSolid = (x: number, y: number) =>
+        x >= bx + ix &&
+        x <= bx + br.width - ix &&
+        y >= by + it &&
+        y <= by + br.height - ib;
+      const solid = (x: number, y: number) =>
+        maskReady()
+          ? solidAt((x - bx) / br.width, (y - by) / br.height)
+          : boxSolid(x, y);
       const subs: string[] = [];
-      const pushH = (a: number, b: number) => {
-        if (Math.abs(b - a) < 0.5) return;
-        subs.push(`M ${a} ${y1} H ${b}`);
-        ex = b;
-        ey = y1;
+      const walk = (
+        ax: number,
+        ay: number,
+        bx2: number,
+        by2: number,
+        emit: (ax1: number, ay1: number, bx1: number, by1: number) => void
+      ) => {
+        const len = Math.hypot(bx2 - ax, by2 - ay);
+        const n = Math.max(2, Math.ceil(len / 5));
+        let start = 0;
+        let cur = solid(ax, ay);
+        const flush = (i: number, s: boolean) => {
+          if (i === start) return;
+          const ax1 = ax + (bx2 - ax) * (start / n);
+          const ay1 = ay + (by2 - ay) * (start / n);
+          const bx1 = ax + (bx2 - ax) * (i / n);
+          const by1 = ay + (by2 - ay) * (i / n);
+          if (s) {
+            dustPts.push({ x: ax1 - bx, y: ay1 - by }, { x: bx1 - bx, y: by1 - by });
+          } else {
+            emit(ax1, ay1, bx1, by1);
+          }
+        };
+        for (let i = 1; i <= n; i++) {
+          const t = i / n;
+          const s = solid(ax + (bx2 - ax) * t, ay + (by2 - ay) * t);
+          if (s !== cur) {
+            flush(i - 1, cur);
+            start = i - 1;
+            cur = s;
+          }
+        }
+        flush(n, cur);
       };
-      const pushV = (a: number, b: number) => {
-        if (Math.abs(b - a) < 0.5) return;
-        subs.push(`M ${x2} ${a} V ${b}`);
-        ex = x2;
-        ey = b;
+      const emitH = (ax1: number, ay1: number, bx1: number) => {
+        if (Math.abs(bx1 - ax1) < 1) return;
+        subs.push(`M ${ax1} ${ay1} H ${bx1}`);
+        ex = bx1;
+        ey = ay1;
       };
-      const dustPush = (x: number, y: number) =>
-        dustPts.push({ x: x - bx, y: y - by });
-      if (y1 < sy1 || y1 > sy2) {
-        pushH(x1, x2);
-      } else if (x1 < x2) {
-        if (x1 < sx1) pushH(x1, Math.min(x2, sx1));
-        if (x2 > sx1 && x1 < sx2) {
-          dustPush(Math.max(x1, sx1), y1);
-          dustPush(Math.min(x2, sx2), y1);
-        }
-        if (x2 > sx2) pushH(sx2, x2);
-      } else {
-        if (x1 > sx2) pushH(x1, Math.max(x2, sx2));
-        if (x2 < sx2 && x1 > sx1) {
-          dustPush(Math.min(x1, sx2), y1);
-          dustPush(Math.max(x2, sx1), y1);
-        }
-        if (x2 < sx1) pushH(sx1, x2);
-      }
-      if (x2 < sx1 || x2 > sx2) {
-        pushV(y1, y2);
-      } else if (y1 < y2) {
-        if (y1 < sy1) pushV(y1, Math.min(y2, sy1));
-        if (y2 > sy1 && y1 < sy2) {
-          dustPush(x2, Math.max(y1, sy1));
-          dustPush(x2, Math.min(y2, sy2));
-        }
-        if (y2 > sy2) pushV(sy2, y2);
-      } else {
-        if (y1 > sy2) pushV(y1, Math.max(y2, sy2));
-        if (y2 < sy2 && y1 > sy1) {
-          dustPush(x2, Math.min(y1, sy2));
-          dustPush(x2, Math.max(y2, sy1));
-        }
-        if (y2 < sy1) pushV(sy1, y2);
-      }
+      const emitV = (ax1: number, ay1: number, bx1: number, by1: number) => {
+        if (Math.abs(by1 - ay1) < 1) return;
+        subs.push(`M ${ax1} ${ay1} V ${by1}`);
+        ex = ax1;
+        ey = by1;
+      };
+      walk(x1, y1, x2, y1, (a, _y, b) => emitH(a, y1, b));
+      walk(x2, y1, x2, y2, (a, ay1, _b, by1) => emitV(a, ay1, a, by1));
       d = subs.join(" ");
     }
     setTrace({ d, dx: ex, dy: ey });
