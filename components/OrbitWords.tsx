@@ -60,11 +60,12 @@ export default function OrbitWords() {
       const bx = br.left - sr.left;
       const by = br.top - sr.top;
       const ix = br.width * 0.12;
-      const iy = br.height * 0.12;
+      const it = br.height * 0.1;
+      const ib = br.height * 0.24;
       const sx1 = bx + ix;
-      const sy1 = by + iy;
+      const sy1 = by + it;
       const sx2 = bx + br.width - ix;
-      const sy2 = by + br.height - iy;
+      const sy2 = by + br.height - ib;
       const subs: string[] = [];
       const pushH = (a: number, b: number) => {
         if (Math.abs(b - a) < 0.5) return;
@@ -135,12 +136,17 @@ export default function OrbitWords() {
     }
   };
 
-  const onLeave = () => {
+  const clearHover = () => {
     setHovered(null);
     setTrace(null);
     highlight(null);
     dustRef.current = null;
     window.dispatchEvent(new CustomEvent("portrait:dust-end"));
+  };
+
+  const onLeave = (i: number) => {
+    if (wordRefs.current[i] === document.activeElement) return;
+    clearHover();
   };
 
   const onClick = (e: MouseEvent, tech: string) => {
@@ -154,7 +160,7 @@ export default function OrbitWords() {
       {hovered !== null && trace && (
         <svg className="orbit-lines" aria-hidden="true" key={hovered}>
           <path d={trace.d} pathLength={1} className="orbit-line" />
-          <circle cx={trace.dx} cy={trace.dy} r="3.5" className="orbit-dot" />
+          <circle cx={trace.dx} cy={trace.dy} r="4.5" className="orbit-dot" />
         </svg>
       )}
       <div className="orbit-words">
@@ -174,9 +180,9 @@ export default function OrbitWords() {
               animationDelay: item.dl,
             }}
             onMouseEnter={() => onEnter(i)}
-            onMouseLeave={onLeave}
+            onMouseLeave={() => onLeave(i)}
             onFocus={() => onEnter(i)}
-            onBlur={onLeave}
+            onBlur={clearHover}
             onClick={(e) => onClick(e, item.tech)}
             aria-label={
               item.tech
