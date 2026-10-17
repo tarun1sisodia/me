@@ -2133,7 +2133,7 @@ p {
   left: 50%;
   width: 0;
   height: 0;
-  transform: rotate(var(--a)) translateX(var(--r));
+  transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(var(--a) * -1));
 }
 
 .orbit-badge {
