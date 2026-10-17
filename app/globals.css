@@ -700,6 +700,80 @@ p {
   border-bottom: 1px solid var(--border);
 }
 
+/* ---------- process: numbered accordion steps ---------- */
+
+.steps {
+  border-top: 1px solid var(--border);
+}
+
+.step {
+  border-bottom: 1px solid var(--border);
+}
+
+.step-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 32px);
+  padding: 22px 4px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--text);
+  text-align: left;
+}
+
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  flex: none;
+  width: 34px;
+}
+
+.step-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 700;
+  flex: 1;
+}
+
+.step-icon {
+  flex: none;
+  color: var(--muted);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.step.is-open .step-icon {
+  transform: rotate(45deg);
+  color: var(--cyan);
+}
+
+.step-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.step.is-open .step-body {
+  grid-template-rows: 1fr;
+}
+
+.step-body p {
+  overflow: hidden;
+  margin: 0;
+  padding: 0 4px 0 calc(34px + clamp(16px, 3vw, 32px));
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 62ch;
+}
+
+.step.is-open .step-body p {
+  padding-bottom: 26px;
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {
