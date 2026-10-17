@@ -37,7 +37,7 @@ export default function WordmarkReveal() {
       gsap.to(float, {
         scale: 1,
         duration: 0.45,
-        ease: [0.76, 0, 0.24, 1],
+        ease: "expo.out",
         overwrite: "auto",
       });
     };
@@ -46,7 +46,7 @@ export default function WordmarkReveal() {
       gsap.to(float, {
         scale: 0,
         duration: 0.35,
-        ease: [0.76, 0, 0.24, 1],
+        ease: "expo.out",
         overwrite: "auto",
       });
     };
