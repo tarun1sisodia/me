@@ -474,6 +474,136 @@ p {
   -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 45%, black 25%, transparent 72%);
 }
 
+/* ---------- hero rebuild: sticker stage ---------- */
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: clamp(84px, 10vh, 120px);
+  position: relative;
+  z-index: 3;
+}
+
+.hero-stage {
+  position: relative;
+  text-align: center;
+  margin-top: clamp(8px, 2vh, 24px);
+  z-index: 2;
+}
+
+.hero-sticker {
+  width: clamp(260px, 34vw, 460px);
+  margin-inline: auto;
+  position: relative;
+  transform: translate(
+    calc(var(--mx, 0) * 22px),
+    calc(var(--my, 0) * 16px)
+  );
+  transition: transform 0.35s ease-out;
+  mask-image: radial-gradient(
+    ellipse 72% 68% at 50% 44%,
+    black 52%,
+    transparent 79%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 72% 68% at 50% 44%,
+    black 52%,
+    transparent 79%
+  );
+}
+
+.hero-sticker img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sticker-color {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.hero-sticker:hover .sticker-color {
+  opacity: 1;
+}
+
+.hero-sticker:hover .sticker-ht {
+  opacity: 0;
+}
+
+.sticker-ht {
+  transition: opacity 0.5s ease;
+}
+
+.hero-giant {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(64px, 16.5vw, 250px);
+  line-height: 0.84;
+  letter-spacing: -0.015em;
+  margin: -0.32em 0 0;
+  position: relative;
+  z-index: 3;
+  text-wrap: balance;
+}
+
+.hero-mono-caption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  color: var(--muted);
+  margin: 26px 0 0;
+  position: relative;
+  z-index: 3;
+}
+
+.hero-bottom {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  margin-top: clamp(28px, 4vh, 52px);
+  padding-bottom: clamp(72px, 9vh, 110px);
+}
+
+.hero-bottom .hero-sub,
+.hero-bottom .hero-desc {
+  margin-inline: auto;
+}
+
+.hero-bottom .hero-ctas {
+  justify-content: center;
+}
+
+.hero-ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px clamp(16px, 4vw, 48px);
+  border-top: 1px solid var(--border);
+  background: rgba(6, 6, 11, 0.72);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.hero-ticker span:first-child {
+  color: var(--cyan);
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {
@@ -545,7 +675,7 @@ p {
 .scroll-badge {
   position: absolute;
   right: clamp(20px, 5vw, 64px);
-  bottom: clamp(20px, 5vh, 48px);
+  bottom: 76px;
   width: 108px;
   height: 108px;
   display: grid;

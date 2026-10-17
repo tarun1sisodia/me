@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import Magnetic from "./Magnetic";
-import Parallax from "./Parallax";
 import Scramble from "./Scramble";
 import Words from "./Words";
 import { PROFILE } from "@/lib/data";
@@ -14,6 +13,7 @@ const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
 
 export default function Hero({ started }: { started: boolean }) {
   const [hasAvatar, setHasAvatar] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     fetch("/avatar.glb", { method: "HEAD" })
@@ -22,64 +22,110 @@ export default function Hero({ started }: { started: boolean }) {
       })
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const sec = sectionRef.current;
+    if (!sec) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const onMove = (e: MouseEvent) => {
+      const r = sec.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      sec.style.setProperty("--mx", x.toFixed(3));
+      sec.style.setProperty("--my", y.toFixed(3));
+    };
+    sec.addEventListener("mousemove", onMove, { passive: true });
+    return () => sec.removeEventListener("mousemove", onMove);
+  }, []);
+
   return (
-    <section className="hero" id="top" aria-label="Introduction">
+    <section
+      ref={sectionRef}
+      className="hero bg-blueprint"
+      id="top"
+      aria-label="Introduction"
+    >
       <ParticleField />
       <div className="hero-noise" aria-hidden="true" />
-      <div className="hero-orb orb-a" aria-hidden="true" />
-      <div className="hero-orb orb-b" aria-hidden="true" />
-      <div className="container hero-inner">
-        <Parallax speed={-0.14} className="hero-copy">
-          <p className="hero-kicker">
-            <span className="kicker-num">01</span>
-            <span aria-hidden="true"> / </span>INTRO
-          </p>
-          <h1 className="hero-name">
-            <Scramble text="TARUN SISODIA" active={started} />
-          </h1>
-          <Words text={PROFILE.subline} className="hero-sub" active={started} tag="p" />
-          <Words
-            text="I build production systems — APIs, payments, platforms. Full stack, security-minded, shipped not shelved."
-            className="hero-desc"
-            active={started}
-            tag="p"
-            delay={0.25}
-          />
-          <div className="hero-ctas">
-            <Magnetic>
-              <a href="#work" className="btn btn-primary">
-                View work <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a href="#connect" className="btn btn-ghost">
-                Connect
-              </a>
-            </Magnetic>
-          </div>
-        </Parallax>
-        <Parallax speed={-0.3} className="hero-photo">
+      <div className="container hero-top">
+        <span className="chapter-label">
+          <span className="chapter-bullet" aria-hidden="true" />
+          01 / PRESENCE
+        </span>
+        <span className="chapter-kicker">FULL STACK · SECURITY-MINDED</span>
+      </div>
+
+      <div className="container hero-stage">
+        <div className="hero-sticker" data-cursor="HI">
           {hasAvatar ? (
             <AvatarStage
               className="hero-avatar"
               onError={() => setHasAvatar(false)}
             />
           ) : (
-            <div className="duotone hero-frame">
+            <>
               <Image
-                src="/photos/portrait-hero-clean.jpg"
-                alt="Tarun Sisodia portrait"
-                fill
-                sizes="(max-width: 900px) 82vw, 32vw"
+                src="/photos/sticker-tarun-halftone.png"
+                alt="Tarun Sisodia — halftone portrait"
+                className="sticker-ht"
+                width={1254}
+                height={1324}
                 priority
               />
-            </div>
+              <Image
+                src="/photos/sticker-tarun.png"
+                alt=""
+                aria-hidden="true"
+                className="sticker-color"
+                width={1254}
+                height={1324}
+              />
+            </>
           )}
-          <p className="hero-caption">
-            {hasAvatar ? "// me_3d — live render, tap to wave" : "// portrait_01 — the dev"}
-          </p>
-        </Parallax>
+        </div>
+        <h1 className="hero-giant">
+          <Scramble text="TARUN" active={started} />
+          <br />
+          <Scramble text="SISODIA" active={started} />
+        </h1>
+        <p className="hero-mono-caption">A BUILDER'S PERSPECTIVE ON SYSTEMS</p>
       </div>
+
+      <div className="container hero-bottom">
+        <Words
+          text={PROFILE.subline}
+          className="hero-sub"
+          active={started}
+          tag="p"
+        />
+        <Words
+          text="I build production systems — APIs, payments, platforms. Full stack, security-minded, shipped not shelved."
+          className="hero-desc"
+          active={started}
+          tag="p"
+          delay={0.25}
+        />
+        <div className="hero-ctas">
+          <Magnetic>
+            <a href="#work" className="btn btn-primary">
+              View work <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+          </Magnetic>
+          <Magnetic>
+            <a href="#connect" className="btn btn-ghost">
+              Connect
+            </a>
+          </Magnetic>
+        </div>
+      </div>
+
+      <div className="hero-ticker" aria-hidden="true">
+        <span>SCROLL TO DISCOVER ↓</span>
+        <span>BUILDING SINCE 2022</span>
+        <span>OPEN FOR WORK ◆ FULL STACK ◆ SHIPPED NOT SHELVED</span>
+      </div>
+
       <a href="#stack" className="scroll-badge" aria-label="Scroll to content">
         <svg viewBox="0 0 120 120" aria-hidden="true" className="scroll-badge-ring">
           <defs>
