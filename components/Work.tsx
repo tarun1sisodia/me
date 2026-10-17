@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useRef, type ReactNode, type MouseEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, Film, GraduationCap, Music } from "lucide-react";
@@ -6,6 +7,8 @@ import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import { GithubIcon } from "./BrandIcons";
 import { PROJECTS, type Project } from "@/lib/data";
+
+const RippleGrid = dynamic(() => import("./RippleGrid"), { ssr: false });
 
 const ICONS = { Music, Film, GraduationCap };
 
@@ -85,7 +88,8 @@ export default function Work() {
   const [featured, ...rest] = PROJECTS;
   return (
     <section className="section work" id="work" aria-label="Work">
-      <div className="container">
+      <RippleGrid />
+      <div className="container work-front">
         <SectionHeading
           num="03"
           label="WORK"

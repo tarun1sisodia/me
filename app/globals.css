@@ -995,6 +995,28 @@ p {
   z-index: 2;
 }
 
+/* ---------- work ripple grid ---------- */
+
+.work {
+  position: relative;
+  overflow: clip;
+}
+
+.ripple-grid {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 560px;
+  opacity: 0.42;
+  pointer-events: none;
+  mask-image: linear-gradient(to top, black 35%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to top, black 35%, transparent 95%);
+}
+
+.work-front {
+  position: relative;
+  z-index: 2;
+}
+
 /* ---------- split-text + word reveals ---------- */
 
 .split-mask,
