@@ -41,8 +41,9 @@ export default function Journey() {
     <section className="section journey" id="journey" ref={rootRef} aria-label="Journey">
       <div className="container">
         <SectionHeading
-          num="02"
-          label="JOURNEY"
+          index="06"
+          label="THE PATH"
+          kicker="STILL BECOMING"
           title="The road so far."
           blurb="Degrees, internships, and production systems — in order."
         />

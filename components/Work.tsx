@@ -105,8 +105,9 @@ export default function Work() {
       <RippleGrid />
       <div className="container work-front">
         <SectionHeading
-          num="03"
-          label="WORK"
+          index="04"
+          label="SELECTED WORK"
+          kicker="PRODUCTION, NOT PROTOTYPES"
           title="Shipped, not shelved."
           blurb="Real systems for real users — not tutorial projects."
         />

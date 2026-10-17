@@ -7,7 +7,9 @@ export default function Skills() {
     <section className="section skills" id="skills" aria-label="Skills">
       <div className="container">
         <SectionHeading
+          index="07"
           label="ARSENAL"
+          kicker="BATTLE-TESTED"
           title="The toolkit."
           blurb="What I reach for when something needs to exist by Friday."
         />

@@ -384,6 +384,47 @@ p {
   opacity: 0;
 }
 
+/* ---------- chapter eyebrows (numbered NN / TITLE + kicker) ---------- */
+
+.chapter-rule {
+  border-top: 1px solid var(--border);
+  margin-bottom: clamp(36px, 5vw, 72px);
+}
+
+.chapter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.chapter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  color: var(--text);
+}
+
+.chapter-bullet {
+  width: 8px;
+  height: 8px;
+  background: var(--cyan);
+  flex: none;
+}
+
+.chapter-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: var(--muted);
+  text-align: right;
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {

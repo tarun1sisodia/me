@@ -9,7 +9,9 @@ export default function About() {
     <section className="section about" id="about" aria-label="About">
       <div className="container">
         <SectionHeading
-          label="ABOUT"
+          index="02"
+          label="THE PERSON"
+          kicker="THE HUMAN BEHIND THE SYSTEMS"
           title="Not a template person."
           blurb="The short version of a long story with computers."
         />
