@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useRef, type ReactNode, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, Film, GraduationCap, HeartPulse, Music } from "lucide-react";
 import SectionHeading from "./SectionHeading";
@@ -99,7 +99,24 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
 }
 
 export default function Work() {
+  const [filter, setFilter] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onFilter = (e: Event) => {
+      setFilter((e as CustomEvent<string>).detail || null);
+    };
+    window.addEventListener("work:filter", onFilter);
+    return () => window.removeEventListener("work:filter", onFilter);
+  }, []);
+
+  const matches = filter
+    ? PROJECTS.filter((p) =>
+        p.stack.some((s) => s.toLowerCase().includes(filter.toLowerCase()))
+      )
+    : PROJECTS;
+  const list = filter && matches.length === 0 ? PROJECTS : matches;
   const [featured, ...rest] = PROJECTS;
+
   return (
     <section className="section work" id="work" aria-label="Work">
       <RippleGrid />
@@ -117,16 +134,46 @@ export default function Work() {
           <span>{String(PROJECTS.length).padStart(2, "0")}</span>
           <span className="work-count-label">selected work</span>
         </p>
-        <Reveal>
-          <ProjectCard project={featured} featured />
-        </Reveal>
-        <div className="project-grid">
-          {rest.map((p, i) => (
-            <Reveal key={p.name} delay={(i % 3) * 0.08}>
-              <ProjectCard project={p} />
+        {filter && (
+          <div className="work-filter">
+            <span className="work-filter-label">Showing work tagged</span>
+            <button
+              type="button"
+              className="work-filter-pill"
+              onClick={() => setFilter(null)}
+              aria-label={`Clear filter ${filter}`}
+            >
+              {filter} <span aria-hidden="true">×</span>
+            </button>
+            {matches.length === 0 && (
+              <span className="work-filter-note">
+                — nothing tagged yet, showing everything
+              </span>
+            )}
+          </div>
+        )}
+        {!filter ? (
+          <>
+            <Reveal>
+              <ProjectCard project={featured} featured />
             </Reveal>
-          ))}
-        </div>
+            <div className="project-grid">
+              {rest.map((p, i) => (
+                <Reveal key={p.name} delay={(i % 3) * 0.08}>
+                  <ProjectCard project={p} />
+                </Reveal>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="project-grid">
+            {list.map((p, i) => (
+              <Reveal key={p.name} delay={(i % 3) * 0.08}>
+                <ProjectCard project={p} />
+              </Reveal>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

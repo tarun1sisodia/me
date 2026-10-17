@@ -1198,6 +1198,48 @@ p {
   }
 }
 
+/* ---------- work filter: pill shown when arriving from a hero word ---------- */
+
+.work-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.work-filter-label {
+  color: var(--muted);
+}
+
+.work-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--cyan);
+  background: rgba(0, 229, 255, 0.08);
+  color: var(--cyan);
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.work-filter-pill:hover {
+  background: rgba(0, 229, 255, 0.16);
+}
+
+.work-filter-note {
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {
