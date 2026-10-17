@@ -34,6 +34,7 @@ export default function WriteReveal({
           className="write-char"
           style={{ "--i": i } as CSSProperties}
           aria-hidden="true"
+          onAnimationEnd={(e) => e.currentTarget.classList.add("is-written")}
         >
           {ch}
         </span>

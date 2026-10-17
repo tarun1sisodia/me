@@ -36,6 +36,24 @@ export default function Hero({ started }: { started: boolean }) {
     return () => sec.removeEventListener("mousemove", onMove);
   }, []);
 
+  useEffect(() => {
+    const sec = sectionRef.current;
+    if (!sec) return;
+    const onHighlight = (e: Event) => {
+      const letter = (e as CustomEvent<string | null>).detail;
+      sec
+        .querySelectorAll(".write-reveal.name-tarun .write-char")
+        .forEach((el) => {
+          el.classList.toggle(
+            "char-lit",
+            !!letter && el.textContent?.toUpperCase() === letter
+          );
+        });
+    };
+    window.addEventListener("name:highlight", onHighlight);
+    return () => window.removeEventListener("name:highlight", onHighlight);
+  }, []);
+
   return (
     <section
       ref={sectionRef}
@@ -82,7 +100,7 @@ export default function Hero({ started }: { started: boolean }) {
           )}
         </div>
         <h1 className="hero-giant">
-          <WriteReveal text="TARUN" active={started} />
+          <WriteReveal text="TARUN" active={started} className="name-tarun" />
           <br />
           <WriteReveal text="SISODIA" active={started} delay={1.1} />
         </h1>
