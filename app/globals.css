@@ -957,6 +957,50 @@ p {
   }
 }
 
+/* ---------- dotwave: dot-matrix traveling wave ---------- */
+
+.dotwave-wrap {
+  margin: clamp(36px, 5vw, 64px) 0 0;
+}
+
+.dotwave {
+  display: grid;
+  grid-template-columns: repeat(48, 1fr);
+  gap: 12px 4px;
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+
+.dotwave-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  justify-self: center;
+  animation: dotwave-rise 2.8s ease-in-out infinite;
+}
+
+@keyframes dotwave-rise {
+  0%,
+  100% {
+    transform: translateY(12px);
+    opacity: 0.18;
+  }
+  50% {
+    transform: translateY(-12px);
+    opacity: 0.95;
+  }
+}
+
+.dotwave-caption {
+  margin-top: 14px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {

@@ -2,6 +2,7 @@ import Image from "next/image";
 import SectionHeading from "./SectionHeading";
 import Parallax from "./Parallax";
 import Reveal from "./Reveal";
+import DotWave from "./DotWave";
 import { ABOUT_STORY, CURRENTLY } from "@/lib/data";
 
 export default function About() {
@@ -66,6 +67,7 @@ export default function About() {
             </Reveal>
           </div>
         </div>
+        <DotWave />
       </div>
     </section>
   );
