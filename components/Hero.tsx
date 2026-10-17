@@ -41,7 +41,7 @@ export default function Hero({ started }: { started: boolean }) {
   return (
     <section
       ref={sectionRef}
-      className="hero bg-blueprint"
+      className="hero bg-blueprint-anim"
       id="top"
       aria-label="Introduction"
     >

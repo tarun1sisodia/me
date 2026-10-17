@@ -440,6 +440,30 @@ p {
   pointer-events: none;
 }
 
+.bg-blueprint-anim {
+  position: relative;
+}
+
+.bg-blueprint-anim::before {
+  content: "";
+  position: absolute;
+  inset: -60px;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 75%);
+  animation: blueprint-drift 26s linear infinite;
+}
+
+@keyframes blueprint-drift {
+  to {
+    transform: translate(56px, 56px);
+  }
+}
+
 /* ---------- grid texture utilities ---------- */
 
 .bg-blueprint {
