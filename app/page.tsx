@@ -14,6 +14,7 @@ import Interlude from "@/components/Interlude";
 import Skills from "@/components/Skills";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
+import Now from "@/components/Now";
 import Connect from "@/components/Connect";
 
 export default function Home() {
@@ -47,6 +48,7 @@ export default function Home() {
         <Process />
         <Interlude />
         <Skills />
+        <Now />
         <Connect />
       </main>
     </>

@@ -774,6 +774,68 @@ p {
   padding-bottom: 26px;
 }
 
+/* ---------- now: currently strip ---------- */
+
+.now-list {
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.now-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 18px;
+  align-items: baseline;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--border);
+  margin: 0;
+}
+
+.now-row dt {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.now-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex: none;
+  animation: now-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes now-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.5);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 6px rgba(0, 229, 255, 0);
+  }
+}
+
+.now-row dd {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .now-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {
