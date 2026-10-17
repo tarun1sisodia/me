@@ -1001,6 +1001,46 @@ p {
   color: var(--muted);
 }
 
+/* ---------- gridsweep: hairline columns with traveling light ---------- */
+
+.gridsweep {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-evenly;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gridsweep-line {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.055);
+  flex: none;
+}
+
+.gridsweep-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 140px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 229, 255, 0.09),
+    transparent
+  );
+  animation: gridsweep-move 9s linear infinite;
+}
+
+@keyframes gridsweep-move {
+  from {
+    left: -160px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
 /* ---------- awwwards batch: loader counter ---------- */
 
 .loader-pct {
@@ -1045,6 +1085,8 @@ p {
 
 .interlude {
   padding: clamp(40px, 6vw, 90px) 0;
+  position: relative;
+  overflow: clip;
 }
 
 .scrub-text {

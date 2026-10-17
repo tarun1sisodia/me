@@ -1,5 +1,6 @@
 import Marquee from "./Marquee";
 import ScrubText from "./ScrubText";
+import GridSweep from "./GridSweep";
 
 const DIVIDER_ITEMS = [
   "SHIPPED NOT SHELVED",
@@ -12,6 +13,7 @@ const DIVIDER_ITEMS = [
 export default function Interlude() {
   return (
     <div className="interlude" aria-label="Interlude">
+      <GridSweep />
       <Marquee
         items={DIVIDER_ITEMS}
         baseSpeed={1.8}
