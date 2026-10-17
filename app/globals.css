@@ -567,6 +567,63 @@ p {
   white-space: nowrap;
 }
 
+/* ---------- wordmark hover image reveal ---------- */
+
+.wm {
+  pointer-events: auto;
+  cursor: default;
+}
+
+.wm-letter {
+  display: inline-block;
+  transition:
+    color 0.28s ease,
+    -webkit-text-stroke-color 0.28s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wm-letter:hover {
+  color: var(--cyan);
+  -webkit-text-stroke-color: var(--cyan);
+  transform: translateY(-0.055em) skewX(-7deg) scale(1.04);
+}
+
+.wm-float {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: min(300px, 38vw);
+  aspect-ratio: 4 / 3;
+  z-index: 80;
+  pointer-events: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.wm-img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.wm-img.is-active {
+  opacity: 1;
+}
+
+.wm-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- clip-path image reveal ---------- */
+
+.clip-reveal {
+  will-change: clip-path;
+}
+
 /* ---------- hero ---------- */
 
 .hero {

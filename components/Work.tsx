@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, Film, GraduationCap, Music } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
+import ClipReveal from "./ClipReveal";
 import { GithubIcon } from "./BrandIcons";
 import { PROJECTS, type Project } from "@/lib/data";
 
@@ -47,18 +48,22 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
   return (
     <TiltCard className={`project-card${featured ? " featured" : ""}`}>
       {project.image ? (
-        <div className="project-visual">
-          <Image
-            src={project.image}
-            alt={`${project.name} — build documentation on screen`}
-            fill
-            sizes={featured ? "(max-width: 900px) 100vw, 1100px" : "(max-width: 900px) 100vw, 34vw"}
-          />
-        </div>
+        <ClipReveal>
+          <div className="project-visual">
+            <Image
+              src={project.image}
+              alt={`${project.name} — build documentation on screen`}
+              fill
+              sizes={featured ? "(max-width: 900px) 100vw, 1100px" : "(max-width: 900px) 100vw, 34vw"}
+            />
+          </div>
+        </ClipReveal>
       ) : (
-        <div className="project-visual project-icon" aria-hidden="true">
-          {Icon && <Icon size={46} strokeWidth={1.25} />}
-        </div>
+        <ClipReveal>
+          <div className="project-visual project-icon" aria-hidden="true">
+            {Icon && <Icon size={46} strokeWidth={1.25} />}
+          </div>
+        </ClipReveal>
       )}
       <div className="project-body">
         <div className="project-top">

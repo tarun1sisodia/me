@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Mail } from "lucide-react";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
+import WordmarkReveal from "./WordmarkReveal";
 import { GithubIcon, InstagramIcon, LinkedinIcon, XIcon } from "./BrandIcons";
 import { PROFILE, SOCIALS } from "@/lib/data";
 
@@ -89,9 +90,7 @@ export default function Connect() {
           </div>
         </div>
       </div>
-      <div className="foot-mark" aria-hidden="true">
-        TARUN
-      </div>
+      <WordmarkReveal />
       <footer className="footer">
         <div className="container footer-inner">
           <span>© 2026&nbsp;{PROFILE.name}</span>
