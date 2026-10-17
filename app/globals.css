@@ -972,6 +972,7 @@ p {
   border: 0;
   padding: 6px 4px;
   cursor: pointer;
+  pointer-events: auto;
   animation: orbit-float 7s ease-in-out infinite alternate;
   transition: color 0.25s ease;
 }
