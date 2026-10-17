@@ -549,6 +549,7 @@ p {
   position: relative;
   text-align: center;
   margin-top: clamp(8px, 2vh, 24px);
+  padding-bottom: clamp(84px, 11vh, 130px);
   z-index: 2;
 }
 
@@ -1074,6 +1075,24 @@ p {
   to {
     left: 100%;
   }
+}
+
+/* ---------- hero sub strip: copy moved below the hero ---------- */
+
+.hero-sub-strip {
+  text-align: center;
+  padding: clamp(48px, 7vw, 96px) 0 clamp(8px, 2vw, 20px);
+  position: relative;
+  z-index: 2;
+}
+
+.hero-sub-strip .hero-sub,
+.hero-sub-strip .hero-desc {
+  margin-inline: auto;
+}
+
+.hero-sub-strip .hero-desc {
+  margin-top: 18px;
 }
 
 /* ---------- awwwards batch: loader counter ---------- */

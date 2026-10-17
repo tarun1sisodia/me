@@ -2,12 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import Magnetic from "./Magnetic";
+import { ArrowDown } from "lucide-react";
 import Scramble from "./Scramble";
-import Words from "./Words";
 import OrbitWords from "./OrbitWords";
-import { PROFILE } from "@/lib/data";
 
 const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
 
@@ -90,34 +87,6 @@ export default function Hero({ started }: { started: boolean }) {
           <Scramble text="SISODIA" active={started} />
         </h1>
         <p className="hero-mono-caption">A BUILDER'S PERSPECTIVE ON SYSTEMS</p>
-      </div>
-
-      <div className="container hero-bottom">
-        <Words
-          text={PROFILE.subline}
-          className="hero-sub"
-          active={started}
-          tag="p"
-        />
-        <Words
-          text="I build production systems — APIs, payments, platforms. Full stack, security-minded, shipped not shelved."
-          className="hero-desc"
-          active={started}
-          tag="p"
-          delay={0.25}
-        />
-        <div className="hero-ctas">
-          <Magnetic>
-            <a href="#work" className="btn btn-primary">
-              View work <ArrowUpRight size={16} aria-hidden="true" />
-            </a>
-          </Magnetic>
-          <Magnetic>
-            <a href="#connect" className="btn btn-ghost">
-              Connect
-            </a>
-          </Magnetic>
-        </div>
       </div>
 
       <div className="hero-ticker" aria-hidden="true">

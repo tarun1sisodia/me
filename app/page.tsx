@@ -6,6 +6,7 @@ import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import MotionToggle from "@/components/MotionToggle";
 import MiniNav from "@/components/MiniNav";
+import HeroSub from "@/components/HeroSub";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import StatsBand from "@/components/StatsBand";
@@ -43,6 +44,7 @@ export default function Home() {
       <MiniNav />
       <main>
         <Hero started={loaded} />
+        <HeroSub started={loaded} />
         <Marquee id="stack" />
         <StatsBand />
         <About />
