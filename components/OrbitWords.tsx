@@ -52,53 +52,71 @@ export default function OrbitWords() {
     const x2 = lr.left - sr.left + lr.width / 2;
     const y2 = lr.top - sr.top + 4;
     let d = `M ${x1} ${y1} H ${x2} V ${y2}`;
+    let ex = x2;
+    let ey = y2;
     const dustPts: { x: number; y: number }[] = [];
     if (sticker) {
       const br = sticker.getBoundingClientRect();
       const bx = br.left - sr.left;
       const by = br.top - sr.top;
-      const sx1 = bx;
-      const sy1 = by;
-      const sx2 = bx + br.width;
-      const sy2 = by + br.height;
+      const ix = br.width * 0.12;
+      const iy = br.height * 0.12;
+      const sx1 = bx + ix;
+      const sy1 = by + iy;
+      const sx2 = bx + br.width - ix;
+      const sy2 = by + br.height - iy;
       const subs: string[] = [];
-      const hlo = Math.min(x1, x2);
-      const hhi = Math.max(x1, x2);
+      const pushH = (a: number, b: number) => {
+        if (Math.abs(b - a) < 0.5) return;
+        subs.push(`M ${a} ${y1} H ${b}`);
+        ex = b;
+        ey = y1;
+      };
+      const pushV = (a: number, b: number) => {
+        if (Math.abs(b - a) < 0.5) return;
+        subs.push(`M ${x2} ${a} V ${b}`);
+        ex = x2;
+        ey = b;
+      };
+      const dustPush = (x: number, y: number) =>
+        dustPts.push({ x: x - bx, y: y - by });
       if (y1 < sy1 || y1 > sy2) {
-        subs.push(`M ${x1} ${y1} H ${x2}`);
-      } else {
-        const l = Math.min(hhi, sx1);
-        if (l > hlo) subs.push(`M ${hlo} ${y1} H ${l}`);
-        const r = Math.max(hlo, sx2);
-        if (hhi > r) subs.push(`M ${r} ${y1} H ${hhi}`);
-        const a = Math.max(hlo, sx1);
-        const b = Math.min(hhi, sx2);
-        if (b > a) {
-          const dir = x1 < x2 ? 1 : -1;
-          dustPts.push({ x: (dir > 0 ? a : b) - bx, y: y1 - by });
-          dustPts.push({ x: (dir > 0 ? b : a) - bx, y: y1 - by });
+        pushH(x1, x2);
+      } else if (x1 < x2) {
+        if (x1 < sx1) pushH(x1, Math.min(x2, sx1));
+        if (x2 > sx1 && x1 < sx2) {
+          dustPush(Math.max(x1, sx1), y1);
+          dustPush(Math.min(x2, sx2), y1);
         }
+        if (x2 > sx2) pushH(sx2, x2);
+      } else {
+        if (x1 > sx2) pushH(x1, Math.max(x2, sx2));
+        if (x2 < sx2 && x1 > sx1) {
+          dustPush(Math.min(x1, sx2), y1);
+          dustPush(Math.max(x2, sx1), y1);
+        }
+        if (x2 < sx1) pushH(sx1, x2);
       }
-      const vlo = Math.min(y1, y2);
-      const vhi = Math.max(y1, y2);
       if (x2 < sx1 || x2 > sx2) {
-        subs.push(`M ${x2} ${y1} V ${y2}`);
-      } else {
-        const t = Math.min(vhi, sy1);
-        if (t > vlo) subs.push(`M ${x2} ${vlo} V ${t}`);
-        const btm = Math.max(vlo, sy2);
-        if (vhi > btm) subs.push(`M ${x2} ${btm} V ${vhi}`);
-        const a = Math.max(vlo, sy1);
-        const b = Math.min(vhi, sy2);
-        if (b > a) {
-          const dir = y1 < y2 ? 1 : -1;
-          dustPts.push({ x: x2 - bx, y: (dir > 0 ? a : b) - by });
-          dustPts.push({ x: x2 - bx, y: (dir > 0 ? b : a) - by });
+        pushV(y1, y2);
+      } else if (y1 < y2) {
+        if (y1 < sy1) pushV(y1, Math.min(y2, sy1));
+        if (y2 > sy1 && y1 < sy2) {
+          dustPush(x2, Math.max(y1, sy1));
+          dustPush(x2, Math.min(y2, sy2));
         }
+        if (y2 > sy2) pushV(sy2, y2);
+      } else {
+        if (y1 > sy2) pushV(y1, Math.max(y2, sy2));
+        if (y2 < sy2 && y1 > sy1) {
+          dustPush(x2, Math.min(y1, sy2));
+          dustPush(x2, Math.max(y2, sy1));
+        }
+        if (y2 < sy1) pushV(sy1, y2);
       }
       d = subs.join(" ");
     }
-    setTrace({ d, dx: x2, dy: y2 });
+    setTrace({ d, dx: ex, dy: ey });
     dustRef.current = dustPts.length > 1 ? { pts: dustPts } : null;
   }, []);
 
