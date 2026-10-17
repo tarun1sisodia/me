@@ -121,6 +121,12 @@ export default function OrbitWords() {
       };
       walk(x1, y1, x2, y1, (a, _y, b) => emitH(a, y1, b));
       walk(x2, y1, x2, y2, (a, ay1, _b, by1) => emitV(a, ay1, a, by1));
+      if (Math.abs(ey - y2) > 2 || Math.abs(ex - x2) > 2) {
+        const from = y2 > y1 ? y2 - 24 : y2 + 24;
+        subs.push(`M ${x2} ${from} V ${y2}`);
+        ex = x2;
+        ey = y2;
+      }
       d = subs.join(" ");
     }
     setTrace({ d, dx: ex, dy: ey });
