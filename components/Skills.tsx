@@ -1,5 +1,6 @@
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
+import OrbitSkills from "./OrbitSkills";
 import { SKILL_GROUPS } from "@/lib/data";
 
 export default function Skills() {
@@ -13,6 +14,7 @@ export default function Skills() {
           title="The toolkit."
           blurb="What I reach for when something needs to exist by Friday."
         />
+        <OrbitSkills />
         <div className="skills-grid">
           {SKILL_GROUPS.map((group, i) => (
             <Reveal key={group.title} delay={(i % 3) * 0.07}>
