@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
+import ScrollProgress from "@/components/ScrollProgress";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import StatsBand from "@/components/StatsBand";
@@ -32,6 +33,7 @@ export default function Home() {
       {!loaded && <Loader onDone={() => setLoaded(true)} />}
       <SmoothScroll />
       <CustomCursor />
+      <ScrollProgress />
       <main>
         <Hero started={loaded} />
         <Marquee id="stack" />
