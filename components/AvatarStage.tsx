@@ -59,7 +59,7 @@ export default function AvatarStage({
     const rim = new THREE.DirectionalLight(0x00e5ff, 1.1);
     rim.position.set(-4, 3, -3);
     scene.add(rim);
-    const fill = new THREE.DirectionalLight(0xffffff, 0.28);
+    const fill = new THREE.DirectionalLight(0xff2d78, 0.35);
     fill.position.set(-2, 1, 4);
     scene.add(fill);
 

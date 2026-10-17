@@ -3,6 +3,8 @@
   --panel: rgba(255, 255, 255, 0.03);
   --border: rgba(255, 255, 255, 0.08);
   --cyan: #00e5ff;
+  --magenta: #ff2d78;
+  --amber: #ffb800;
   --text: #ededf2;
   --muted: #8a8a96;
   --font-display: "Space Grotesk", system-ui, sans-serif;
@@ -83,7 +85,7 @@ p {
   font-size: 12px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--cyan);
+  color: var(--amber);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -147,7 +149,7 @@ p {
 }
 
 .btn-primary {
-  background: var(--cyan);
+  background: linear-gradient(120deg, var(--cyan), #4da6ff);
   color: #04121a;
   box-shadow: 0 0 24px rgba(0, 229, 255, 0.35);
 }
@@ -222,7 +224,7 @@ p {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(155deg, rgba(0, 229, 255, 0.42), rgba(0, 229, 255, 0.06));
+  background: linear-gradient(155deg, rgba(0, 229, 255, 0.5), rgba(255, 45, 120, 0.5));
   mix-blend-mode: color;
   pointer-events: none;
 }
@@ -292,7 +294,7 @@ p {
 .loader-bar span {
   display: block;
   height: 100%;
-  background: var(--cyan);
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
   border-radius: 2px;
   transition: width 0.25s ease;
   box-shadow: 0 0 14px rgba(0, 229, 255, 0.7);
@@ -346,7 +348,7 @@ p {
   width: 62px;
   height: 62px;
   margin: -31px 0 0 -31px;
-  border-color: #fff;
+  border-color: var(--magenta);
 }
 
 .cursor-ring.is-label {
@@ -411,7 +413,7 @@ p {
 
 .marquee-div {
   border-block: 1px solid var(--border);
-  background: rgba(0, 229, 255, 0.045);
+  background: rgba(255, 45, 120, 0.04);
   padding: 26px 0;
 }
 
@@ -618,7 +620,7 @@ p {
   height: 520px;
   right: -160px;
   bottom: -180px;
-  background: rgba(0, 229, 255, 0.07);
+  background: rgba(255, 45, 120, 0.09);
 }
 
 .hero-inner {
@@ -789,7 +791,10 @@ p {
   font-family: var(--font-display);
   font-size: clamp(34px, 4vw, 52px);
   font-weight: 700;
-  color: var(--cyan);
+  background: linear-gradient(120deg, var(--cyan), var(--magenta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .stat-label {
@@ -872,13 +877,13 @@ p {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: var(--cyan);
+  background: linear-gradient(180deg, var(--cyan), var(--magenta));
 }
 
 .card-label {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: var(--cyan);
+  color: var(--amber);
   letter-spacing: 0.1em;
   margin-bottom: 18px;
 }
@@ -956,7 +961,7 @@ p {
 .journey-progress {
   width: 100%;
   height: 100%;
-  background: var(--cyan);
+  background: linear-gradient(180deg, var(--cyan), var(--magenta));
   transform-origin: top;
   transform: scaleY(0);
   box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
@@ -984,19 +989,19 @@ p {
 }
 
 .journey-item.is-current .journey-dot {
-  border-color: var(--cyan);
-  background: var(--cyan);
-  box-shadow: 0 0 18px rgba(0, 229, 255, 0.8);
+  border-color: var(--magenta);
+  background: var(--magenta);
+  box-shadow: 0 0 18px rgba(255, 45, 120, 0.8);
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
   0%,
   100% {
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+    box-shadow: 0 0 10px rgba(255, 45, 120, 0.6);
   }
   50% {
-    box-shadow: 0 0 26px rgba(0, 229, 255, 1);
+    box-shadow: 0 0 26px rgba(255, 45, 120, 1);
   }
 }
 
@@ -1004,7 +1009,7 @@ p {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.2em;
-  color: var(--muted);
+  color: var(--amber);
   margin-bottom: 8px;
 }
 
@@ -1081,7 +1086,7 @@ p {
   justify-content: center;
   background:
     radial-gradient(circle at 30% 20%, rgba(0, 229, 255, 0.14), transparent 55%),
-    radial-gradient(circle at 75% 80%, rgba(0, 229, 255, 0.12), transparent 55%);
+    radial-gradient(circle at 75% 80%, rgba(255, 45, 120, 0.14), transparent 55%);
   color: var(--cyan);
 }
 
@@ -1106,7 +1111,7 @@ p {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #04121a;
-  background: var(--cyan);
+  background: linear-gradient(120deg, var(--cyan), #4da6ff);
   padding: 5px 12px;
   border-radius: 999px;
 }
@@ -1170,7 +1175,7 @@ p {
 }
 
 .skill-group:hover {
-  border-color: rgba(0, 229, 255, 0.35);
+  border-color: rgba(255, 45, 120, 0.35);
   transform: translateY(-4px);
 }
 
@@ -1179,7 +1184,7 @@ p {
   font-size: 12px;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--cyan);
+  color: var(--amber);
   margin: 0 0 16px;
 }
 
@@ -1254,7 +1259,7 @@ p {
   overflow: hidden;
   background:
     radial-gradient(120% 90% at 50% 10%, rgba(0, 229, 255, 0.07), transparent 60%),
-    radial-gradient(100% 80% at 50% 100%, rgba(0, 229, 255, 0.06), transparent 60%),
+    radial-gradient(100% 80% at 50% 100%, rgba(255, 45, 120, 0.06), transparent 60%),
     rgba(255, 255, 255, 0.015);
   box-shadow:
     0 0 0 1px rgba(0, 229, 255, 0.12),
@@ -1279,7 +1284,7 @@ p {
 }
 
 .connect-dot {
-  color: var(--cyan);
+  color: var(--magenta);
 }
 
 .connect-grid {

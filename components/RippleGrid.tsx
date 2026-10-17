@@ -31,10 +31,10 @@ export default function RippleGrid() {
     const pos = geo.attributes.position as THREE.BufferAttribute;
     const colors = new Float32Array(pos.count * 3);
     const cyan = new THREE.Color("#00E5FF");
-    const white = new THREE.Color("#FFFFFF");
+    const magenta = new THREE.Color("#FF2D78");
     for (let i = 0; i < pos.count; i++) {
       const t = (pos.getX(i) + W / 2) / W;
-      const c = cyan.clone().lerp(white, t).multiplyScalar(0.5);
+      const c = cyan.clone().lerp(magenta, t).multiplyScalar(0.5);
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;

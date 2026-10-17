@@ -28,12 +28,12 @@ export default function ParticleField() {
     const positions = new Float32Array(COUNT * 3);
     const colors = new Float32Array(COUNT * 3);
     const cyan = new THREE.Color("#00E5FF");
-    const white = new THREE.Color("#FFFFFF");
+    const magenta = new THREE.Color("#FF2D78");
     for (let i = 0; i < COUNT; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 24;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 15;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
-      const c = Math.random() > 0.72 ? white : cyan;
+      const c = Math.random() > 0.72 ? magenta : cyan;
       const dim = 0.22 + Math.random() * 0.78;
       colors[i * 3] = c.r * dim;
       colors[i * 3 + 1] = c.g * dim;
@@ -68,7 +68,7 @@ export default function ParticleField() {
     const ico2 = new THREE.Mesh(
       new THREE.IcosahedronGeometry(1.0, 0),
       new THREE.MeshBasicMaterial({
-        color: "#FFFFFF",
+        color: "#FF2D78",
         wireframe: true,
         transparent: true,
         opacity: 0.2,
