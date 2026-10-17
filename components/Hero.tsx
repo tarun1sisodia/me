@@ -8,7 +8,6 @@ import Scramble from "./Scramble";
 import Words from "./Words";
 import { PROFILE } from "@/lib/data";
 
-const ParticleField = dynamic(() => import("./ParticleField"), { ssr: false });
 const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
 
 export default function Hero({ started }: { started: boolean }) {
@@ -46,7 +45,6 @@ export default function Hero({ started }: { started: boolean }) {
       id="top"
       aria-label="Introduction"
     >
-      <ParticleField />
       <div className="hero-noise" aria-hidden="true" />
       <div className="container hero-top">
         <span className="chapter-label">
