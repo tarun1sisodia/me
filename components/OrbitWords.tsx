@@ -31,7 +31,7 @@ export default function OrbitWords() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [trace, setTrace] = useState<Trace | null>(null);
   const wordRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const dustRef = useRef<{ x: number; y: number } | null>(null);
+  const dustRef = useRef<{ pts: { x: number; y: number }[] } | null>(null);
 
   const measure = useCallback((i: number) => {
     const word = wordRefs.current[i];
@@ -52,46 +52,54 @@ export default function OrbitWords() {
     const x2 = lr.left - sr.left + lr.width / 2;
     const y2 = lr.top - sr.top + 4;
     let d = `M ${x1} ${y1} H ${x2} V ${y2}`;
-    let dx = x2;
-    let dy = y2;
-    dustRef.current = null;
+    const dustPts: { x: number; y: number }[] = [];
     if (sticker) {
       const br = sticker.getBoundingClientRect();
-      const ix = br.width * 0.08;
-      const iy = br.height * 0.08;
-      const sx1 = br.left - sr.left + ix;
-      const sy1 = br.top - sr.top + iy;
-      const sx2 = br.left - sr.left + br.width - ix;
-      const sy2 = br.top - sr.top + br.height - iy;
-      let hx = 0;
-      let hy = 0;
-      let kind: "h" | "v" | null = null;
-      if (y1 >= sy1 && y1 <= sy2) {
-        const lo = Math.min(x1, x2);
-        const hi = Math.max(x1, x2);
-        if (hi >= sx1 && lo <= sx2) {
-          hx = x1 < x2 ? Math.max(lo, sx1) : Math.min(hi, sx2);
-          hy = y1;
-          kind = "h";
+      const bx = br.left - sr.left;
+      const by = br.top - sr.top;
+      const sx1 = bx;
+      const sy1 = by;
+      const sx2 = bx + br.width;
+      const sy2 = by + br.height;
+      const subs: string[] = [];
+      const hlo = Math.min(x1, x2);
+      const hhi = Math.max(x1, x2);
+      if (y1 < sy1 || y1 > sy2) {
+        subs.push(`M ${x1} ${y1} H ${x2}`);
+      } else {
+        const l = Math.min(hhi, sx1);
+        if (l > hlo) subs.push(`M ${hlo} ${y1} H ${l}`);
+        const r = Math.max(hlo, sx2);
+        if (hhi > r) subs.push(`M ${r} ${y1} H ${hhi}`);
+        const a = Math.max(hlo, sx1);
+        const b = Math.min(hhi, sx2);
+        if (b > a) {
+          const dir = x1 < x2 ? 1 : -1;
+          dustPts.push({ x: (dir > 0 ? a : b) - bx, y: y1 - by });
+          dustPts.push({ x: (dir > 0 ? b : a) - bx, y: y1 - by });
         }
       }
-      if (!kind && x2 >= sx1 && x2 <= sx2) {
-        const lo = Math.min(y1, y2);
-        const hi = Math.max(y1, y2);
-        if (hi >= sy1 && lo <= sy2) {
-          hx = x2;
-          hy = y1 < y2 ? Math.max(lo, sy1) : Math.min(hi, sy2);
-          kind = "v";
+      const vlo = Math.min(y1, y2);
+      const vhi = Math.max(y1, y2);
+      if (x2 < sx1 || x2 > sx2) {
+        subs.push(`M ${x2} ${y1} V ${y2}`);
+      } else {
+        const t = Math.min(vhi, sy1);
+        if (t > vlo) subs.push(`M ${x2} ${vlo} V ${t}`);
+        const btm = Math.max(vlo, sy2);
+        if (vhi > btm) subs.push(`M ${x2} ${btm} V ${vhi}`);
+        const a = Math.max(vlo, sy1);
+        const b = Math.min(vhi, sy2);
+        if (b > a) {
+          const dir = y1 < y2 ? 1 : -1;
+          dustPts.push({ x: x2 - bx, y: (dir > 0 ? a : b) - by });
+          dustPts.push({ x: x2 - bx, y: (dir > 0 ? b : a) - by });
         }
       }
-      if (kind) {
-        d = kind === "h" ? `M ${x1} ${y1} H ${hx}` : `M ${x1} ${y1} H ${x2} V ${hy}`;
-        dx = hx;
-        dy = hy;
-        dustRef.current = { x: hx - (br.left - sr.left), y: hy - (br.top - sr.top) };
-      }
+      d = subs.join(" ");
     }
-    setTrace({ d, dx, dy });
+    setTrace({ d, dx: x2, dy: y2 });
+    dustRef.current = dustPts.length > 1 ? { pts: dustPts } : null;
   }, []);
 
   const highlight = (letter: string | null) => {

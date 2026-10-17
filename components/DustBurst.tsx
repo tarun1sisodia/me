@@ -5,6 +5,7 @@ type P = {
   x: number; y: number; vx: number; vy: number;
   life: number; max: number; size: number; color: string;
 };
+type Pt = { x: number; y: number };
 
 export default function DustBurst() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -27,7 +28,9 @@ export default function DustBurst() {
     let W = 0, H = 0, S = 1;
     let snap: ImageData | null = null;
     let raf = 0, live = false, last = 0;
-    let dusting = false, cx = 0, cy = 0, radius = 0, hole = 0;
+    let dusting = false, hole = 0;
+    let path: Pt[] = [];
+    let hx = 0, hy = 0, seg = 0, arrived = true;
     let parts: P[] = [];
 
     const buildSnap = () => {
@@ -73,7 +76,7 @@ export default function DustBurst() {
       parts.push({
         x,
         y,
-        vx: Math.cos(a) * sp + (x - cx) * 1.6,
+        vx: Math.cos(a) * sp + (x - hx) * 1.6,
         vy: Math.sin(a) * sp * 0.5 - (30 + Math.random() * 70),
         life: 0,
         max: 0.7 + Math.random() * 0.8,
@@ -82,32 +85,47 @@ export default function DustBurst() {
       });
     };
 
+    const punch = (x: number, y: number) => {
+      mctx.fillStyle = "#fff";
+      for (let k = 0; k < 10; k++) {
+        const a = Math.random() * Math.PI * 2;
+        const rr = Math.random() * 22;
+        const px = x + Math.cos(a) * rr;
+        const py = y + Math.sin(a) * rr;
+        const pr = (9 + Math.random() * 15) * S;
+        mctx.beginPath();
+        mctx.arc(px * S, py * S, pr, 0, 7);
+        mctx.fill();
+        hole += pr * pr;
+        if (parts.length < 420 && Math.random() < 0.6) spawn(px, py);
+      }
+    };
+
     const frame = (now: number) => {
       const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
       last = now;
 
-      if (dusting) {
-        const cap = Math.min(W, H) * 0.5;
-        radius = Math.min(cap, radius + dt * 260);
-        mctx.fillStyle = "#fff";
-        for (let k = 0; k < 26; k++) {
-          const a = Math.random() * Math.PI * 2;
-          const rr = radius + (Math.random() - 0.5) * 14;
-          const px = cx + Math.cos(a) * rr;
-          const py = cy + Math.sin(a) * rr;
-          const pr = (2 + Math.random() * 5) * S;
-          mctx.beginPath();
-          mctx.arc(px * S, py * S, pr, 0, 7);
-          mctx.fill();
-          hole += pr * pr;
-          if (parts.length < 420 && Math.random() < 0.5) spawn(px, py);
+      if (dusting && !arrived) {
+        let move = 520 * dt;
+        while (move > 0 && !arrived) {
+          const t = path[seg + 1];
+          const dx = t.x - hx;
+          const dy = t.y - hy;
+          const len = Math.hypot(dx, dy);
+          if (len <= move) {
+            hx = t.x;
+            hy = t.y;
+            move -= len;
+            seg++;
+            if (seg >= path.length - 1) arrived = true;
+          } else {
+            hx += (dx / len) * move;
+            hy += (dy / len) * move;
+            move = 0;
+          }
         }
-        if (radius > 8) {
-          mctx.beginPath();
-          mctx.arc(cx * S, cy * S, Math.max(0, radius - 6) * S, 0, 7);
-          mctx.fill();
-        }
-      } else {
+        punch(hx, hy);
+      } else if (!dusting) {
         hole *= Math.exp(-5 * dt);
         if (hole < 300) {
           hole = 0;
@@ -118,7 +136,6 @@ export default function DustBurst() {
           mctx.fillRect(0, 0, mask.width, mask.height);
           mctx.globalCompositeOperation = "source-over";
         }
-        radius = Math.max(0, radius - dt * 320);
       }
 
       parts = parts.filter((p) => (p.life += dt) < p.max);
@@ -156,11 +173,16 @@ export default function DustBurst() {
     };
 
     const start = (e: Event) => {
-      const d = (e as CustomEvent<{ x: number; y: number }>).detail;
-      if (!d || !isFinite(d.x) || !isFinite(d.y)) return;
-      cx = Math.max(0, Math.min(W, d.x));
-      cy = Math.max(0, Math.min(H, d.y));
-      radius = 0;
+      const d = (e as CustomEvent<{ pts: Pt[] }>).detail;
+      if (!d || !d.pts || d.pts.length < 2) return;
+      path = d.pts.map((p) => ({
+        x: Math.max(0, Math.min(W, p.x)),
+        y: Math.max(0, Math.min(H, p.y)),
+      }));
+      hx = path[0].x;
+      hy = path[0].y;
+      seg = 0;
+      arrived = false;
       dusting = true;
       sticker.classList.add("is-dusting");
       if (!live) {
