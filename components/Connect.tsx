@@ -56,7 +56,11 @@ export default function Connect() {
             </Reveal>
             <Reveal delay={0.08}>
               <Magnetic>
-                <a className="btn btn-primary btn-lg" href={`mailto:${PROFILE.email}`}>
+                <a
+                  className="btn btn-primary btn-lg"
+                  href={`mailto:${PROFILE.email}`}
+                  data-cursor="SAY HI"
+                >
                   <Mail size={16} aria-hidden="true" />
                   {PROFILE.email}
                 </a>
@@ -84,6 +88,9 @@ export default function Connect() {
             </Reveal>
           </div>
         </div>
+      </div>
+      <div className="foot-mark" aria-hidden="true">
+        TARUN
       </div>
       <footer className="footer">
         <div className="container footer-inner">

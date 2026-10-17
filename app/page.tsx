@@ -9,6 +9,7 @@ import StatsBand from "@/components/StatsBand";
 import About from "@/components/About";
 import Journey from "@/components/Journey";
 import Work from "@/components/Work";
+import Interlude from "@/components/Interlude";
 import Skills from "@/components/Skills";
 import Connect from "@/components/Connect";
 
@@ -33,11 +34,12 @@ export default function Home() {
       <CustomCursor />
       <main>
         <Hero started={loaded} />
-        <Marquee />
+        <Marquee id="stack" />
         <StatsBand />
         <About />
         <Journey />
         <Work />
+        <Interlude />
         <Skills />
         <Connect />
       </main>

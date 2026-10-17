@@ -49,6 +49,10 @@ export default function Loader({ onDone }: { onDone: () => void }) {
   return (
     <div className="loader" role="status" aria-label="Loading portfolio">
       <div className="loader-scan" aria-hidden="true" />
+      <div className="loader-pct" aria-hidden="true">
+        {progress}
+        <span>%</span>
+      </div>
       <div className="loader-box">
         {lines.map((line, i) => (
           <div key={i} className="loader-line">

@@ -351,6 +351,222 @@ p {
   border-color: var(--magenta);
 }
 
+.cursor-ring.is-label {
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  background: rgba(0, 229, 255, 0.92);
+  border-color: transparent;
+  mix-blend-mode: normal;
+}
+
+.cursor-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #04040a;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+.cursor-ring.is-label .cursor-label {
+  opacity: 1;
+}
+
+.cursor-dot.is-hidden {
+  opacity: 0;
+}
+
+/* ---------- awwwards batch: loader counter ---------- */
+
+.loader-pct {
+  position: absolute;
+  right: clamp(20px, 6vw, 72px);
+  bottom: clamp(8px, 4vh, 40px);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(72px, 14vw, 180px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0, 229, 255, 0.35);
+  user-select: none;
+}
+
+.loader-pct span {
+  font-size: 0.35em;
+  -webkit-text-stroke: 0;
+  color: rgba(0, 229, 255, 0.5);
+}
+
+/* ---------- awwwards batch: velocity marquee ---------- */
+
+.marquee-track-js {
+  animation: none;
+}
+
+.marquee-div {
+  border-block: 1px solid var(--border);
+  background: rgba(255, 45, 120, 0.04);
+  padding: 26px 0;
+}
+
+.marquee-div .marquee-item {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(20px, 3vw, 34px);
+  letter-spacing: 0.04em;
+}
+
+/* ---------- awwwards batch: interlude + scrub text ---------- */
+
+.interlude {
+  padding: clamp(40px, 6vw, 90px) 0;
+}
+
+.scrub-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 5.4vw, 68px);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  max-width: 20ch;
+  margin: clamp(48px, 7vw, 110px) auto;
+  text-align: center;
+}
+
+.scrub-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.scrub-char {
+  display: inline-block;
+}
+
+/* ---------- awwwards batch: rotating scroll badge ---------- */
+
+.scroll-badge {
+  position: absolute;
+  right: clamp(20px, 5vw, 64px);
+  bottom: clamp(20px, 5vh, 48px);
+  width: 108px;
+  height: 108px;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+}
+
+.scroll-badge-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: badge-spin 16s linear infinite;
+}
+
+.scroll-badge-text {
+  font-family: var(--font-mono);
+  font-size: 10.2px;
+  letter-spacing: 0.24em;
+  fill: var(--muted);
+}
+
+.scroll-badge-arrow {
+  color: var(--cyan);
+}
+
+@keyframes badge-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- awwwards batch: duplicated-text link rollover ---------- */
+
+.roll {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: 1.3;
+}
+
+.roll > span {
+  display: block;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.roll > span + span {
+  position: absolute;
+  inset: 0;
+  transform: translateY(104%);
+  color: var(--cyan);
+}
+
+.plink:hover .roll > span:first-child,
+.plink:focus-visible .roll > span:first-child {
+  transform: translateY(-104%);
+}
+
+.plink:hover .roll > span + span,
+.plink:focus-visible .roll > span + span {
+  transform: translateY(0);
+}
+
+/* ---------- awwwards batch: work counter ---------- */
+
+.work-count {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin: 0 0 26px;
+}
+
+.work-count-num {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.work-count-sep {
+  color: var(--cyan);
+}
+
+.work-count-label {
+  margin-left: 6px;
+}
+
+/* ---------- awwwards batch: giant footer wordmark ---------- */
+
+.foot-mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(110px, 26vw, 420px);
+  line-height: 0.82;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.09);
+  user-select: none;
+  pointer-events: none;
+  margin: clamp(60px, 9vw, 130px) 0 -0.12em;
+  white-space: nowrap;
+}
+
 /* ---------- hero ---------- */
 
 .hero {

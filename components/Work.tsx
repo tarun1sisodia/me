@@ -30,7 +30,13 @@ function TiltCard({ children, className = "" }: { children: ReactNode; className
   };
 
   return (
-    <div ref={ref} className={`tilt ${className}`} onMouseMove={onMove} onMouseLeave={onLeave}>
+    <div
+      ref={ref}
+      className={`tilt ${className}`}
+      data-cursor="VIEW"
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+    >
       {children}
     </div>
   );
@@ -75,7 +81,10 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
               ) : (
                 <ArrowUpRight size={15} aria-hidden="true" />
               )}
-              {l.label}
+              <span className="roll" aria-label={l.label}>
+                <span>{l.label}</span>
+                <span aria-hidden="true">{l.label}</span>
+              </span>
             </a>
           ))}
         </div>
@@ -96,6 +105,12 @@ export default function Work() {
           title="Shipped, not shelved."
           blurb="Real systems for real users — not tutorial projects."
         />
+        <p className="work-count" aria-label={`Selected work, ${PROJECTS.length} projects`}>
+          <span className="work-count-num">01</span>
+          <span className="work-count-sep" aria-hidden="true">/</span>
+          <span>{String(PROJECTS.length).padStart(2, "0")}</span>
+          <span className="work-count-label">selected work</span>
+        </p>
         <Reveal>
           <ProjectCard project={featured} featured />
         </Reveal>

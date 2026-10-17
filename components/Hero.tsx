@@ -80,9 +80,21 @@ export default function Hero({ started }: { started: boolean }) {
           </p>
         </Parallax>
       </div>
-      <a href="#stack" className="scroll-hint" aria-label="Scroll to content">
-        <ArrowDown size={15} aria-hidden="true" />
-        <span>scroll</span>
+      <a href="#stack" className="scroll-badge" aria-label="Scroll to content">
+        <svg viewBox="0 0 120 120" aria-hidden="true" className="scroll-badge-ring">
+          <defs>
+            <path
+              id="badge-circle"
+              d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"
+            />
+          </defs>
+          <text className="scroll-badge-text">
+            <textPath href="#badge-circle">
+              OPEN FOR WORK • SCROLL DOWN • OPEN FOR WORK • SCROLL DOWN •
+            </textPath>
+          </text>
+        </svg>
+        <ArrowDown size={16} aria-hidden="true" className="scroll-badge-arrow" />
       </a>
     </section>
   );
