@@ -20,16 +20,16 @@ export default function Connect() {
   return (
     <section className="section connect" id="connect" aria-label="Connect">
       <WaveField />
+      <div className="chapter-rule" aria-hidden="true">
+        <div className="container chapter-row">
+          <span className="chapter-label">
+            <span className="chapter-bullet" />
+            09 / OPEN CHANNEL
+          </span>
+          <span className="chapter-kicker">RESPONSE TIME · FAST</span>
+        </div>
+      </div>
       <div className="container connect-front">
-        <Reveal>
-          <p className="sec-meta">
-            <span className="sec-num">04</span>
-            <span className="sec-sep" aria-hidden="true">
-              /
-            </span>
-            <span className="sec-label">CONNECT</span>
-          </p>
-        </Reveal>
         <Reveal>
           <h2 className="connect-title">
             Let&apos;s build
