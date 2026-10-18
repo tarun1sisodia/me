@@ -11,12 +11,10 @@ type Card = { x: number; y: number; vx: number; vy: number; released: boolean };
 export default function MagnetGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const leashRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const leash = leashRef.current;
-    if (!section || !leash) return;
+    if (!section) return;
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       document.documentElement.classList.contains("motion-off")
@@ -34,12 +32,6 @@ export default function MagnetGrid() {
     let px = -9999;
     let py = -9999;
     let pointerIn = false;
-    let lastMove = 0;
-    let gx = -9999;
-    let gy = -9999;
-    let gvx = 0;
-    let gvy = 0;
-    let leashAlpha = 0;
     let raf = 0;
     let entered = false;
 
@@ -53,10 +45,6 @@ export default function MagnetGrid() {
           y: r.top - sr.top + r.height / 2,
         };
       });
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      leash.width = sr.width * dpr;
-      leash.height = sr.height * dpr;
-      leash.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const onMove = (e: PointerEvent) => {
@@ -64,11 +52,6 @@ export default function MagnetGrid() {
       px = e.clientX - sr.left;
       py = e.clientY - sr.top;
       pointerIn = true;
-      lastMove = performance.now();
-      if (gx < -999) {
-        gx = px;
-        gy = py;
-      }
     };
     const onLeave = () => {
       pointerIn = false;
@@ -76,7 +59,6 @@ export default function MagnetGrid() {
 
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      const now = performance.now();
 
       for (let i = 0; i < cards.length; i++) {
         const c = cards[i];
@@ -99,40 +81,6 @@ export default function MagnetGrid() {
         c.y += c.vy;
         const el = cardRefs.current[i];
         if (el) el.style.transform = `translate3d(${c.x.toFixed(1)}px, ${c.y.toFixed(1)}px, 0)`;
-      }
-
-      const ctx = leash.getContext("2d");
-      if (ctx) {
-        const sr = section.getBoundingClientRect();
-        ctx.clearRect(0, 0, sr.width, sr.height);
-        if (pointerIn) {
-          gvx = (gvx + (px - gx) * 0.045) * 0.86;
-          gvy = (gvy + (py - gy) * 0.045) * 0.86;
-          gx += gvx;
-          gy += gvy;
-        }
-        const want = pointerIn && now - lastMove < 2500 ? 1 : 0;
-        leashAlpha += (want - leashAlpha) * 0.08;
-        if (leashAlpha > 0.02 && gx > -999) {
-          const mx = (px + gx) / 2;
-          const my = (py + gy) / 2;
-          const nx = -(gy - py);
-          const ny = gx - px;
-          const nl = Math.hypot(nx, ny) || 1;
-          const bow = Math.min(60, Math.hypot(gvx, gvy) * 6);
-          const cx = mx + (nx / nl) * bow;
-          const cy = my + (ny / nl) * bow;
-          ctx.strokeStyle = `rgba(255, 107, 53, ${(0.75 * leashAlpha).toFixed(3)})`;
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(px, py);
-          ctx.quadraticCurveTo(cx, cy, gx, gy);
-          ctx.stroke();
-          ctx.fillStyle = `rgba(255, 107, 53, ${(0.9 * leashAlpha).toFixed(3)})`;
-          ctx.beginPath();
-          ctx.arc(px, py, 3, 0, 7);
-          ctx.fill();
-        }
       }
     };
 
@@ -199,7 +147,6 @@ export default function MagnetGrid() {
           ))}
         </div>
       </div>
-      <canvas className="magnet-leash" ref={leashRef} aria-hidden="true" />
     </section>
   );
 }
