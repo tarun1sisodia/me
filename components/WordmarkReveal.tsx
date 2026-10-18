@@ -3,13 +3,15 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 
-const LETTERS = [
-  { ch: "T", img: "/photos/portrait-studio-clean.jpg" },
-  { ch: "A", img: "/photos/portrait-smiling-arms-crossed.jpg" },
-  { ch: "R", img: "/photos/photo-bw-double-exposure.png" },
-  { ch: "U", img: "/photos/workspace-me-coding-cafe.png" },
-  { ch: "N", img: "/photos/hero-night-motion.png" },
+const PHOTOS = [
+  "/photos/portrait-studio-clean.jpg",
+  "/photos/portrait-smiling-arms-crossed.jpg",
+  "/photos/photo-bw-double-exposure.png",
+  "/photos/workspace-me-coding-cafe.png",
+  "/photos/hero-night-motion.png",
 ];
+
+const UNITS = 6;
 
 export default function WordmarkReveal() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -57,9 +59,10 @@ export default function WordmarkReveal() {
       rTo(gsap.utils.clamp(-10, 10, (e.movementX || 0) * 0.5));
     };
 
-    const letters = Array.from(root.querySelectorAll(".wm-letter"));
-    const offs = letters.map((el, i) => {
-      const h = (e: Event) => show(i, e as MouseEvent);
+    const units = Array.from(root.querySelectorAll(".wm-unit"));
+    const offs = units.map((el) => {
+      const h = (e: Event) =>
+        show(Number((el as HTMLElement).dataset.i || 0), e as MouseEvent);
       el.addEventListener("mouseenter", h);
       return () => el.removeEventListener("mouseenter", h);
     });
@@ -74,17 +77,19 @@ export default function WordmarkReveal() {
 
   return (
     <>
-      <div ref={rootRef} className="foot-mark wm" aria-label="Tarun">
-        {LETTERS.map((l, i) => (
-          <span key={i} className="wm-letter" aria-hidden="true">
-            {l.ch}
-          </span>
-        ))}
+      <div ref={rootRef} className="wm-marquee" aria-label="Tarun Sisodia">
+        <div className="wm-track" aria-hidden="true">
+          {Array.from({ length: UNITS }).map((_, u) => (
+            <span key={u} className="wm-unit" data-i={u % PHOTOS.length}>
+              TARUN SISODIA <span className="wm-sep">✦</span>
+            </span>
+          ))}
+        </div>
       </div>
       <div ref={floatRef} className="wm-float" aria-hidden="true">
-        {LETTERS.map((l, i) => (
+        {PHOTOS.map((src, i) => (
           <div key={i} className="wm-img">
-            <Image src={l.img} alt="" width={480} height={360} />
+            <Image src={src} alt="" width={480} height={360} />
           </div>
         ))}
       </div>

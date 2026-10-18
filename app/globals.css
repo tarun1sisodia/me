@@ -1474,41 +1474,58 @@ p {
 
 /* ---------- awwwards batch: giant footer wordmark ---------- */
 
-.foot-mark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(110px, 26vw, 420px);
-  line-height: 0.82;
-  text-align: center;
-  letter-spacing: 0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(var(--tint), 0.09);
-  user-select: none;
-  pointer-events: none;
+/* ---------- wordmark marquee: infinite name scroll ---------- */
+
+.wm-marquee {
+  overflow: hidden;
   margin: clamp(60px, 9vw, 130px) 0 -0.12em;
-  white-space: nowrap;
-}
-
-/* ---------- wordmark hover image reveal ---------- */
-
-.wm {
-  pointer-events: auto;
+  user-select: none;
   cursor: default;
 }
 
-.wm-letter {
-  display: inline-block;
-  transition:
-    color 0.28s ease,
-    -webkit-text-stroke-color 0.28s ease,
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+.wm-track {
+  display: flex;
+  width: max-content;
+  animation: wm-scroll 28s linear infinite;
 }
 
-.wm-letter:hover {
-  color: var(--accent);
-  -webkit-text-stroke-color: var(--accent);
-  transform: translateY(-0.055em) skewX(-7deg) scale(1.04);
+.wm-marquee:hover .wm-track {
+  animation-play-state: paused;
 }
+
+@keyframes wm-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.wm-unit {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(110px, 22vw, 380px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: var(--text);
+  transition: color 0.28s ease;
+}
+
+.wm-unit:hover {
+  color: var(--accent);
+}
+
+.wm-unit .wm-sep {
+  color: var(--accent);
+  padding: 0 0.22em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wm-track {
+    animation: none;
+  }
+}
+
+/* ---------- wordmark hover image reveal ---------- */
 
 .wm-float {
   position: fixed;
