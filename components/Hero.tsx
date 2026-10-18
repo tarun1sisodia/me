@@ -68,7 +68,6 @@ export default function Hero({ started }: { started: boolean }) {
           <span className="chapter-bullet" aria-hidden="true" />
           01 / PRESENCE
         </span>
-        <span className="chapter-kicker">FULL STACK · SECURITY-MINDED</span>
       </div>
 
       <div className="container hero-stage">
