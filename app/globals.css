@@ -1179,6 +1179,27 @@ p {
   }
 }
 
+/* ---------- write reveal phase 2: SISODIA fills with accent after writing ---------- */
+
+.write-reveal.name-sisodia .write-char {
+  padding: 0 0.03em;
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease;
+  transition-delay: calc(var(--i) * 0.09s);
+}
+
+.write-reveal.name-sisodia.is-colored .write-char {
+  background-color: var(--accent);
+  color: #0b0b0e;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .write-reveal.name-sisodia .write-char {
+    transition: none;
+  }
+}
+
 /* ---------- work filter: pill shown when arriving from a hero word ---------- */
 
 .work-filter {
