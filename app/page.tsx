@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import MotionToggle from "@/components/MotionToggle";
+import ThemeToggle from "@/components/ThemeToggle";
 import MusicToggle from "@/components/MusicToggle";
 import MiniNav from "@/components/MiniNav";
 import HeroSub from "@/components/HeroSub";
@@ -42,6 +43,7 @@ export default function Home() {
       <CustomCursor />
       <ScrollProgress />
       <MotionToggle />
+      <ThemeToggle />
       <MusicToggle />
       <MiniNav />
       <main>
