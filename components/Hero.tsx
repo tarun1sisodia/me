@@ -89,6 +89,14 @@ export default function Hero({ started }: { started: boolean }) {
                 priority
               />
               <Image
+                src="/photos/sticker-tarun-halftone-dark.png"
+                alt=""
+                aria-hidden="true"
+                className="sticker-ht-dark"
+                width={1254}
+                height={1324}
+              />
+              <Image
                 src="/photos/sticker-tarun.png"
                 alt=""
                 aria-hidden="true"

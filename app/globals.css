@@ -29,10 +29,6 @@
   color-scheme: light;
 }
 
-:root[data-theme="light"] .sticker-ht {
-  filter: invert(1);
-}
-
 * {
   box-sizing: border-box;
 }
@@ -621,6 +617,27 @@ p {
 
 .sticker-ht {
   transition: opacity 0.5s ease;
+}
+
+.sticker-ht-dark {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.5s ease;
+}
+
+:root[data-theme="light"] .sticker-ht-dark {
+  display: block;
+}
+
+:root[data-theme="light"] .sticker-ht {
+  display: none;
+}
+
+.hero-sticker:hover .sticker-ht-dark {
+  opacity: 0;
 }
 
 .hero-giant {
@@ -2745,6 +2762,7 @@ select.field-input option {
 }
 
 .hero-sticker.is-dusting .sticker-ht,
+.hero-sticker.is-dusting .sticker-ht-dark,
 .hero-sticker.is-dusting .sticker-color {
   opacity: 0;
 }
