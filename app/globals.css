@@ -1649,6 +1649,8 @@ p {
   background: rgba(255, 255, 255, 0.015);
   overflow: hidden;
   padding: 20px 0;
+  margin-block: 36px;
+  transform: rotate(-1.8deg) scaleX(1.03);
 }
 
 .marquee-track {
