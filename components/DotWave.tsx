@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 const ACCENT = "255,107,53";
 const COLS = 56;
 const ROWS = 8;
+const MAGNET_R = 220;
+const MAGNET_PULL = 32;
 
 type Star = { x: number; y: number; vx: number; vy: number; r: number; ph: number };
 
@@ -22,6 +24,9 @@ export default function DotWave() {
     let h = 0;
     let t = 0;
     let stars: Star[] = [];
+    const mouse = { x: -9999, y: -9999 };
+    const offs = new Float32Array(COLS * ROWS * 2);
+    const vels = new Float32Array(COLS * ROWS * 2);
 
     const seedStars = () => {
       stars = Array.from({ length: 16 }, () => ({
@@ -46,6 +51,18 @@ export default function DotWave() {
     resize();
     window.addEventListener("resize", resize);
 
+    const onMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    };
+    const onLeave = () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    };
+    canvas.addEventListener("mousemove", onMove);
+    canvas.addEventListener("mouseleave", onLeave);
+
     const draw = () => {
       const frozen = reduced || document.documentElement.classList.contains("motion-off");
       ctx.clearRect(0, 0, w, h);
@@ -64,14 +81,41 @@ export default function DotWave() {
       ctx.fillStyle = `rgba(${ACCENT},0.9)`;
       ctx.fill();
 
+      let k = 0;
       for (let c = 0; c < COLS; c++) {
-        for (let r = 0; r < ROWS; r++) {
-          const x = (c / (COLS - 1)) * w;
+        for (let r = 0; r < ROWS; r++, k++) {
+          const bx = (c / (COLS - 1)) * w;
           const swell = Math.sin((r / (ROWS - 1)) * Math.PI);
-          const y = (r / (ROWS - 1)) * h + Math.sin(c * 0.32 + t * 1.7) * 13 * swell;
+          const by = (r / (ROWS - 1)) * h + Math.sin(c * 0.32 + t * 1.7) * 13 * swell;
+          let ox = offs[k * 2];
+          let oy = offs[k * 2 + 1];
+          let vx = vels[k * 2];
+          let vy = vels[k * 2 + 1];
+          let tx = 0;
+          let ty = 0;
+          if (!frozen) {
+            const dx = mouse.x - bx;
+            const dy = mouse.y - by;
+            const d = Math.hypot(dx, dy);
+            if (d < MAGNET_R && d > 0.01) {
+              const pull = (1 - d / MAGNET_R) * MAGNET_PULL;
+              tx = (dx / d) * pull;
+              ty = (dy / d) * pull;
+            }
+            vx += (tx - ox) * 0.14;
+            vy += (ty - oy) * 0.14;
+            vx *= 0.78;
+            vy *= 0.78;
+            ox += vx;
+            oy += vy;
+            offs[k * 2] = ox;
+            offs[k * 2 + 1] = oy;
+            vels[k * 2] = vx;
+            vels[k * 2 + 1] = vy;
+          }
           const glow = 0.5 + 0.5 * Math.sin(c * 0.32 + t * 1.7);
           ctx.beginPath();
-          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.arc(bx + ox, by + oy, 2, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${ACCENT},${(0.14 + glow * 0.62).toFixed(3)})`;
           ctx.fill();
         }
@@ -118,6 +162,8 @@ export default function DotWave() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      canvas.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("mouseleave", onLeave);
     };
   }, []);
 
