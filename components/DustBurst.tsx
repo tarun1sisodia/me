@@ -78,7 +78,7 @@ export default function DustBurst() {
         life: 0,
         max: 0.7 + Math.random() * 0.8,
         size: 1 + Math.random() * 2.4,
-        color: Math.random() < 0.12 ? "#00e5ff" : colorAt(x, y),
+        color: Math.random() < 0.12 ? "#ff6b35" : colorAt(x, y),
       });
     };
 

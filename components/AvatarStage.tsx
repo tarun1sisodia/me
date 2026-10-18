@@ -56,10 +56,10 @@ export default function AvatarStage({
     key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
     scene.add(key);
-    const rim = new THREE.DirectionalLight(0x00e5ff, 1.1);
+    const rim = new THREE.DirectionalLight(0xff6b35, 1.1);
     rim.position.set(-4, 3, -3);
     scene.add(rim);
-    const fill = new THREE.DirectionalLight(0xff2d78, 0.35);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.3);
     fill.position.set(-2, 1, 4);
     scene.add(fill);
 
