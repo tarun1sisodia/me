@@ -1036,39 +1036,18 @@ p {
   }
 }
 
-/* ---------- dotwave: dot-matrix traveling wave ---------- */
+/* ---------- dotwave: dot-matrix wave + constellation + orbit ring ---------- */
 
 .dotwave-wrap {
   margin: clamp(36px, 5vw, 64px) 0 0;
 }
 
-.dotwave {
-  display: grid;
-  grid-template-columns: repeat(48, 1fr);
-  gap: 12px 4px;
+.dotwave-canvas {
+  display: block;
+  width: 100%;
+  height: 250px;
   mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-}
-
-.dotwave-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  justify-self: center;
-  animation: dotwave-rise 2.8s ease-in-out infinite;
-}
-
-@keyframes dotwave-rise {
-  0%,
-  100% {
-    transform: translateY(12px);
-    opacity: 0.18;
-  }
-  50% {
-    transform: translateY(-12px);
-    opacity: 0.95;
-  }
 }
 
 .dotwave-caption {
@@ -1129,13 +1108,45 @@ p {
   z-index: 2;
 }
 
-.hero-sub-strip .hero-sub,
-.hero-sub-strip .hero-desc {
+.hero-sub-strip .hero-sub-new {
   margin-inline: auto;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: clamp(20px, 3vw, 34px);
+  letter-spacing: 0.04em;
+  color: var(--text);
 }
 
-.hero-sub-strip .hero-desc {
-  margin-top: 18px;
+.hero-story-cue {
+  margin-top: 22px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  color: var(--accent);
+}
+
+.hero-story-cue span {
+  display: inline-block;
+  animation: cue-drop 1.8s ease-in-out infinite;
+}
+
+@keyframes cue-drop {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-story-cue span {
+    animation: none;
+  }
 }
 
 /* ---------- write reveal: letters drawn one by one, like writing ---------- */
@@ -1333,8 +1344,8 @@ p {
 
 .scroll-badge-text {
   font-family: var(--font-mono);
-  font-size: 10.2px;
-  letter-spacing: 0.24em;
+  font-size: 13px;
+  letter-spacing: 0.16em;
   fill: var(--muted);
 }
 

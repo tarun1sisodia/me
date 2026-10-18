@@ -125,7 +125,7 @@ export default function Hero({ started }: { started: boolean }) {
           </defs>
           <text className="scroll-badge-text">
             <textPath href="#badge-circle">
-              OPEN FOR WORK • SCROLL DOWN • OPEN FOR WORK • SCROLL DOWN •
+              OPEN FOR WORK • SCROLL DOWN •
             </textPath>
           </text>
         </svg>

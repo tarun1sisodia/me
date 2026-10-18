@@ -142,7 +142,7 @@ export const CURRENTLY = [
 ];
 
 export const ABOUT_STORY = [
-  "I'm Tarun — a full stack developer from Greater Noida who likes systems that actually ship.",
+  "I'm a full stack developer from Greater Noida who likes systems that actually ship.",
   "I build backends that handle real money and real users: payments, bookings, auth — the unglamorous parts that have to work.",
   "Right now I'm finishing my MCA in Cyber Security, and going deeper into the security side of everything I build.",
 ];
