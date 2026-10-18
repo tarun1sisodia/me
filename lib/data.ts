@@ -124,7 +124,7 @@ export const PROJECTS: Project[] = [
     outcome: "Production-ready backend for a blood-donation connect app.",
     stack: ["JavaScript", "Node.js"],
     image: "/photos/projects/bloodconnect-donation.webp",
-    imageAlt: "Blood donation drive",
+    imageAlt: "Blood bags ready for donation",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia/bloodconnectbackend" }],
   },
 ];

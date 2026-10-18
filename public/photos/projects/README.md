@@ -21,5 +21,5 @@ page before any commercial reuse.
    - Author: Maksimsokolov — License: CC BY-SA 4.0
 
 5. `bloodconnect-donation.webp` — BloodConnect
-   - Source: https://commons.wikimedia.org/wiki/File:2025-02-27_Blutspendeaktion_in_der_Aula_der_Kaufm%C3%A4nnischen_Schule_Tauberbischofsheim.jpg
-   - Author: Triplec85 — License: CC BY-SA 4.0
+   - Source: https://commons.wikimedia.org/wiki/File:Antonio_e_Biagio_e_Cesare_Arrigo_Blood_Bags.jpg
+   - Author: PescediBabele — License: CC BY-SA 4.0
