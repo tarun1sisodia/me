@@ -1,9 +1,10 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { Mail } from "lucide-react";
+import { Download, Mail, MessageCircle } from "lucide-react";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import WordmarkReveal from "./WordmarkReveal";
+import LeadForm from "./LeadForm";
 import { GithubIcon, InstagramIcon, LinkedinIcon, XIcon } from "./BrandIcons";
 import { PROFILE, SOCIALS } from "@/lib/data";
 
@@ -67,6 +68,24 @@ export default function Connect() {
                 </a>
               </Magnetic>
             </Reveal>
+            <Reveal delay={0.11}>
+              <div className="connect-alt">
+                <a className="btn btn-ghost" href="/resume.pdf" download data-cursor="GET">
+                  <Download size={16} aria-hidden="true" />
+                  Résumé
+                </a>
+                <a
+                  className="btn btn-ghost"
+                  href="https://wa.me/919536454306?text=Hi%20Tarun%2C%20saw%20your%20portfolio."
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="CHAT"
+                >
+                  <MessageCircle size={16} aria-hidden="true" />
+                  WhatsApp
+                </a>
+              </div>
+            </Reveal>
             <Reveal delay={0.14}>
               <div className="socials">
                 {SOCIALS.map((s) => {
@@ -89,6 +108,9 @@ export default function Connect() {
             </Reveal>
           </div>
         </div>
+        <Reveal>
+          <LeadForm />
+        </Reveal>
       </div>
       <WordmarkReveal />
       <footer className="footer">

@@ -2273,6 +2273,137 @@ p {
   letter-spacing: 0.06em;
 }
 
+.connect-alt {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ================= LEAD FORM — start (remove this block + LeadForm.tsx + its mount line in Connect.tsx to remove) ================= */
+
+.lead-form {
+  margin-top: 72px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--panel);
+  padding: clamp(24px, 4vw, 44px);
+  display: grid;
+  gap: 20px;
+}
+
+.lead-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field-input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 15px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.field-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+}
+
+.field-input::placeholder {
+  color: var(--muted);
+}
+
+select.field-input {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+select.field-input option {
+  background: #0c0c12;
+  color: var(--text);
+}
+
+.field-area {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.lead-honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+.lead-submit {
+  justify-self: start;
+}
+
+.lead-submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.lead-error {
+  font-size: 14px;
+  color: var(--accent);
+  margin: 0;
+}
+
+.lead-done {
+  margin-top: 72px;
+  border: 1px solid rgba(255, 107, 53, 0.35);
+  border-radius: 22px;
+  background: rgba(255, 107, 53, 0.05);
+  padding: clamp(28px, 4vw, 48px);
+  text-align: center;
+}
+
+.lead-done-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.lead-done-text {
+  color: var(--muted);
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .lead-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= LEAD FORM — end ================= */
+
 .footer {
   border-top: 1px solid var(--border);
   padding: 26px 0;
