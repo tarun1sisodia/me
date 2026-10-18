@@ -78,6 +78,7 @@ export interface Project {
   outcome: string;
   stack: string[];
   image?: string;
+  imageAlt?: string;
   icon?: "Music" | "Film" | "GraduationCap" | "HeartPulse";
   links: { label: string; href: string }[];
 }
@@ -87,7 +88,8 @@ export const PROJECTS: Project[] = [
     name: "ArenaAI",
     outcome: "Production travel platform for a real business — bookings, fares, payments, live and serving users.",
     stack: ["React", "TypeScript", "Fastify", "PostgreSQL", "Razorpay", "Cloudflare"],
-    image: "/photos/workspace-docs-closeup.webp",
+    image: "/photos/projects/arenai-travel.webp",
+    imageAlt: "Taj Mahal at sunrise",
     links: [
       { label: "GitHub", href: "https://github.com/tarun1sisodia/ArenaAI" },
       { label: "Live site", href: "https://agraskbagheltourandtravels.com" },
@@ -97,28 +99,32 @@ export const PROJECTS: Project[] = [
     name: "FreeTune",
     outcome: "Scalable music-streaming backend with caching, rate limiting, and cloud audio storage.",
     stack: ["Node.js", "Express", "MongoDB", "Redis", "Cloudflare R2"],
-    icon: "Music",
+    image: "/photos/projects/freetune-concert.webp",
+    imageAlt: "Concert crowd under stage lights",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
     name: "CineMatch",
     outcome: "Full-stack movie recommendations with content-based filtering (TF-IDF + cosine similarity).",
     stack: ["React", "FastAPI", "scikit-learn", "SQLite"],
-    icon: "Film",
+    image: "/photos/projects/cinematch-cinema.webp",
+    imageAlt: "Empty cinema theater seats",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
     name: "SmartCampus",
     outcome: "Cross-platform attendance app for institutions — recording, teacher workflows, analytics.",
     stack: ["Flutter", "Node.js", "MySQL"],
-    icon: "GraduationCap",
+    image: "/photos/projects/smartcampus-campus.webp",
+    imageAlt: "University campus",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
     name: "BloodConnect",
     outcome: "Production-ready backend for a blood-donation connect app.",
     stack: ["JavaScript", "Node.js"],
-    icon: "HeartPulse",
+    image: "/photos/projects/bloodconnect-donation.webp",
+    imageAlt: "Blood donation drive",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia/bloodconnectbackend" }],
   },
 ];

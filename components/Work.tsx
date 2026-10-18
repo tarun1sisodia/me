@@ -52,7 +52,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
           <div className="project-visual">
             <Image
               src={project.image}
-              alt={`${project.name} — build documentation on screen`}
+              alt={project.imageAlt || project.name}
               fill
               sizes={featured ? "(max-width: 900px) 100vw, 1100px" : "(max-width: 900px) 100vw, 34vw"}
             />
