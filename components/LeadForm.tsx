@@ -1,5 +1,5 @@
 "use client";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Send } from "lucide-react";
 
 const FORMSPREE_ID = "mppqnzza";
@@ -8,10 +8,17 @@ type Status = "idle" | "sending" | "sent" | "error";
 
 export default function LeadForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const [delivered, setDelivered] = useState(false);
+
+  useEffect(() => {
+    if (status !== "sent") return;
+    const t = window.setTimeout(() => setDelivered(true), 1100);
+    return () => window.clearTimeout(t);
+  }, [status]);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (status === "sending") return;
+    if (status !== "idle") return;
     setStatus("sending");
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
@@ -25,12 +32,17 @@ export default function LeadForm() {
     }
   };
 
-  if (status === "sent") {
+  if (delivered) {
     return (
       <div className="lead-done" role="status">
-        <p className="lead-done-title">Message received.</p>
+        <svg className="done-check" viewBox="0 0 64 64" aria-hidden="true">
+          <circle className="done-circle" cx="32" cy="32" r="28" />
+          <path className="done-tick" d="M20 33 L29 42 L45 24" />
+        </svg>
+        <p className="lead-done-title">Delivered.</p>
         <p className="lead-done-text">
-          I read everything myself — expect a reply within 24 hours.
+          Your brief is in my inbox — I read everything myself, expect a reply
+          within 24 hours.
         </p>
       </div>
     );
@@ -104,12 +116,26 @@ export default function LeadForm() {
       )}
       <button
         type="submit"
-        className="btn btn-primary btn-lg lead-submit"
-        disabled={status === "sending"}
+        className={`btn btn-primary btn-lg lead-submit is-${status}`}
+        disabled={status !== "idle"}
         data-cursor="SEND"
       >
-        <Send size={16} aria-hidden="true" />
-        {status === "sending" ? "Sending…" : "Send the brief"}
+        {status === "sending" ? (
+          <>
+            <span className="lead-spinner" aria-hidden="true" />
+            <span>Sending…</span>
+          </>
+        ) : status === "sent" ? (
+          <>
+            <Send size={16} className="lead-plane" aria-hidden="true" />
+            <span>Delivered</span>
+          </>
+        ) : (
+          <>
+            <Send size={16} aria-hidden="true" />
+            <span>Send the brief</span>
+          </>
+        )}
       </button>
     </form>
   );

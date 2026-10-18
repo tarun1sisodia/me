@@ -2362,11 +2362,52 @@ select.field-input option {
 
 .lead-submit {
   justify-self: start;
+  position: relative;
+  overflow: hidden;
+  min-width: 210px;
+  justify-content: center;
 }
 
 .lead-submit:disabled {
-  opacity: 0.6;
   cursor: wait;
+}
+
+.lead-submit.is-sending {
+  opacity: 0.85;
+}
+
+.lead-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(4, 18, 26, 0.3);
+  border-top-color: #04121a;
+  border-radius: 50%;
+  animation: lead-spin 0.7s linear infinite;
+}
+
+@keyframes lead-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lead-submit.is-sent .lead-plane {
+  animation: plane-fly 0.9s ease-in forwards;
+}
+
+@keyframes plane-fly {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translate(8px, -8px) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(72px, -72px) rotate(26deg);
+    opacity: 0;
+  }
 }
 
 .lead-error {
@@ -2382,6 +2423,48 @@ select.field-input option {
   background: rgba(255, 107, 53, 0.05);
   padding: clamp(28px, 4vw, 48px);
   text-align: center;
+  animation: done-in 0.5s ease-out;
+}
+
+@keyframes done-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.done-check {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 18px;
+  display: block;
+}
+
+.done-circle {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-dasharray: 176;
+  stroke-dashoffset: 176;
+  animation: done-draw 0.6s ease-out forwards;
+  filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.5));
+}
+
+.done-tick {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 44;
+  stroke-dashoffset: 44;
+  animation: done-draw 0.4s ease-out 0.5s forwards;
+}
+
+@keyframes done-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .lead-done-title {
@@ -2394,6 +2477,21 @@ select.field-input option {
 .lead-done-text {
   color: var(--muted);
   margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .done-circle,
+  .done-tick {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .lead-submit.is-sent .lead-plane {
+    animation: none;
+    opacity: 0;
+  }
+  .lead-done {
+    animation: none;
+  }
 }
 
 @media (max-width: 700px) {
