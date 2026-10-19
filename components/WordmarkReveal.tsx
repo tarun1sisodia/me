@@ -89,7 +89,7 @@ export default function WordmarkReveal() {
       <div ref={floatRef} className="wm-float" aria-hidden="true">
         {PHOTOS.map((src, i) => (
           <div key={i} className="wm-img">
-            <Image src={src} alt="" width={480} height={360} />
+            <Image src={src} alt="" width={480} height={360} sizes="(max-width: 768px) 38vw, 300px" loading="lazy" />
           </div>
         ))}
       </div>

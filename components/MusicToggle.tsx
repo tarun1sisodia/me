@@ -7,6 +7,7 @@ export default function MusicToggle() {
 
   useEffect(() => {
     audio.current = new Audio("/audio/on-and-on.mp3");
+    audio.current.preload = "none";
     audio.current.loop = true;
     audio.current.volume = 0.6;
     return () => {

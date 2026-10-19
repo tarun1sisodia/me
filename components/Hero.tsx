@@ -87,6 +87,7 @@ export default function Hero({ started }: { started: boolean }) {
                 width={1254}
                 height={1324}
                 priority
+                sizes="(max-width: 768px) 260px, 460px"
               />
               <Image
                 src="/photos/sticker-tarun-halftone-dark.png"
@@ -95,6 +96,7 @@ export default function Hero({ started }: { started: boolean }) {
                 className="sticker-ht-dark"
                 width={1254}
                 height={1324}
+                sizes="(max-width: 768px) 260px, 460px"
               />
               <Image
                 src="/photos/sticker-tarun.png"
@@ -103,6 +105,7 @@ export default function Hero({ started }: { started: boolean }) {
                 className="sticker-color"
                 width={1254}
                 height={1324}
+                sizes="(max-width: 768px) 260px, 460px"
               />
               <DustBurst />
             </>

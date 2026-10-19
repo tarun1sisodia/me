@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESC,
   authors: [{ name: "Tarun Sisodia" }],
+  alternates: {
+    canonical: "https://me-seven-delta-16.vercel.app",
+  },
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESC,

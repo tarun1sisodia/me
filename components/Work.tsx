@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "re
 import Image from "next/image";
 import { ArrowUpRight, Film, GraduationCap, HeartPulse, Music } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import LazyScene from "./LazyScene";
 import Reveal from "./Reveal";
 import ClipReveal from "./ClipReveal";
 import { GithubIcon } from "./BrandIcons";
@@ -119,7 +120,9 @@ export default function Work() {
 
   return (
     <section className="section work" id="work" aria-label="Work">
-      <RippleGrid />
+      <LazyScene>
+        <RippleGrid />
+      </LazyScene>
       <div className="container work-front">
         <SectionHeading
           index="04"

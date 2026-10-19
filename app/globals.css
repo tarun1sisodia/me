@@ -2236,6 +2236,20 @@ p {
   overflow: clip;
 }
 
+/* ---------- lazy 3D scene wrapper (perf: mounts scene near viewport) ---------- */
+.lazy-scene {
+  position: relative;
+  height: 0;
+}
+.lazy-scene canvas {
+  animation: sceneIn 1.1s ease;
+}
+@keyframes sceneIn {
+  from {
+    opacity: 0;
+  }
+}
+
 .wave-field {
   position: absolute;
   inset: auto 0 0 0;

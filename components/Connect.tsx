@@ -5,6 +5,7 @@ import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import WordmarkReveal from "./WordmarkReveal";
 import LeadForm from "./LeadForm";
+import LazyScene from "./LazyScene";
 import { GithubIcon, InstagramIcon, LinkedinIcon, XIcon } from "./BrandIcons";
 import { PROFILE, SOCIALS } from "@/lib/data";
 
@@ -20,7 +21,9 @@ const ICONS = {
 export default function Connect() {
   return (
     <section className="section connect" id="connect" aria-label="Connect">
-      <WaveField />
+      <LazyScene>
+        <WaveField />
+      </LazyScene>
       <div className="chapter-rule" aria-hidden="true">
         <div className="container chapter-row">
           <span className="chapter-label">
