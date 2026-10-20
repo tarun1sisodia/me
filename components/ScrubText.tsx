@@ -40,9 +40,9 @@ export default function ScrubText({
 
   const words = text.split(" ");
   return (
-    <p ref={ref} className={`scrub-text ${className}`} aria-label={text}>
+    <p ref={ref} className={`scrub-text ${className}`}>
       {words.map((w, wi) => (
-        <span key={wi} className="scrub-word" aria-hidden="true">
+        <span key={wi} className="scrub-word">
           {w.split("").map((c, ci) => (
             <span key={ci} className="scrub-char">
               {c}

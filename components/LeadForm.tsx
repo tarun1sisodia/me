@@ -51,7 +51,7 @@ export default function LeadForm() {
   return (
     <form className="lead-form" onSubmit={onSubmit}>
       <input type="hidden" name="_subject" value="New lead from portfolio" />
-      <input type="text" name="_gotcha" className="lead-honeypot" tabIndex={-1} autoComplete="off" />
+      <input type="text" name="_gotcha" className="lead-honeypot" tabIndex={-1} autoComplete="off" aria-label="Leave this field empty" />
       <div className="lead-row">
         <label className="field">
           <span className="field-label">Name *</span>

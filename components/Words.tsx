@@ -49,7 +49,7 @@ export default function Words({
 
   const parts = text.split(" ");
   const inner = parts.map((w, i) => (
-    <span key={i} className="w-mask" aria-hidden="true">
+    <span key={i} className="w-mask">
       <span className="w-word">{w}</span>
       {i < parts.length - 1 ? " " : ""}
     </span>
@@ -57,13 +57,13 @@ export default function Words({
 
   if (tag === "span") {
     return (
-      <span ref={ref as React.RefObject<HTMLSpanElement>} className={className} aria-label={text}>
+      <span ref={ref as React.RefObject<HTMLSpanElement>} className={className}>
         {inner}
       </span>
     );
   }
   return (
-    <p ref={ref as React.RefObject<HTMLParagraphElement>} className={className} aria-label={text}>
+    <p ref={ref as React.RefObject<HTMLParagraphElement>} className={className}>
       {inner}
     </p>
   );

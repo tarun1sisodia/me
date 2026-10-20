@@ -14,9 +14,10 @@ export default function Hero({ started }: { started: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    fetch("/avatar.glb", { method: "HEAD" })
-      .then((r) => {
-        if (r.ok) setHasAvatar(true);
+    fetch("/api/avatar")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.available) setHasAvatar(true);
       })
       .catch(() => {});
   }, []);
@@ -84,8 +85,8 @@ export default function Hero({ started }: { started: boolean }) {
                 src="/photos/sticker-tarun-halftone.png"
                 alt="Tarun Sisodia — halftone portrait"
                 className="sticker-ht"
-                width={1254}
-                height={1324}
+                width={920}
+                height={971}
                 priority
                 sizes="(max-width: 768px) 260px, 460px"
               />
@@ -94,8 +95,8 @@ export default function Hero({ started }: { started: boolean }) {
                 alt=""
                 aria-hidden="true"
                 className="sticker-ht-dark"
-                width={1254}
-                height={1324}
+                width={920}
+                height={971}
                 sizes="(max-width: 768px) 260px, 460px"
               />
               <Image
@@ -103,8 +104,8 @@ export default function Hero({ started }: { started: boolean }) {
                 alt=""
                 aria-hidden="true"
                 className="sticker-color"
-                width={1254}
-                height={1324}
+                width={920}
+                height={971}
                 sizes="(max-width: 768px) 260px, 460px"
               />
               <DustBurst />

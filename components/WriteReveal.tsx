@@ -40,12 +40,14 @@ export default function WriteReveal({
   };
 
   return (
-    <span
-      ref={ref}
-      className={`write-reveal ${className}`}
-      style={{ "--wdelay": `${delay}s` } as CSSProperties}
-      aria-label={text}
-    >
+    <>
+      <span className="sr-only">{text}</span>
+      <span
+        ref={ref}
+        className={`write-reveal ${className}`}
+        style={{ "--wdelay": `${delay}s` } as CSSProperties}
+        aria-hidden="true"
+      >
       {text.split("").map((ch, i) => (
         <span
           key={i}
@@ -57,6 +59,7 @@ export default function WriteReveal({
           {ch}
         </span>
       ))}
-    </span>
+      </span>
+    </>
   );
 }

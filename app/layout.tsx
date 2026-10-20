@@ -5,7 +5,7 @@ import "./globals.css";
 const display = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-display",
-  display: "swap",
+  display: "block",
 });
 
 const body = Inter({

@@ -77,7 +77,7 @@ export default function WordmarkReveal() {
 
   return (
     <>
-      <div ref={rootRef} className="wm-marquee" aria-label="Tarun Sisodia">
+      <div ref={rootRef} className="wm-marquee">
         <div className="wm-track" aria-hidden="true">
           {Array.from({ length: UNITS }).map((_, u) => (
             <span key={u} className="wm-unit" data-i={u % PHOTOS.length}>
