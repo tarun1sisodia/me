@@ -88,6 +88,7 @@ export default function Hero({ started }: { started: boolean }) {
                 width={920}
                 height={971}
                 priority
+                fetchPriority="high"
                 sizes="(max-width: 768px) 260px, 460px"
               />
               <Image

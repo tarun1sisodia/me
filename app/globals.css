@@ -308,20 +308,24 @@ p {
   position: absolute;
   left: 0;
   right: 0;
-  top: -30%;
+  top: 0;
   height: 30%;
+  transform: translateY(-100%);
   background: linear-gradient(180deg, transparent, rgba(var(--accent-rgb), 0.07), transparent);
   animation: scan 1.4s linear infinite;
 }
 
 @keyframes scan {
   to {
-    top: 110%;
+    transform: translateY(366.7%);
   }
 }
 
 .loader-box {
   width: min(480px, 86vw);
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
 }
 
 .loader-line {
@@ -336,7 +340,7 @@ p {
 }
 
 .loader-bar {
-  margin-top: 22px;
+  margin-top: auto;
   height: 3px;
   background: rgba(var(--tint), 0.08);
   border-radius: 2px;
@@ -575,6 +579,7 @@ p {
 
 .hero-sticker {
   width: clamp(260px, 34vw, 460px);
+  aspect-ratio: 920 / 971;
   margin-inline: auto;
   position: relative;
   transform: translate(
@@ -1323,6 +1328,8 @@ p {
   position: absolute;
   right: clamp(20px, 6vw, 72px);
   bottom: clamp(8px, 4vh, 40px);
+  min-width: 2.3em;
+  text-align: right;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(72px, 14vw, 180px);

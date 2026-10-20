@@ -22,7 +22,7 @@ export default function DustBurst() {
     if (!ctx || !mctx || !sctx) return;
 
     const img = new Image();
-    img.src = "/photos/sticker-tarun-halftone.png";
+    img.src = "/photos/sticker-sample-dust.webp";
 
     let W = 0, H = 0, S = 1;
     let snap: ImageData | null = null;

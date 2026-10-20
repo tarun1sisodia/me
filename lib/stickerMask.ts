@@ -5,7 +5,7 @@ let ready = false;
 
 function build() {
   const img = new Image();
-  img.src = "/photos/sticker-tarun.png";
+  img.src = "/photos/sticker-sample-mask.webp";
   img.onload = () => {
     const W = 120;
     const H = Math.max(1, Math.round((W * img.naturalHeight) / img.naturalWidth));
