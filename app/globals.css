@@ -1620,6 +1620,21 @@ p {
   padding: 84px 0 48px;
 }
 
+/* ---------- hero 3d scene: HeroScene3D ---------- */
+
+.hero-scene-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-scene-3d canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .particle-field {
   position: absolute;
   inset: 0;
