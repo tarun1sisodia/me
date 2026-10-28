@@ -103,6 +103,14 @@ export default function HeroScene3D() {
       );
       group.add(stars);
 
+      const layout = () => {
+        const spread = Math.min(1, camera.aspect * 0.85);
+        icosa.position.x = 3.1 * spread;
+        torus.position.x = -3.3 * spread;
+        knot.position.x = 2.7 * spread;
+      };
+      layout();
+
       const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
       const onMouse = (e: MouseEvent) => {
         mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -120,6 +128,7 @@ export default function HeroScene3D() {
         camera.aspect = mount.clientWidth / Math.max(1, mount.clientHeight);
         camera.updateProjectionMatrix();
         renderer.setSize(mount.clientWidth, mount.clientHeight);
+        layout();
       };
       window.addEventListener("resize", onResize);
 
@@ -176,6 +185,7 @@ export default function HeroScene3D() {
         });
         renderer.render(scene, camera);
         };
+        tick();
       };
 
       if (reduced) {
