@@ -12,7 +12,8 @@
 //   timing, and still receives the char-lit class on tech-word hover.
 // - The canvas replays those two TARUN behaviours itself: dots sweep in
 //   left-to-right on the same write-in rhythm, and a highlighted letter warms
-//   the dots in that letter's band to the accent colour.
+//   the dots whose ink belongs to that letter (assigned from per-letter ink
+//   masks, since A tucks under T's bar and the two share columns).
 // - No background is painted, so the blueprint grid shows through. Colours
 //   follow the site theme: ink from --text, warm from --accent, re-read on
 //   every theme change. SISODIA, the portrait, the dust burst, the marquee
@@ -139,7 +140,8 @@ export default function HalftoneTarun({
     // Flat arrays: x, y, vx, vy, hx, hy, r per dot.
     let dots = new Float32Array(0);
     let count = 0;
-    let bands: Array<[number, number]> = [];
+    // Letter index per dot, from per-letter ink masks (see layout).
+    let dotLetter = new Uint8Array(0);
     let grainTile: HTMLCanvasElement | null = null;
     let ink: number[] = [237, 237, 242];
     let warm: number[] = [255, 107, 53];
@@ -179,14 +181,16 @@ export default function HalftoneTarun({
       m.font = face;
       const fit = hwfFitSize(m.measureText(WORD).width, w * 1.02);
       m.font = `${cs.fontWeight} ${fit}px ${cs.fontFamily}`;
-      // Letter bands, for the tech-word highlight: cumulative advances.
-      const widths = WORD.split("").map((ch) => m.measureText(ch).width);
-      const total = widths.reduce((a, b) => a + b, 0);
-      let x = (w - total) / 2;
-      bands = widths.map((wd) => {
-        const band: [number, number] = [x, x + wd];
-        x += wd;
-        return band;
+      // Kerned origins: measuring a prefix includes the kern with the next
+      // letter, so origin(k) = width(prefix k+1) - width(letter k). Summing
+      // single-letter widths ignores kerning, which misassigned the T/A
+      // edge dots: A tucks under T's bar, so its left-leg dots fell in T's
+      // band and missed their colour on A hover (and caught it on T hover).
+      const total = m.measureText(WORD).width;
+      const wordLeft = (w - total) / 2;
+      const origins = WORD.split("").map((ch, k) => {
+        const prefix = m.measureText(WORD.slice(0, k + 1)).width;
+        return wordLeft + prefix - m.measureText(ch).width;
       });
       // Centre the glyph box in the canvas box.
       const probe = m.measureText(WORD);
@@ -195,39 +199,68 @@ export default function HalftoneTarun({
       const baseline = (h - (ascent + descent)) / 2 + ascent;
       m.fillStyle = "#000";
       m.textBaseline = "alphabetic";
-      m.fillText(WORD, (w - total) / 2, baseline);
+      m.fillText(WORD, wordLeft, baseline);
       const img = m.getImageData(0, 0, w, h).data;
 
       const gap = Math.max(3, o.dotGap);
       const cols = Math.ceil(w / gap);
       const rows = Math.ceil(h / gap);
+      // Coverage: average alpha over a 3×3 sample of the cell.
+      const sample = (data: Uint8ClampedArray, gx: number, gy: number) => {
+        let sum = 0;
+        for (let sy = 0; sy < 3; sy++) {
+          for (let sx = 0; sx < 3; sx++) {
+            const sxp = Math.min(
+              w - 1,
+              Math.floor(gx * gap + ((sx + 0.5) * gap) / 3),
+            );
+            const syp = Math.min(
+              h - 1,
+              Math.floor(gy * gap + ((sy + 0.5) * gap) / 3),
+            );
+            sum += data[(syp * w + sxp) * 4 + 3];
+          }
+        }
+        return sum / (9 * 255);
+      };
       const tmp: number[] = [];
+      const cells: Array<[number, number]> = [];
       for (let gy = 0; gy < rows; gy++) {
         for (let gx = 0; gx < cols; gx++) {
-          // Coverage: average alpha over a 3×3 sample of the cell.
-          let sum = 0;
-          for (let sy = 0; sy < 3; sy++) {
-            for (let sx = 0; sx < 3; sx++) {
-              const sxp = Math.min(
-                w - 1,
-                Math.floor(gx * gap + ((sx + 0.5) * gap) / 3),
-              );
-              const syp = Math.min(
-                h - 1,
-                Math.floor(gy * gap + ((sy + 0.5) * gap) / 3),
-              );
-              sum += img[(syp * w + sxp) * 4 + 3];
-            }
-          }
-          const cov = sum / (9 * 255);
+          const cov = sample(img, gx, gy);
           if (cov < 0.06) continue;
           const hx = gx * gap + gap / 2;
           const hy = gy * gap + gap / 2;
           tmp.push(hx, hy, 0, 0, hx, hy, hwfRadius(cov, gap));
+          cells.push([gx, gy]);
         }
       }
       dots = new Float32Array(tmp);
       count = tmp.length / 7;
+      // Assign each dot to the letter whose ink actually covers its cell.
+      // X-only bands cannot do this: where A tucks under T's bar the two
+      // letters share columns, so only the ink itself separates them.
+      dotLetter = new Uint8Array(count);
+      const best = new Float32Array(count);
+      for (let k = 0; k < WORD.length; k++) {
+        const lm = document.createElement("canvas");
+        lm.width = w;
+        lm.height = h;
+        const lc = lm.getContext("2d", { willReadFrequently: true });
+        if (!lc) continue;
+        lc.font = `${cs.fontWeight} ${fit}px ${cs.fontFamily}`;
+        lc.fillStyle = "#000";
+        lc.textBaseline = "alphabetic";
+        lc.fillText(WORD[k], origins[k], baseline);
+        const ldata = lc.getImageData(0, 0, w, h).data;
+        for (let i = 0; i < count; i++) {
+          const covL = sample(ldata, cells[i][0], cells[i][1]);
+          if (covL > best[i]) {
+            best[i] = covL;
+            dotLetter[i] = k;
+          }
+        }
+      }
 
       grainTile = document.createElement("canvas");
       grainTile.width = 256;
@@ -268,10 +301,8 @@ export default function HalftoneTarun({
       const ringAge = ring.t < 0 ? 1e9 : now - ring.t;
       const ringR = ringAge * 0.9;
       const edge = revealEdge(now);
-      const litBand =
-        lit != null
-          ? bands[WORD.indexOf(lit.toUpperCase())]
-          : undefined;
+      const litIdx =
+        lit != null ? WORD.indexOf(lit.toUpperCase()) : -1;
       let moving = false;
       for (let i = 0; i < count; i++) {
         const j = i * 7;
@@ -324,7 +355,7 @@ export default function HalftoneTarun({
           dots[j + 3] = vy;
         }
         let k = hwfWarmth(x, y, hx, hy, 28);
-        if (litBand && hx >= litBand[0] && hx < litBand[1]) k = 1;
+        if (litIdx >= 0 && dotLetter[i] === litIdx) k = 1;
         ctx.fillStyle =
           k > 0.02
             ? "rgb(" +
