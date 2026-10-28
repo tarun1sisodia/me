@@ -2481,6 +2481,15 @@ p {
 }
 .contact-modal-card .lead-form {
   margin-top: 0;
+  /* The form used to be nearly transparent (3% panel, 8% border) and melted
+     into the doodle footer behind the modal. Solid card, real border, lift. */
+  background: rgba(var(--bg-rgb), 0.97);
+  border: 1.5px solid rgba(var(--tint), 0.32);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+.lead-form .field-input {
+  background: rgba(var(--tint), 0.06);
+  border: 1.5px solid rgba(var(--tint), 0.28);
 }
 .contact-modal-close {
   position: absolute;
@@ -2563,7 +2572,9 @@ select.field-input {
 }
 
 select.field-input option {
-  background: #0c0c12;
+  /* Was hardcoded #0c0c12: readable in dark mode, but in light mode the
+     dark text sat on a near-black popup and vanished. Follow the theme. */
+  background: var(--bg);
   color: var(--text);
 }
 
