@@ -81,7 +81,7 @@ export default function WordmarkReveal() {
         <div className="wm-track" aria-hidden="true">
           {Array.from({ length: UNITS }).map((_, u) => (
             <span key={u} className="wm-unit" data-i={u % PHOTOS.length}>
-              TARUN SISODIA <span className="wm-sep">✦</span>
+              LET’S BUILD SOMETHING <span className="wm-sep">✦</span>
             </span>
           ))}
         </div>

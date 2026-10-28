@@ -2450,6 +2450,55 @@ p {
   flex-wrap: wrap;
 }
 
+/* ---------- contact form modal: opens from the footer buttons ---------- */
+/* One component state (Connect.tsx) + this block. The form keeps its own
+   card styling; the modal only frames it. Closes on backdrop click, the
+   close button, or Escape. */
+.contact-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.contact-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+.contact-modal-wrap {
+  position: relative;
+  width: min(680px, 100%);
+}
+.contact-modal-card {
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  border-radius: 22px;
+}
+.contact-modal-card .lead-form {
+  margin-top: 0;
+}
+.contact-modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 0;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
 /* ================= LEAD FORM — start (remove this block + LeadForm.tsx + its mount line in Connect.tsx to remove) ================= */
 
 .lead-form {

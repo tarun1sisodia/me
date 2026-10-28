@@ -21,6 +21,7 @@ import Services from "@/components/Services";
 import Process from "@/components/Process";
 import Now from "@/components/Now";
 import Connect from "@/components/Connect";
+import SiteFooter from "@/components/SiteFooter";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -61,6 +62,7 @@ export default function Home() {
         <Now />
         <Connect />
       </main>
+      <SiteFooter />
     </>
   );
 }

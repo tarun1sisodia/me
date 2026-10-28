@@ -1,6 +1,8 @@
+"use client";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { Download, Mail, MessageCircle } from "lucide-react";
+import { Download, Mail, MessageCircle, X } from "lucide-react";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import WordmarkReveal from "./WordmarkReveal";
@@ -19,6 +21,25 @@ const ICONS = {
 };
 
 export default function Connect() {
+  // The lead form is no longer open by default: it opens as a modal when
+  // either of the footer buttons dispatches "contact:open".
+  const [formOpen, setFormOpen] = useState(false);
+
+  useEffect(() => {
+    const open = () => setFormOpen(true);
+    window.addEventListener("contact:open", open);
+    return () => window.removeEventListener("contact:open", open);
+  }, []);
+
+  useEffect(() => {
+    if (!formOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFormOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [formOpen]);
+
   return (
     <section className="section connect" id="connect" aria-label="Connect">
       <LazyScene>
@@ -33,14 +54,9 @@ export default function Connect() {
           <span className="chapter-kicker">RESPONSE TIME · FAST</span>
         </div>
       </div>
+      <WordmarkReveal />
       <div className="container connect-front">
-        <Reveal>
-          <h2 className="connect-title">
-            Let&apos;s build
-            <br />
-            something<span className="connect-dot">.</span>
-          </h2>
-        </Reveal>
+        <h2 className="sr-only">Let&apos;s build something</h2>
         <div className="connect-grid">
           <Reveal>
             <div className="duotone connect-photo">
@@ -111,17 +127,25 @@ export default function Connect() {
             </Reveal>
           </div>
         </div>
-        <Reveal>
-          <LeadForm />
-        </Reveal>
       </div>
-      <WordmarkReveal />
-      <footer className="footer">
-        <div className="container footer-inner">
-          <span>© 2026&nbsp;{PROFILE.name}</span>
-          <span>{PROFILE.location}</span>
+      {formOpen && (
+        <div className="contact-modal" role="dialog" aria-modal="true" aria-label="Start a project">
+          <div className="contact-modal-backdrop" onClick={() => setFormOpen(false)} />
+          <div className="contact-modal-wrap">
+            <button
+              type="button"
+              className="contact-modal-close"
+              aria-label="Close form"
+              onClick={() => setFormOpen(false)}
+            >
+              <X size={18} aria-hidden="true" />
+            </button>
+            <div className="contact-modal-card">
+              <LeadForm />
+            </div>
+          </div>
         </div>
-      </footer>
+      )}
     </section>
   );
 }
