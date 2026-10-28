@@ -1280,6 +1280,31 @@ p {
   }
 }
 
+/* ---------- halftone TARUN: the hero name printed as a dot field ---------- */
+/* One component file (HalftoneTarun.tsx) + this block + one mount line in
+   Hero.tsx. The canvas covers exactly the TARUN text box; the text beneath
+   stays in the layout (so OrbitWords' letter measurements keep working) but
+   is drawn transparent, and its accent-lit state is suppressed because the
+   canvas warms the lit letter's dots instead. */
+.halftone-tarun {
+  position: relative;
+  display: inline-block;
+}
+.halftone-tarun-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.halftone-tarun .write-reveal.name-tarun .write-char {
+  color: transparent;
+}
+.halftone-tarun .write-reveal.is-writing .write-char.is-written.char-lit {
+  color: transparent;
+  animation: none;
+}
+
 /* ---------- work filter: pill shown when arriving from a hero word ---------- */
 
 .work-filter {

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import WriteReveal from "./WriteReveal";
+import HalftoneTarun from "./HalftoneTarun";
 import OrbitWords from "./OrbitWords";
 import DustBurst from "./DustBurst";
 
@@ -114,7 +115,7 @@ export default function Hero({ started }: { started: boolean }) {
           )}
         </div>
         <h1 className="hero-giant">
-          <WriteReveal text="TARUN" active={started} className="name-tarun" />
+          <HalftoneTarun active={started} />
           <br />
           <WriteReveal text="SISODIA" active={started} delay={1.1} className="name-sisodia" colorFill />
         </h1>
