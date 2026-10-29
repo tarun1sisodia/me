@@ -3,6 +3,12 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { themeAccent } from "@/lib/themeAccent";
 
+const LETTERS = ["T", "R", "A", "U", "N"];
+const RING_R = 3.1;
+const STOP_ANGLES: Record<string, number> = Object.fromEntries(
+  LETTERS.map((l, i) => [l, Math.PI / 2 - i * ((Math.PI * 2) / 5)])
+);
+
 export default function HeroScene3D() {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -35,81 +41,84 @@ export default function HeroScene3D() {
       mount.appendChild(renderer.domElement);
 
       const accent = new THREE.Color(themeAccent());
-      const text = getComputedStyle(document.documentElement)
-        .getPropertyValue("--text")
-        .trim();
 
       scene.add(new THREE.HemisphereLight(0xffffff, 0x1a1a22, 0.9));
       const key = new THREE.DirectionalLight(0xffffff, 2.2);
       key.position.set(4, 6, 5);
       scene.add(key);
-      const rim = new THREE.DirectionalLight(accent, 2.4);
-      rim.position.set(-5, 2, -4);
-      scene.add(rim);
 
-      const group = new THREE.Group();
-      scene.add(group);
+      const sceneGroup = new THREE.Group();
+      scene.add(sceneGroup);
 
-      const icosa = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(1.5, 1),
-        new THREE.MeshStandardMaterial({
-          color: accent,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.55,
-        })
+      const orbitGroup = new THREE.Group();
+      orbitGroup.rotation.x = -1.05;
+      sceneGroup.add(orbitGroup);
+
+      const ringGeo = new THREE.BufferGeometry().setFromPoints(
+        new THREE.EllipseCurve(0, 0, RING_R, RING_R, 0, Math.PI * 2).getPoints(128)
       );
-      icosa.position.set(3.1, 1.1, -1);
-      group.add(icosa);
+      const ring = new THREE.LineLoop(
+        ringGeo,
+        new THREE.LineBasicMaterial({ color: accent, transparent: true, opacity: 0.4 })
+      );
+      orbitGroup.add(ring);
 
-      const torus = new THREE.Mesh(
-        new THREE.TorusGeometry(1.05, 0.3, 16, 48),
-        new THREE.MeshStandardMaterial({
+      const markers = LETTERS.map((letter) => {
+        const mat = new THREE.MeshStandardMaterial({
           color: accent,
-          metalness: 0.7,
-          roughness: 0.3,
           emissive: accent,
-          emissiveIntensity: 0.15,
-        })
-      );
-      torus.position.set(-3.3, -1.2, 0);
-      group.add(torus);
+          emissiveIntensity: 0.7,
+        });
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 16), mat);
+        const a = STOP_ANGLES[letter];
+        m.position.set(Math.cos(a) * RING_R, Math.sin(a) * RING_R, 0);
+        orbitGroup.add(m);
+        return { letter, mesh: m, mat };
+      });
 
-      const knot = new THREE.Mesh(
-        new THREE.TorusKnotGeometry(0.65, 0.2, 100, 16),
-        new THREE.MeshStandardMaterial({
-          color: text || "#ffffff",
-          wireframe: true,
-          transparent: true,
-          opacity: 0.35,
-        })
+      const satellite = new THREE.Group();
+      const core = new THREE.Mesh(
+        new THREE.SphereGeometry(0.16, 24, 24),
+        new THREE.MeshStandardMaterial({ color: accent, emissive: accent, emissiveIntensity: 2 })
       );
-      knot.position.set(2.7, -1.9, -2);
-      group.add(knot);
+      const halo = new THREE.Mesh(
+        new THREE.SphereGeometry(0.32, 24, 24),
+        new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.16 })
+      );
+      satellite.add(core);
+      satellite.add(halo);
+      orbitGroup.add(satellite);
 
       const dots = new THREE.BufferGeometry();
-      const count = 220;
+      const count = 120;
       const pos = new Float32Array(count * 3);
       for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 14;
       dots.setAttribute("position", new THREE.BufferAttribute(pos, 3));
       const stars = new THREE.Points(
         dots,
-        new THREE.PointsMaterial({
-          color: accent,
-          size: 0.045,
-          transparent: true,
-          opacity: 0.7,
-        })
+        new THREE.PointsMaterial({ color: accent, size: 0.04, transparent: true, opacity: 0.45 })
       );
-      group.add(stars);
+      sceneGroup.add(stars);
 
       const layout = () => {
-        const spread = Math.min(1, camera.aspect * 0.85);
-        icosa.position.x = 3.1 * spread;
-        torus.position.x = -3.3 * spread;
-        knot.position.x = 2.7 * spread;
+        orbitGroup.scale.setScalar(Math.min(1, camera.aspect * 0.85));
       };
       layout();
+
+      let angle = STOP_ANGLES.T;
+      let targetAngle: number | null = null;
+      let activeLetter: string | null = null;
+      const placeSatellite = () => {
+        satellite.position.set(Math.cos(angle) * RING_R, Math.sin(angle) * RING_R, 0);
+      };
+      placeSatellite();
+
+      const onHighlight = (e: Event) => {
+        const letter = (e as CustomEvent<string | null>).detail;
+        activeLetter = letter && STOP_ANGLES[letter] !== undefined ? letter : null;
+        targetAngle = activeLetter ? STOP_ANGLES[activeLetter] : null;
+      };
+      window.addEventListener("name:highlight", onHighlight);
 
       const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
       const onMouse = (e: MouseEvent) => {
@@ -136,6 +145,53 @@ export default function HeroScene3D() {
         window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
         document.documentElement.classList.contains("motion-off");
 
+      const clock = new THREE.Clock();
+      let running = false;
+      const arc = (a: number) => {
+        let d = (a + Math.PI * 3) % (Math.PI * 2);
+        if (d < 0) d += Math.PI * 2;
+        return d - Math.PI;
+      };
+      const loop = () => {
+        if (disposed || !visible || reduced || running) return;
+        running = true;
+        const tick = () => {
+          if (disposed || !visible || reduced) {
+            running = false;
+            return;
+          }
+          raf = requestAnimationFrame(tick);
+          const dt = Math.min(clock.getDelta(), 0.05);
+          const t = clock.elapsedTime;
+          if (targetAngle !== null) {
+            const diff = arc(targetAngle - angle);
+            const step = Math.max(-dt * 2.4, Math.min(dt * 2.4, diff));
+            angle += step;
+            if (Math.abs(diff) < 0.005) angle = targetAngle;
+          } else {
+            angle += dt * ((Math.PI * 2) / 24);
+          }
+          placeSatellite();
+          const docked = targetAngle !== null && Math.abs(arc(targetAngle - angle)) < 0.05;
+          halo.scale.setScalar(docked ? 1 + Math.sin(t * 3) * 0.15 : 1);
+          for (const m of markers) {
+            const on = m.letter === activeLetter;
+            const s = on ? 1.8 : 1;
+            m.mesh.scale.x += (s - m.mesh.scale.x) * 0.15;
+            m.mesh.scale.y = m.mesh.scale.x;
+            m.mesh.scale.z = m.mesh.scale.x;
+            m.mat.emissiveIntensity += ((on ? 2.2 : 0.7) - m.mat.emissiveIntensity) * 0.15;
+          }
+          mouse.x += (mouse.tx - mouse.x) * 0.05;
+          mouse.y += (mouse.ty - mouse.y) * 0.05;
+          sceneGroup.rotation.y = mouse.x * 0.22;
+          sceneGroup.rotation.x = mouse.y * 0.12;
+          stars.rotation.y = t * 0.02;
+          renderer.render(scene, camera);
+        };
+        tick();
+      };
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           visible = entry.isIntersecting;
@@ -151,44 +207,14 @@ export default function HeroScene3D() {
       };
       document.addEventListener("visibilitychange", onVis);
 
-      const clock = new THREE.Clock();
-      const baseY = new Map<THREE.Object3D, number>([
-        [icosa, icosa.position.y],
-        [torus, torus.position.y],
-        [knot, knot.position.y],
-      ]);
-
-      let running = false;
-      const loop = () => {
-        if (disposed || !visible || reduced || running) return;
-        running = true;
-        const tick = () => {
-          if (disposed || !visible || reduced) {
-            running = false;
-            return;
-          }
-          raf = requestAnimationFrame(tick);
-          const t = clock.getElapsedTime();
-        mouse.x += (mouse.tx - mouse.x) * 0.05;
-        mouse.y += (mouse.ty - mouse.y) * 0.05;
-        group.rotation.y = mouse.x * 0.28 + window.scrollY * 0.0002;
-        group.rotation.x = mouse.y * 0.16;
-        icosa.rotation.y = t * 0.22;
-        icosa.rotation.x = t * 0.13;
-        torus.rotation.x = t * 0.3;
-        torus.rotation.y = t * 0.18;
-        knot.rotation.y = -t * 0.25;
-        knot.rotation.z = t * 0.12;
-        stars.rotation.y = t * 0.02;
-        baseY.forEach((y, obj) => {
-          obj.position.y = y + Math.sin(t * 0.9 + y) * 0.18;
-        });
-        renderer.render(scene, camera);
-        };
-        tick();
-      };
-
       if (reduced) {
+        activeLetter = "T";
+        for (const m of markers) {
+          if (m.letter === "T") {
+            m.mesh.scale.setScalar(1.8);
+            m.mat.emissiveIntensity = 2.2;
+          }
+        }
         renderer.render(scene, camera);
       } else {
         loop();
@@ -197,13 +223,14 @@ export default function HeroScene3D() {
       dispose = () => {
         disposed = true;
         cancelAnimationFrame(raf);
+        window.removeEventListener("name:highlight", onHighlight);
         window.removeEventListener("mousemove", onMouse);
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onResize);
         document.removeEventListener("visibilitychange", onVis);
         observer.disconnect();
         scene.traverse((o) => {
-          if (o instanceof THREE.Mesh || o instanceof THREE.Points) {
+          if (o instanceof THREE.Mesh || o instanceof THREE.Points || o instanceof THREE.Line) {
             o.geometry.dispose();
             const m = o.material as THREE.Material | THREE.Material[];
             (Array.isArray(m) ? m : [m]).forEach((x) => x.dispose());
