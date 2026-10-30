@@ -1,3 +1,7 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
   --tint: 255, 255, 255;
   --bg-rgb: 6, 6, 11;
