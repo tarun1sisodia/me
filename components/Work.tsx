@@ -46,9 +46,53 @@ function TiltCard({ children, className = "" }: { children: ReactNode; className
 
 function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
   const Icon = project.icon ? ICONS[project.icon] : null;
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canPlay = () => {
+    if (typeof window === "undefined") return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    if (document.documentElement.classList.contains("motion-off")) return false;
+    return true;
+  };
+  const play = () => {
+    const v = videoRef.current;
+    if (v && canPlay()) v.play().catch(() => {});
+  };
+  const pause = () => {
+    const v = videoRef.current;
+    if (v) v.pause();
+  };
+  const toggle = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) play();
+    else pause();
+  };
   return (
     <TiltCard className={`project-card${featured ? " featured" : ""}`}>
-      {project.image ? (
+      {project.video ? (
+        <ClipReveal>
+          <div
+            className="project-visual"
+            onMouseEnter={play}
+            onMouseLeave={pause}
+            onFocus={play}
+            onBlur={pause}
+          >
+            <video
+              ref={videoRef}
+              src={project.video}
+              poster={project.image}
+              muted
+              loop
+              playsInline
+              preload="none"
+              onClick={toggle}
+              aria-label={`${project.name} walkthrough video, tap to play or pause`}
+            />
+            <span className="project-video-badge">Video — hover or tap to play</span>
+          </div>
+        </ClipReveal>
+      ) : project.image ? (
         <ClipReveal>
           <div className="project-visual">
             <Image

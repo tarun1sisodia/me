@@ -12,6 +12,8 @@ const STOPS = [
   { id: "connect", name: "Connect" },
 ];
 
+const BUILDING_COLORS = ["#3a3a44", "#4a3f38", "#2e3a3a", "#453a2e", "#383852"];
+
 export default function HeroScene3D() {
   const mountRef = useRef<HTMLDivElement>(null);
   const isTouch =
@@ -35,7 +37,7 @@ export default function HeroScene3D() {
         0.1,
         100
       );
-      const camDir = new THREE.Vector3(0, 15, 11).normalize();
+      const camDir = new THREE.Vector3(0, 12.5, 12.5).normalize();
       const basePos = new THREE.Vector3();
       const layoutCamera = () => {
         const aspect = mount.clientWidth / Math.max(1, mount.clientHeight);
@@ -52,6 +54,10 @@ export default function HeroScene3D() {
       });
       renderer.setSize(mount.clientWidth, mount.clientHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.1;
       mount.appendChild(renderer.domElement);
 
       const accent = new THREE.Color(themeAccent());
@@ -59,66 +65,192 @@ export default function HeroScene3D() {
       const bg = rootStyle.getPropertyValue("--bg").trim() || "#06060B";
       const text = rootStyle.getPropertyValue("--text").trim() || "#ffffff";
 
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x1a1a22, 0.9));
-      const key = new THREE.DirectionalLight(0xffffff, 2.0);
-      key.position.set(4, 8, 5);
-      scene.add(key);
+      scene.fog = new THREE.Fog(new THREE.Color(bg), 30, 60);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x1a1a22, 0.7));
+      const sun = new THREE.DirectionalLight(0xffdfb0, 2.4);
+      sun.position.set(8, 14, 6);
+      sun.castShadow = true;
+      sun.shadow.mapSize.set(1024, 1024);
+      sun.shadow.camera.left = -16;
+      sun.shadow.camera.right = 16;
+      sun.shadow.camera.top = 16;
+      sun.shadow.camera.bottom = -16;
+      sun.shadow.camera.near = 1;
+      sun.shadow.camera.far = 40;
+      sun.shadow.bias = -0.0004;
+      sun.shadow.normalBias = 0.02;
+      sun.shadow.camera.updateProjectionMatrix();
+      scene.add(sun);
+
+      const groundCanvas = document.createElement("canvas");
+      groundCanvas.width = groundCanvas.height = 256;
+      const gtx = groundCanvas.getContext("2d")!;
+      gtx.fillStyle = bg;
+      gtx.fillRect(0, 0, 256, 256);
+      for (let i = 0; i < 4000; i++) {
+        gtx.fillStyle = Math.random() > 0.5 ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.08)";
+        gtx.fillRect(Math.random() * 256, Math.random() * 256, 1.5, 1.5);
+      }
+      const groundTex = new THREE.CanvasTexture(groundCanvas);
+      groundTex.wrapS = groundTex.wrapT = THREE.RepeatWrapping;
+      groundTex.repeat.set(10, 10);
+      groundTex.colorSpace = THREE.SRGBColorSpace;
 
       const ground = new THREE.Mesh(
         new THREE.PlaneGeometry(60, 60),
-        new THREE.MeshStandardMaterial({ color: new THREE.Color(bg) })
+        new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.95 })
       );
       ground.rotation.x = -Math.PI / 2;
+      ground.receiveShadow = true;
       scene.add(ground);
 
-      const grid = new THREE.GridHelper(32, 32, accent, new THREE.Color(0x555555));
-      (grid.material as THREE.Material).transparent = true;
-      (grid.material as THREE.Material).opacity = 0.3;
-      scene.add(grid);
-
       const road = new THREE.Mesh(
-        new THREE.RingGeometry(7.6, 8.6, 64),
-        new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.06 })
+        new THREE.RingGeometry(7.4, 8.8, 64),
+        new THREE.MeshStandardMaterial({ color: new THREE.Color(0x232327), roughness: 0.9 })
       );
       road.rotation.x = -Math.PI / 2;
       road.position.y = 0.02;
+      road.receiveShadow = true;
       scene.add(road);
+
+      for (const [inner, outer] of [[7.4, 7.55], [8.65, 8.8]] as const) {
+        const edge = new THREE.Mesh(
+          new THREE.RingGeometry(inner, outer, 64),
+          new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.55 })
+        );
+        edge.rotation.x = -Math.PI / 2;
+        edge.position.y = 0.03;
+        scene.add(edge);
+      }
+
+      const dashMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(text), transparent: true, opacity: 0.75 });
+      for (let i = 0; i < 28; i++) {
+        const a = (i / 28) * Math.PI * 2;
+        const dash = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.02, 0.62), dashMat);
+        dash.position.set(Math.cos(a) * 8.1, 0.04, Math.sin(a) * 8.1);
+        dash.rotation.y = -a;
+        scene.add(dash);
+      }
+
+      const medallion = new THREE.Mesh(
+        new THREE.CircleGeometry(1.3, 32),
+        new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.1 })
+      );
+      medallion.rotation.x = -Math.PI / 2;
+      medallion.position.y = 0.03;
+      scene.add(medallion);
+      const medallionRing = new THREE.Mesh(
+        new THREE.RingGeometry(1.3, 1.45, 48),
+        new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.45 })
+      );
+      medallionRing.rotation.x = -Math.PI / 2;
+      medallionRing.position.y = 0.03;
+      scene.add(medallionRing);
 
       for (let i = 0; i < 10; i++) {
         const a = (i / 10) * Math.PI * 2 + 0.4;
         const r = 11.5 + (i % 3);
         const h = 1 + ((i * 0.7) % 3);
+        const c = new THREE.Color(BUILDING_COLORS[i % BUILDING_COLORS.length]);
         const b = new THREE.Mesh(
           new THREE.BoxGeometry(1.8, h, 1.8),
-          new THREE.MeshStandardMaterial({ color: new THREE.Color(text), transparent: true, opacity: 0.2 })
+          new THREE.MeshStandardMaterial({ color: c, roughness: 0.85 })
         );
         b.position.set(Math.cos(a) * r, h / 2, Math.sin(a) * r);
+        b.castShadow = true;
+        b.receiveShadow = true;
         scene.add(b);
+        const roof = new THREE.Mesh(
+          new THREE.BoxGeometry(1.95, 0.12, 1.95),
+          new THREE.MeshStandardMaterial({ color: c.clone().multiplyScalar(1.3), roughness: 0.85 })
+        );
+        roof.position.set(Math.cos(a) * r, h + 0.06, Math.sin(a) * r);
+        roof.castShadow = true;
+        scene.add(roof);
+      }
+
+      const trunkMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x5a4632), roughness: 1 });
+      const leafMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x2e4b34), roughness: 1 });
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2 + 0.9;
+        const r = 10.2 + (i % 3) * 1.1;
+        const x = Math.cos(a) * r;
+        const z = Math.sin(a) * r;
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.12, 0.5, 8), trunkMat);
+        trunk.position.set(x, 0.25, z);
+        trunk.castShadow = true;
+        scene.add(trunk);
+        const cone1 = new THREE.Mesh(new THREE.ConeGeometry(0.6, 1.4, 8), leafMat);
+        cone1.position.set(x, 1.1, z);
+        cone1.castShadow = true;
+        scene.add(cone1);
+        const cone2 = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1.0, 8), leafMat);
+        cone2.position.set(x, 1.85, z);
+        cone2.castShadow = true;
+        scene.add(cone2);
+      }
+
+      const poleMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x1a1a22), roughness: 0.6 });
+      const lampMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0xffd9a0), emissive: new THREE.Color(0xffd9a0), emissiveIntensity: 2.2 });
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2 + 0.3;
+        const x = Math.cos(a) * 9.7;
+        const z = Math.sin(a) * 9.7;
+        const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2.3, 8), poleMat);
+        pole.position.set(x, 1.15, z);
+        scene.add(pole);
+        const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.15, 12, 12), lampMat);
+        lamp.position.set(x, 2.35, z);
+        scene.add(lamp);
       }
 
       const car = new THREE.Group();
-      const bodyMat = new THREE.MeshStandardMaterial({ color: accent, metalness: 0.5, roughness: 0.4 });
-      const darkMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x1a1a22) });
-      const body = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.4, 1.7), bodyMat);
-      body.position.y = 0.4;
+      const bodyMat = new THREE.MeshStandardMaterial({ color: accent, metalness: 0.55, roughness: 0.35 });
+      const glassMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x101418), metalness: 0.9, roughness: 0.12 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0x111114), roughness: 0.9 });
+      const hubMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0xb8b8c0), metalness: 0.85, roughness: 0.3 });
+      const body = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.42, 1.85), bodyMat);
+      body.position.y = 0.42;
       car.add(body);
-      const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.35, 0.9), darkMat);
-      cabin.position.set(0, 0.72, -0.15);
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.4, 1.0), glassMat);
+      cabin.position.set(0, 0.8, -0.12);
       car.add(cabin);
-      const strip = new THREE.Mesh(
-        new THREE.BoxGeometry(0.7, 0.08, 0.05),
-        new THREE.MeshStandardMaterial({ color: accent, emissive: accent, emissiveIntensity: 2 })
-      );
-      strip.position.set(0, 0.42, 0.88);
-      car.add(strip);
-      car.scale.setScalar(1.8);
-      const wheelGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.15, 16);
-      for (const [x, z] of [[-0.45, 0.55], [0.45, 0.55], [-0.45, -0.55], [0.45, -0.55]] as const) {
-        const w = new THREE.Mesh(wheelGeo, darkMat);
-        w.rotation.z = Math.PI / 2;
-        w.position.set(x, 0.18, z);
-        car.add(w);
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(0.87, 0.07, 1.02), bodyMat);
+      roof.position.set(0, 1.03, -0.12);
+      car.add(roof);
+      const headMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0xfff2cc), emissive: new THREE.Color(0xfff2cc), emissiveIntensity: 3 });
+      for (const x of [-0.28, 0.28]) {
+        const head = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.09, 0.05), headMat);
+        head.position.set(x, 0.45, 0.94);
+        car.add(head);
       }
+      const tailMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(0xff2a22), emissive: new THREE.Color(0xff2a22), emissiveIntensity: 2 });
+      for (const x of [-0.28, 0.28]) {
+        const tail = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.09, 0.05), tailMat);
+        tail.position.set(x, 0.45, -0.94);
+        car.add(tail);
+      }
+      for (const x of [-0.56, 0.56]) {
+        const mirror = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.09, 0.08), bodyMat);
+        mirror.position.set(x, 0.78, 0.28);
+        car.add(mirror);
+      }
+      const tireGeo = new THREE.CylinderGeometry(0.21, 0.21, 0.16, 20);
+      const hubGeo = new THREE.CylinderGeometry(0.11, 0.11, 0.17, 16);
+      for (const [x, z] of [[-0.5, 0.6], [0.5, 0.6], [-0.5, -0.6], [0.5, -0.6]] as const) {
+        const tire = new THREE.Mesh(tireGeo, darkMat);
+        tire.rotation.z = Math.PI / 2;
+        tire.position.set(x, 0.21, z);
+        car.add(tire);
+        const hub = new THREE.Mesh(hubGeo, hubMat);
+        hub.rotation.z = Math.PI / 2;
+        hub.position.set(x, 0.21, z);
+        car.add(hub);
+      }
+      car.traverse((o) => {
+        if (o instanceof THREE.Mesh) o.castShadow = true;
+      });
+      car.scale.setScalar(1.8);
       scene.add(car);
 
       const cruise = window.matchMedia("(pointer: coarse)").matches;
@@ -313,7 +445,11 @@ export default function HeroScene3D() {
           if (o instanceof THREE.Mesh || o instanceof THREE.Points || o instanceof THREE.Line) {
             o.geometry.dispose();
             const m = o.material as THREE.Material | THREE.Material[];
-            (Array.isArray(m) ? m : [m]).forEach((x) => x.dispose());
+            (Array.isArray(m) ? m : [m]).forEach((x) => {
+              const t = (x as THREE.MeshStandardMaterial).map;
+              if (t) t.dispose();
+              x.dispose();
+            });
           }
         });
         renderer.dispose();

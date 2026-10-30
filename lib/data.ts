@@ -79,6 +79,7 @@ export interface Project {
   stack: string[];
   image?: string;
   imageAlt?: string;
+  video?: string;
   icon?: "Music" | "Film" | "GraduationCap" | "HeartPulse";
   links: { label: string; href: string }[];
 }
