@@ -1620,57 +1620,6 @@ p {
   padding: 84px 0 48px;
 }
 
-/* ---------- hero 3d scene: HeroScene3D ---------- */
-
-.hero-scene-3d {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.hero-scene-3d canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.hero-drive-label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  pointer-events: auto;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: rgba(var(--bg-rgb), 0.72);
-  border: 1px solid rgba(var(--tint), 0.16);
-  border-radius: 999px;
-  padding: 5px 10px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.hero-drive-label.is-active {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-.hero-drive-hint {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  z-index: 2;
-  pointer-events: none;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-}
-
 .particle-field {
   position: absolute;
   inset: 0;

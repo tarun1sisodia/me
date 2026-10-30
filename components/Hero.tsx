@@ -9,7 +9,6 @@ import OrbitWords from "./OrbitWords";
 import DustBurst from "./DustBurst";
 
 const AvatarStage = dynamic(() => import("./AvatarStage"), { ssr: false });
-const HeroScene3D = dynamic(() => import("./HeroScene3D"), { ssr: false });
 
 export default function Hero({ started }: { started: boolean }) {
   const [hasAvatar, setHasAvatar] = useState(false);
@@ -65,7 +64,6 @@ export default function Hero({ started }: { started: boolean }) {
       id="top"
       aria-label="Introduction"
     >
-      <HeroScene3D />
       <div className="hero-noise" aria-hidden="true" />
       <div className="container hero-top">
         <span className="chapter-label">
