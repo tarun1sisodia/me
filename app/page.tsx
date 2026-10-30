@@ -9,7 +9,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 import MusicToggle from "@/components/MusicToggle";
 import MiniNav from "@/components/MiniNav";
 import HeroSub from "@/components/HeroSub";
-import Hero from "@/components/Hero";
+import { HeroScrub } from "@/components/ui/hero-scrub";
+import PerspectiveTunnelHero from "@/components/ui/perspective-tunnel-hero";
 import Marquee from "@/components/Marquee";
 import StatsBand from "@/components/StatsBand";
 import About from "@/components/About";
@@ -22,6 +23,17 @@ import Process from "@/components/Process";
 import Now from "@/components/Now";
 import Connect from "@/components/Connect";
 import SiteFooter from "@/components/SiteFooter";
+
+const MAIN2_FRAMES = [
+  "/photos/sticker-tarun.png",
+  "/photos/portrait-hero-clean.jpg",
+  "/photos/portrait-studio-clean.jpg",
+  "/photos/portrait-smiling-arms-crossed.jpg",
+  "/photos/sticker-tarun-halftone.png",
+  "/photos/sticker-tarun-halftone-dark.png",
+];
+
+const main2FrameUrl = (i: number) => MAIN2_FRAMES[i];
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
@@ -48,8 +60,20 @@ export default function Home() {
       <MusicToggle />
       <MiniNav />
       <main>
-        <Hero started={loaded} />
+        <div id="top">
+          <HeroScrub
+            frameCount={MAIN2_FRAMES.length}
+            frameUrl={main2FrameUrl}
+            titleTop="TARUN"
+            titleBottom="SISODIA"
+            accentHex="#ff6b35"
+            defaultAspect={920 / 971}
+          />
+        </div>
         <HeroSub started={loaded} />
+        <section id="gallery" aria-label="Gallery" className="relative overflow-hidden">
+          <PerspectiveTunnelHero />
+        </section>
         <Marquee id="stack" />
         <StatsBand />
         <About />

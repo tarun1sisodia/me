@@ -11,15 +11,15 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 const IMAGES = [
-    { src: "https://cdn.21st.dev/assets/mirror/c3/c3fbd2afa140223999a441b32ed986f61d473930002708df805a81532a326aac.jpg", title: "Chroma I" },
-    { src: "https://cdn.21st.dev/assets/mirror/9d/9d8b2f675a5814476ada3736ce439bcda23c5c389e0ebf9b25d8a0c09f3bbcfe.jpg", title: "Prism III" },
-    { src: "https://cdn.21st.dev/assets/mirror/8b/8bb738bf2f00d7f7ed3c3ec034adb9938ad38f4be4ac191d632a6a11ad525574.jpg", title: "Ether IV" },
-    { src: "https://cdn.21st.dev/assets/mirror/ac/ac5ac700b188d7ef16ee9dab868098b59f15c440db3f71d4e8c03262a3287577.jpg", title: "Quantum V" },
-    { src: "https://cdn.21st.dev/assets/mirror/ef/ef25eff6ce655fba459b3b7e7711524dc92499aa18f6c7dbea9a0fcc56a8f908.jpg", title: "Nebula VI" },
-    { src: "https://cdn.21st.dev/assets/mirror/f2/f28b370a5dcbf76240f1504579c4b05fc0ff0bb990a42aff8dc2f73a5dc46072.jpg", title: "Cyber VII" },
-    { src: "https://cdn.21st.dev/assets/mirror/f2/f26a1eac85704dda924820392dedfb72d51d8261d35354f83b35d683617295f3.jpg", title: "Flux VIII" },
-    { src: "https://cdn.21st.dev/assets/mirror/77/7755d23eaaa0aa5b403343f44afa7a29b2d06d3065fe54c602b14ba01d00f2aa.jpg", title: "Aether IX" },
-    { src: "https://cdn.21st.dev/assets/mirror/65/657317761fe9058a1d43711b13c543a71eb5199b7a5d9abf4c28479674e39cf7.jpg", title: "Chroma X" },
+    { src: "https://cdn.21st.dev/assets/mirror/c3/c3fbd2afa140223999a441b32ed986f61d473930002708df805a81532a326aac.jpg", title: "TypeScript" },
+    { src: "https://cdn.21st.dev/assets/mirror/9d/9d8b2f675a5814476ada3736ce439bcda23c5c389e0ebf9b25d8a0c09f3bbcfe.jpg", title: "React" },
+    { src: "https://cdn.21st.dev/assets/mirror/8b/8bb738bf2f00d7f7ed3c3ec034adb9938ad38f4be4ac191d632a6a11ad525574.jpg", title: "FastAPI" },
+    { src: "https://cdn.21st.dev/assets/mirror/ac/ac5ac700b188d7ef16ee9dab868098b59f15c440db3f71d4e8c03262a3287577.jpg", title: "Security" },
+    { src: "https://cdn.21st.dev/assets/mirror/ef/ef25eff6ce655fba459b3b7e7711524dc92499aa18f6c7dbea9a0fcc56a8f908.jpg", title: "Node.js" },
+    { src: "https://cdn.21st.dev/assets/mirror/f2/f28b370a5dcbf76240f1504579c4b05fc0ff0bb990a42aff8dc2f73a5dc46072.jpg", title: "Docker" },
+    { src: "https://cdn.21st.dev/assets/mirror/f2/f26a1eac85704dda924820392dedfb72d51d8261d35354f83b35d683617295f3.jpg", title: "PostgreSQL" },
+    { src: "https://cdn.21st.dev/assets/mirror/77/7755d23eaaa0aa5b403343f44afa7a29b2d06d3065fe54c602b14ba01d00f2aa.jpg", title: "Redis" },
+    { src: "https://cdn.21st.dev/assets/mirror/65/657317761fe9058a1d43711b13c543a71eb5199b7a5d9abf4c28479674e39cf7.jpg", title: "Ship It" },
 ];
 
 
@@ -85,6 +85,60 @@ interface TunnelCardProps {
 }
 
 function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) {
+    const burstRef = useRef<HTMLCanvasElement>(null);
+    const burstRafRef = useRef(0);
+
+    const burst = (clientX: number, clientY: number) => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const canvas = burstRef.current;
+        if (!canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.max(1, Math.round(rect.width * dpr));
+        canvas.height = Math.max(1, Math.round(rect.height * dpr));
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        const ox = (clientX - rect.left) * dpr;
+        const oy = (clientY - rect.top) * dpr;
+        const parts = Array.from({ length: 70 }, () => {
+            const a = Math.random() * Math.PI * 2;
+            const sp = (24 + Math.random() * 90) * dpr;
+            return {
+                x: ox, y: oy,
+                vx: Math.cos(a) * sp,
+                vy: Math.sin(a) * sp * 0.5 - (30 + Math.random() * 70) * dpr,
+                life: 0, max: 0.6 + Math.random() * 0.6,
+                size: (1 + Math.random() * 2.4) * dpr,
+                color: Math.random() < 0.15 ? "#ff6b35" : "#e8e8ee",
+            };
+        });
+        let last = 0;
+        const frame = (now: number) => {
+            const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
+            last = now;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let alive = false;
+            for (const p of parts) {
+                p.life += dt;
+                if (p.life >= p.max) continue;
+                alive = true;
+                p.vy -= 26 * dt * dpr;
+                p.vx *= 1 - 1.6 * dt;
+                p.x += p.vx * dt;
+                p.y += p.vy * dt;
+                const f = 1 - p.life / p.max;
+                ctx.globalAlpha = f;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size * (0.6 + 0.4 * f), p.size * (0.6 + 0.4 * f));
+            }
+            ctx.globalAlpha = 1;
+            if (alive) burstRafRef.current = requestAnimationFrame(frame);
+            else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        };
+        cancelAnimationFrame(burstRafRef.current);
+        burstRafRef.current = requestAnimationFrame(frame);
+    };
+
     const staggerSpan = 0.55;
     const start = (card.index / total) * (1 - staggerSpan);
     const end = start + staggerSpan;
@@ -122,6 +176,11 @@ function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) 
                 opacity,
                 zIndex: card.index + 1,
             }}
+            onMouseEnter={(e) => burst(e.clientX, e.clientY)}
+            onFocus={(e) => {
+                const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                burst(r.left + r.width / 2, r.top + r.height / 2);
+            }}
             className="pointer-events-auto absolute left-1/2 top-1/2 aspect-[4/5] will-change-transform select-none cursor-pointer"
         >
             <div className="group relative h-full w-full overflow-hidden rounded-2xl bg-neutral-200 dark:bg-neutral-900 shadow-2xl shadow-neutral-950/20 dark:shadow-black/90 ring-1 ring-black/10 dark:ring-white/15 transition-all duration-500 hover:ring-indigo-500/70 dark:hover:ring-indigo-400/70 hover:shadow-indigo-500/25">
@@ -136,6 +195,7 @@ function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) 
                         {card.item.title}
                     </span>
                 </div>
+                <canvas ref={burstRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-10 h-full w-full" />
             </div>
         </motion.div>
     );
@@ -173,22 +233,41 @@ export default function PerspectiveTunnelHero() {
         restDelta: 0.0001,
     });
 
-    // Handle wheel scrolling locally inside the 100vh viewport container without page scroll
+    // Handle wheel scrolling locally inside the 100vh viewport container without page scroll.
+    // At either end of the tunnel, let the wheel pass through so the page can keep scrolling.
     useEffect(() => {
         const el = containerRef.current;
         if (!el) return;
 
         const handleWheel = (e: WheelEvent) => {
-            e.preventDefault();
             const current = rawProgress.get();
             const delta = e.deltaY * 0.0008; // Adjust speed of tunnel travel here
             const next = Math.min(1, Math.max(0, current + delta));
+            if (next === current) return;
+            e.preventDefault();
             rawProgress.set(next);
         };
 
         el.addEventListener("wheel", handleWheel, { passive: false });
         return () => el.removeEventListener("wheel", handleWheel);
     }, [rawProgress]);
+
+    // On small screens there is no wheel to drive the tunnel, so it cruises on its own.
+    useEffect(() => {
+        if (!stage.isMobile || reduce) return;
+        let raf = 0;
+        let dir = 1;
+        const step = () => {
+            const cur = rawProgress.get();
+            let next = cur + dir * 0.0012;
+            if (next >= 1) { next = 1; dir = -1; }
+            if (next <= 0) { next = 0; dir = 1; }
+            rawProgress.set(next);
+            raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        return () => cancelAnimationFrame(raf);
+    }, [stage.isMobile, reduce, rawProgress]);
 
     const pointer = useCameraParallax(!reduce);
 
@@ -219,15 +298,15 @@ export default function PerspectiveTunnelHero() {
                 className="pointer-events-none z-0 flex flex-col items-center text-center px-6 max-w-xl"
             >
                 <p className="text-xs font-mono uppercase tracking-[0.4em] text-indigo-600 dark:text-indigo-400 mb-4">
-                    Warp Drive Sequence
+                    The Stack
                 </p>
                 <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter leading-[0.9] bg-gradient-to-b from-neutral-950 via-neutral-800 to-neutral-400 dark:from-white dark:via-white dark:to-white/40 bg-clip-text text-transparent">
                     INTO THE
                     <br />
-                    ETHER.
+                    STACK.
                 </h1>
                 <p className="mt-4 max-w-[36ch] text-sm sm:text-base font-light text-neutral-600 dark:text-neutral-400">
-                    Scroll your trackpad or mouse wheel to fly through the spatial 3D corridor.
+                    Scroll to fly through the tools I build with. Hover a card for a burst of dust.
                 </p>
             </motion.div>
 

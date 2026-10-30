@@ -175,7 +175,10 @@ export function HeroScrub({
         const img = imagesRef.current[useIdx];
         const ctx2 = canvas.getContext("2d");
         if (!ctx2 || !img) return;
-        ctx2.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const scale = Math.max(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+        const dw = img.naturalWidth * scale;
+        const dh = img.naturalHeight * scale;
+        ctx2.drawImage(img, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
         lastDrawnRef.current = useIdx;
       };
 
