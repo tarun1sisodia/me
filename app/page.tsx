@@ -25,12 +25,14 @@ import Connect from "@/components/Connect";
 import SiteFooter from "@/components/SiteFooter";
 
 const MAIN2_FRAMES = [
-  "/photos/sticker-tarun.png",
-  "/photos/portrait-hero-clean.jpg",
-  "/photos/portrait-studio-clean.jpg",
-  "/photos/portrait-smiling-arms-crossed.jpg",
-  "/photos/sticker-tarun-halftone.png",
-  "/photos/sticker-tarun-halftone-dark.png",
+  "/photos/tarun-white-wall.jpg",
+  "/photos/tarun-corridor-bw.jpg",
+  "/photos/tarun-night-crowd.jpg",
+  "/photos/tarun-arms-crossed-bw.jpg",
+  "/photos/tarun-galgotias-night.jpg",
+  "/photos/tarun-lobby-bench.jpg",
+  "/photos/tarun-fest-night-smile.jpg",
+  "/photos/tarun-smile-closeup.jpg",
 ];
 
 const main2FrameUrl = (i: number) => MAIN2_FRAMES[i];
@@ -66,8 +68,8 @@ export default function Home() {
             frameUrl={main2FrameUrl}
             titleTop="TARUN"
             titleBottom="SISODIA"
-            accentHex="#ff6b35"
             defaultAspect={920 / 971}
+            started={loaded}
           />
         </div>
         <HeroSub started={loaded} />

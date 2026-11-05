@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import HalftoneWord from "./halftone-word";
+import FlutedGlassBackground from "../FlutedGlassBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,8 +20,9 @@ export type HeroScrubProps = {
   titleTop: string;
   titleBottom: string;
   bgClassName?: string;
-  accentHex?: string;
   defaultAspect?: number;
+  /** True once the loader has finished: starts the halftone sweep-in. */
+  started?: boolean;
 };
 
 function usePrefersReducedMotion() {
@@ -40,8 +43,8 @@ export function HeroScrub({
   titleTop,
   titleBottom,
   bgClassName = "bg-black",
-  accentHex = "#3a9b8a",
   defaultAspect = 16 / 9,
+  started = true,
 }: HeroScrubProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
@@ -206,13 +209,11 @@ export function HeroScrub({
       master.to(cardRef.current, { scale: 1, ease: "power2.out", duration: 0.15 }, 0);
       master.to(titleTopRef.current, {
         x: () => (window.innerWidth < 768 ? "-70vw" : "-60vw"),
-        letterSpacing: "0.02em",
         ease: "power2.inOut",
         duration: 0.15,
       }, 0);
       master.to(titleBottomRef.current, {
         x: () => (window.innerWidth < 768 ? "70vw" : "60vw"),
-        letterSpacing: "0.02em",
         ease: "power2.inOut",
         duration: 0.15,
       }, 0);
@@ -223,10 +224,10 @@ export function HeroScrub({
 
       master.to(cardRef.current, { scale: startScale(), ease: "power3.inOut", duration: 0.22 }, 0.78);
       master.to(titleTopRef.current, {
-        x: 0, opacity: 1, letterSpacing: "-0.04em", ease: "power2.inOut", duration: 0.22,
+        x: 0, opacity: 1, ease: "power2.inOut", duration: 0.22,
       }, 0.78);
       master.to(titleBottomRef.current, {
-        x: 0, opacity: 1, letterSpacing: "-0.04em", ease: "power2.inOut", duration: 0.22,
+        x: 0, opacity: 1, ease: "power2.inOut", duration: 0.22,
       }, 0.78);
 
       ScrollTrigger.refresh();
@@ -253,7 +254,9 @@ export function HeroScrub({
         ref={stickyRef}
         className="sticky top-0 flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden"
       >
-        <div ref={bgRef} aria-hidden className="absolute inset-0 z-0" style={{ backgroundColor: accentHex }} />
+        <div ref={bgRef} aria-hidden className="absolute inset-0 z-0">
+          <FlutedGlassBackground />
+        </div>
         <div aria-hidden className="absolute inset-0 z-0 bg-black/30" />
         <div aria-hidden className="absolute inset-0 z-0" style={{
           background: "radial-gradient(ellipse at 50% 35%, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 55%)",
@@ -265,7 +268,7 @@ export function HeroScrub({
         <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-3 md:gap-4">
           <h2 ref={titleTopRef} aria-hidden className="font-black uppercase" style={{
             fontSize: "clamp(3.75rem, 12vw, 11rem)", lineHeight: 0.85, letterSpacing: "-0.04em",
-          }}>{titleTop}</h2>
+          }}><HalftoneWord word={titleTop} active={started} /></h2>
 
           <div ref={cardRef}
             className="relative overflow-hidden rounded-[12px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10 will-change-transform md:rounded-[16px]" style={{
@@ -281,7 +284,7 @@ export function HeroScrub({
 
           <h2 ref={titleBottomRef} aria-hidden className="font-black uppercase" style={{
             fontSize: "clamp(3.75rem, 12vw, 11rem)", lineHeight: 0.85, letterSpacing: "-0.04em",
-          }}>{titleBottom}</h2>
+          }}><HalftoneWord word={titleBottom} active={started} /></h2>
         </div>
       </div>
     </section>
