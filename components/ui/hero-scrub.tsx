@@ -20,6 +20,7 @@ export type HeroScrubProps = {
   bgClassName?: string;
   accentHex?: string;
   defaultAspect?: number;
+  onFrameClick?: (frameIndex: number) => void;
 };
 
 function usePrefersReducedMotion() {
@@ -42,12 +43,17 @@ export function HeroScrub({
   bgClassName = "bg-black",
   accentHex = "#3a9b8a",
   defaultAspect = 16 / 9,
+  onFrameClick,
 }: HeroScrubProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const lastDrawnRef = useRef<number>(-1);
+  const frameIndexRef = useRef(0);
+  const leavingRef = useRef(false);
+  const masterRef = useRef<gsap.core.Timeline | null>(null);
+  const exitTimerRef = useRef<number | null>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const titleTopRef = useRef<HTMLHeadingElement>(null);
@@ -57,6 +63,38 @@ export function HeroScrub({
   const [framesOk, setFramesOk] = useState(true);
   const [aspect, setAspect] = useState<number>(defaultAspect);
   const reduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current) window.clearTimeout(exitTimerRef.current);
+    };
+  }, []);
+
+  const handleCardClick = () => {
+    if (!onFrameClick || leavingRef.current) return;
+    leavingRef.current = true;
+    if (reduced) {
+      onFrameClick(frameIndexRef.current);
+      return;
+    }
+    masterRef.current?.scrollTrigger?.disable();
+    masterRef.current?.pause();
+    gsap.to(cardRef.current, {
+      scale: "+=2.5",
+      duration: 0.7,
+      ease: "power3.in",
+      transformOrigin: "50% 50%",
+    });
+    gsap.to(cardRef.current, { opacity: 0, duration: 0.35, delay: 0.35, ease: "power1.in" });
+    gsap.to([titleTopRef.current, titleBottomRef.current], {
+      opacity: 0,
+      duration: 0.4,
+      ease: "power1.in",
+    });
+    exitTimerRef.current = window.setTimeout(() => {
+      onFrameClick(frameIndexRef.current);
+    }, 750);
+  };
 
   useEffect(() => {
     if (reduced) return;
@@ -171,6 +209,7 @@ export function HeroScrub({
           if (found === -1) return;
           useIdx = found;
         }
+        frameIndexRef.current = useIdx;
         if (lastDrawnRef.current === useIdx) return;
         const img = imagesRef.current[useIdx];
         const ctx2 = canvas.getContext("2d");
@@ -227,9 +266,13 @@ export function HeroScrub({
       }, 0.78);
 
       ScrollTrigger.refresh();
+      masterRef.current = master;
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      masterRef.current = null;
+      ctx.revert();
+    };
   }, [ready, framesOk, reduced, aspect, frameCount]);
 
   // Tall section + inner sticky div = same visual as ScrollTrigger pin, without needing pin
@@ -260,7 +303,16 @@ export function HeroScrub({
             fontSize: "clamp(3.75rem, 12vw, 11rem)", lineHeight: 0.85, letterSpacing: "-0.04em",
           }}>{titleTop}</h2>
 
-          <div ref={cardRef} className="relative overflow-hidden rounded-[12px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10 will-change-transform md:rounded-[16px]" style={{
+          <div ref={cardRef} role={onFrameClick ? "button" : undefined} tabIndex={onFrameClick ? 0 : undefined}
+            aria-label={onFrameClick ? "Open project" : undefined}
+            onClick={onFrameClick ? handleCardClick : undefined}
+            onKeyDown={onFrameClick ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleCardClick();
+              }
+            } : undefined}
+            className={`relative overflow-hidden rounded-[12px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/10 will-change-transform md:rounded-[16px]${onFrameClick ? " cursor-pointer" : ""}`} style={{
             width: `min(96vw, calc(72svh * ${aspect}))`,
             height: `min(72svh, 96vw / ${aspect})`,
             aspectRatio: aspect,

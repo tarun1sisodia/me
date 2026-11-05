@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import ShaderBackground from "@/components/ShaderBackground";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -89,7 +90,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
-        {children}
+        <ShaderBackground />
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );

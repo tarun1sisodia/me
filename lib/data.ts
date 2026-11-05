@@ -73,6 +73,8 @@ export const JOURNEY: JourneyEntry[] = [
   },
 ];
 
+export const projectSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "");
+
 export interface Project {
   name: string;
   outcome: string;
