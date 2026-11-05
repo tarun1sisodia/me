@@ -9,22 +9,30 @@ import {
     MotionValue,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { useRouter } from "next/navigation";
+import { projectSlug } from "@/lib/data";
 
+// Which project each card opens. A card opens the project where its tech is
+// the headline: ArenaAI is the TypeScript / Docker / PostgreSQL platform with
+// the hardened backend (Security, Ship It), CineMatch is the React + FastAPI
+// app, FreeTune is the Node.js + Redis backend. SmartCampus and BloodConnect
+// have no matching tech card, so no tunnel card points at them yet.
 const IMAGES = [
-    { src: "https://cdn.21st.dev/assets/mirror/c3/c3fbd2afa140223999a441b32ed986f61d473930002708df805a81532a326aac.jpg", title: "TypeScript" },
-    { src: "https://cdn.21st.dev/assets/mirror/9d/9d8b2f675a5814476ada3736ce439bcda23c5c389e0ebf9b25d8a0c09f3bbcfe.jpg", title: "React" },
-    { src: "https://cdn.21st.dev/assets/mirror/8b/8bb738bf2f00d7f7ed3c3ec034adb9938ad38f4be4ac191d632a6a11ad525574.jpg", title: "FastAPI" },
-    { src: "https://cdn.21st.dev/assets/mirror/ac/ac5ac700b188d7ef16ee9dab868098b59f15c440db3f71d4e8c03262a3287577.jpg", title: "Security" },
-    { src: "https://cdn.21st.dev/assets/mirror/ef/ef25eff6ce655fba459b3b7e7711524dc92499aa18f6c7dbea9a0fcc56a8f908.jpg", title: "Node.js" },
-    { src: "https://cdn.21st.dev/assets/mirror/f2/f28b370a5dcbf76240f1504579c4b05fc0ff0bb990a42aff8dc2f73a5dc46072.jpg", title: "Docker" },
-    { src: "https://cdn.21st.dev/assets/mirror/f2/f26a1eac85704dda924820392dedfb72d51d8261d35354f83b35d683617295f3.jpg", title: "PostgreSQL" },
-    { src: "https://cdn.21st.dev/assets/mirror/77/7755d23eaaa0aa5b403343f44afa7a29b2d06d3065fe54c602b14ba01d00f2aa.jpg", title: "Redis" },
-    { src: "https://cdn.21st.dev/assets/mirror/65/657317761fe9058a1d43711b13c543a71eb5199b7a5d9abf4c28479674e39cf7.jpg", title: "Ship It" },
+    { src: "https://cdn.21st.dev/assets/mirror/c3/c3fbd2afa140223999a441b32ed986f61d473930002708df805a81532a326aac.jpg", title: "TypeScript", project: "ArenaAI" },
+    { src: "https://cdn.21st.dev/assets/mirror/9d/9d8b2f675a5814476ada3736ce439bcda23c5c389e0ebf9b25d8a0c09f3bbcfe.jpg", title: "React", project: "CineMatch" },
+    { src: "https://cdn.21st.dev/assets/mirror/8b/8bb738bf2f00d7f7ed3c3ec034adb9938ad38f4be4ac191d632a6a11ad525574.jpg", title: "FastAPI", project: "CineMatch" },
+    { src: "https://cdn.21st.dev/assets/mirror/ac/ac5ac700b188d7ef16ee9dab868098b59f15c440db3f71d4e8c03262a3287577.jpg", title: "Security", project: "ArenaAI" },
+    { src: "https://cdn.21st.dev/assets/mirror/ef/ef25eff6ce655fba459b3b7e7711524dc92499aa18f6c7dbea9a0fcc56a8f908.jpg", title: "Node.js", project: "FreeTune" },
+    { src: "https://cdn.21st.dev/assets/mirror/f2/f28b370a5dcbf76240f1504579c4b05fc0ff0bb990a42aff8dc2f73a5dc46072.jpg", title: "Docker", project: "ArenaAI" },
+    { src: "https://cdn.21st.dev/assets/mirror/f2/f26a1eac85704dda924820392dedfb72d51d8261d35354f83b35d683617295f3.jpg", title: "PostgreSQL", project: "ArenaAI" },
+    { src: "https://cdn.21st.dev/assets/mirror/77/7755d23eaaa0aa5b403343f44afa7a29b2d06d3065fe54c602b14ba01d00f2aa.jpg", title: "Redis", project: "FreeTune" },
+    { src: "https://cdn.21st.dev/assets/mirror/65/657317761fe9058a1d43711b13c543a71eb5199b7a5d9abf4c28479674e39cf7.jpg", title: "Ship It", project: "ArenaAI" },
 ];
 
 
 interface TunnelCardData {
-    item: { src: string; title: string };
+    item: { src: string; title: string; project: string };
     angleCos: number;
     angleSin: number;
     radiusFactorX: number;
@@ -82,11 +90,13 @@ interface TunnelCardProps {
     pointer: { x: MotionValue<number>; y: MotionValue<number> };
     total: number;
     stage: StageDimensions;
+    onCardClick?: (index: number, innerEl: HTMLElement | null) => void;
 }
 
-function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) {
+function TunnelCard({ card, progress, pointer, total, stage, onCardClick }: TunnelCardProps) {
     const burstRef = useRef<HTMLCanvasElement>(null);
     const burstRafRef = useRef(0);
+    const innerRef = useRef<HTMLDivElement>(null);
 
     const burst = (clientX: number, clientY: number) => {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -168,6 +178,14 @@ function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) 
         }
     );
 
+    const handleClick = () => {
+        // Cards fade in/out at the ends of their travel; only a card that is
+        // actually visible can be entered.
+        const p = localProgress.get();
+        if (p < 0.08 || p > 0.92) return;
+        onCardClick?.(card.index, innerRef.current);
+    };
+
     return (
         <motion.div
             style={{
@@ -181,9 +199,19 @@ function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) 
                 const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
                 burst(r.left + r.width / 2, r.top + r.height / 2);
             }}
+            role={onCardClick ? "button" : undefined}
+            tabIndex={onCardClick ? 0 : undefined}
+            aria-label={onCardClick ? `Open ${card.item.project} project` : undefined}
+            onClick={onCardClick ? handleClick : undefined}
+            onKeyDown={onCardClick ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleClick();
+                }
+            } : undefined}
             className="pointer-events-auto absolute left-1/2 top-1/2 aspect-[4/5] will-change-transform select-none cursor-pointer"
         >
-            <div className="group relative h-full w-full overflow-hidden rounded-2xl bg-neutral-200 dark:bg-neutral-900 shadow-2xl shadow-neutral-950/20 dark:shadow-black/90 ring-1 ring-black/10 dark:ring-white/15 transition-all duration-500 hover:ring-indigo-500/70 dark:hover:ring-indigo-400/70 hover:shadow-indigo-500/25">
+            <div ref={innerRef} className="group relative h-full w-full overflow-hidden rounded-2xl bg-neutral-200 dark:bg-neutral-900 shadow-2xl shadow-neutral-950/20 dark:shadow-black/90 ring-1 ring-black/10 dark:ring-white/15 transition-all duration-500 hover:ring-indigo-500/70 dark:hover:ring-indigo-400/70 hover:shadow-indigo-500/25">
                 <img
                     src={card.item.src}
                     alt={card.item.title}
@@ -204,6 +232,16 @@ function TunnelCard({ card, progress, pointer, total, stage }: TunnelCardProps) 
 export default function PerspectiveTunnelHero() {
     const containerRef = useRef<HTMLDivElement>(null);
     const reduce = useReducedMotion();
+    const router = useRouter();
+    const [leaving, setLeaving] = useState<number | null>(null);
+    const leavingRef = useRef(false);
+    const exitTimerRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (exitTimerRef.current) window.clearTimeout(exitTimerRef.current);
+        };
+    }, []);
 
     const [stage, setStage] = useState<StageDimensions>({
         width: 1440,
@@ -240,6 +278,7 @@ export default function PerspectiveTunnelHero() {
         if (!el) return;
 
         const handleWheel = (e: WheelEvent) => {
+            if (leavingRef.current) return;
             const current = rawProgress.get();
             const delta = e.deltaY * 0.0008; // Adjust speed of tunnel travel here
             const next = Math.min(1, Math.max(0, current + delta));
@@ -254,7 +293,7 @@ export default function PerspectiveTunnelHero() {
 
     // On small screens there is no wheel to drive the tunnel, so it cruises on its own.
     useEffect(() => {
-        if (!stage.isMobile || reduce) return;
+        if (!stage.isMobile || reduce || leaving !== null) return;
         let raf = 0;
         let dir = 1;
         const step = () => {
@@ -267,9 +306,30 @@ export default function PerspectiveTunnelHero() {
         };
         raf = requestAnimationFrame(step);
         return () => cancelAnimationFrame(raf);
-    }, [stage.isMobile, reduce, rawProgress]);
+    }, [stage.isMobile, reduce, leaving, rawProgress]);
 
-    const pointer = useCameraParallax(!reduce);
+    const pointer = useCameraParallax(!reduce && leaving === null);
+
+    const handleCardClick = (index: number, innerEl: HTMLElement | null) => {
+        if (leavingRef.current) return;
+        leavingRef.current = true;
+        setLeaving(index);
+        const slug = projectSlug(IMAGES[index].project);
+        if (reduce || !innerEl) {
+            router.push(`/projects/${slug}`);
+            return;
+        }
+        // Same fly-inside exit the hero used: the card grows toward the
+        // camera and fades, then the project page opens. The inner div is
+        // animated (not the framer-motion card) so the tunnel's own transform
+        // is never fought. Tunnel cards are smaller than the hero card, so
+        // the scale is bigger to still fill the screen.
+        gsap.to(innerEl, { scale: 6, duration: 0.7, ease: "power3.in", transformOrigin: "50% 50%" });
+        gsap.to(innerEl, { opacity: 0, duration: 0.35, delay: 0.35, ease: "power1.in" });
+        exitTimerRef.current = window.setTimeout(() => {
+            router.push(`/projects/${slug}`);
+        }, 750);
+    };
 
     const titleScale = useTransform(smoothProgress, [0, 0.5, 1], [0.7, 1, 1.35]);
     const titleOpacity = useTransform(smoothProgress, [0, 0.12, 0.85, 1], [0.25, 1, 1, 0]);
@@ -306,7 +366,7 @@ export default function PerspectiveTunnelHero() {
                     STACK.
                 </h1>
                 <p className="mt-4 max-w-[36ch] text-sm sm:text-base font-light text-neutral-600 dark:text-neutral-400">
-                    Scroll to fly through the tools I build with. Hover a card for a burst of dust.
+                    Scroll to fly through the tools I build with. Click a card to step inside its project.
                 </p>
             </motion.div>
 
@@ -332,6 +392,7 @@ export default function PerspectiveTunnelHero() {
                         pointer={pointer}
                         total={TUNNEL_CARDS.length}
                         stage={stage}
+                        onCardClick={handleCardClick}
                     />
                 ))}
             </div>

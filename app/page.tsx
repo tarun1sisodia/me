@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { PROJECTS, projectSlug } from "@/lib/data";
 import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
@@ -39,12 +37,6 @@ const main2FrameUrl = (i: number) => MAIN2_FRAMES[i];
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const router = useRouter();
-
-  const openFrameProject = (frame: number) => {
-    const project = PROJECTS[frame % PROJECTS.length];
-    router.push(`/projects/${projectSlug(project.name)}`);
-  };
 
   useEffect(() => {
     if (!loaded) return;
@@ -76,7 +68,6 @@ export default function Home() {
             titleBottom="SISODIA"
             accentHex="#ff6b35"
             defaultAspect={920 / 971}
-            onFrameClick={openFrameProject}
           />
         </div>
         <HeroSub started={loaded} />
