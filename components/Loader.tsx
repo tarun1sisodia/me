@@ -10,11 +10,18 @@ const LINES = [
   "> access granted",
 ];
 
-export default function Loader({ onDone }: { onDone: () => void }) {
+export default function Loader({ onDone, ready = true }: { onDone: () => void; ready?: boolean }) {
   const reduced = useReducedMotion();
   const [lines, setLines] = useState<string[]>([]);
   const [progress, setProgress] = useState(0);
   const done = useRef(false);
+  // The Loader used to finish on a fixed timer while the hero photos were
+  // still downloading, lifting onto a blank hero. It now waits for `ready`
+  // (first hero frame decoded, fonts in) — but never longer than 6s, so a
+  // failed asset can never trap the user on this screen.
+  const readyRef = useRef(ready);
+  readyRef.current = ready;
+  const startedAt = useRef(Date.now());
 
   useEffect(() => {
     const finish = () => {
@@ -22,6 +29,14 @@ export default function Loader({ onDone }: { onDone: () => void }) {
         done.current = true;
         onDone();
       }
+    };
+    const finishWhenReady = () => {
+      if (done.current) return;
+      if (!readyRef.current && Date.now() - startedAt.current < 6000) {
+        timers.push(setTimeout(finishWhenReady, 200));
+        return;
+      }
+      finish();
     };
     const timers: ReturnType<typeof setTimeout>[] = [];
     if (reduced) {
@@ -31,7 +46,7 @@ export default function Loader({ onDone }: { onDone: () => void }) {
           setProgress(100);
         }, 30)
       );
-      timers.push(setTimeout(finish, 480));
+      timers.push(setTimeout(finishWhenReady, 480));
       return () => timers.forEach(clearTimeout);
     }
     let li = 0;
@@ -40,7 +55,7 @@ export default function Loader({ onDone }: { onDone: () => void }) {
       setLines(LINES.slice(0, li));
       setProgress(Math.round((li / LINES.length) * 100));
       if (li < LINES.length) timers.push(setTimeout(tick, 210));
-      else timers.push(setTimeout(finish, 380));
+      else timers.push(setTimeout(finishWhenReady, 380));
     };
     timers.push(setTimeout(tick, 140));
     return () => timers.forEach(clearTimeout);

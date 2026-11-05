@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HalftoneWord from "./halftone-word";
 import FlutedGlassBackground from "../FlutedGlassBackground";
+import { getPreloadedHeroImage, preloadHeroImage } from "@/lib/hero-preload";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,45 +91,52 @@ export function HeroScrub({
     };
 
     const loadOne = (i: number) => {
-      const img = new window.Image();
-      img.decoding = "async";
-      if (i < 4)
-        (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority = "high";
-      img.onerror = onErr;
-      if (i === 0) img.onload = () => onFirstReady(img);
-      img.src = frameUrl(i);
-      images[i] = img;
+      // page.tsx already preloaded the first frames behind the Loader —
+      // reuse those decoded images instead of downloading them twice.
+      const cached = getPreloadedHeroImage(frameUrl(i));
+      if (cached) {
+        images[i] = cached;
+        if (i === 0) onFirstReady(cached);
+        return;
+      }
+      preloadHeroImage(frameUrl(i), i < 3)
+        .then((img) => {
+          if (cancelled) return;
+          images[i] = img;
+          if (i === 0) onFirstReady(img);
+        })
+        .catch(onErr);
     };
 
-    const INITIAL = Math.min(20, frameCount);
-    for (let i = 0; i < INITIAL; i++) loadOne(i);
-
-    const BATCH = 20;
-    let cursor = INITIAL;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const loadNext = () => {
+    // Only the first 3 frames race the Loader. The rest warm up once the
+    // browser is idle — 8 parallel downloads used to starve the first frame.
+    const URGENT = Math.min(3, frameCount);
+    for (let i = 0; i < URGENT; i++) loadOne(i);
+    const idleLoad = () => {
       if (cancelled) return;
-      const end = Math.min(frameCount, cursor + BATCH);
-      for (let i = cursor; i < end; i++) loadOne(i);
-      cursor = end;
-      if (cursor < frameCount) timer = setTimeout(loadNext, 80);
+      for (let i = URGENT; i < frameCount; i++) loadOne(i);
     };
-    timer = setTimeout(loadNext, 200);
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void }).requestIdleCallback;
+    let idleTimer: ReturnType<typeof setTimeout> | null = null;
+    if (typeof ric === "function") ric(idleLoad, { timeout: 2000 });
+    else idleTimer = setTimeout(idleLoad, 600);
 
     const fallbackTimer = window.setTimeout(() => {
       if (!cancelled && !images[0]?.complete) setFramesOk(false);
-    }, 4500);
+    }, 6000);
 
     return () => {
       cancelled = true;
-      if (timer) clearTimeout(timer);
+      if (idleTimer) clearTimeout(idleTimer);
       window.clearTimeout(fallbackTimer);
     };
   }, [reduced, frameCount, frameUrl]);
 
-  // Entry animation
+  // Entry animation — gated on `started` (the Loader lifting). It used to
+  // run on mount, behind the loading screen, so by the time the hero was
+  // visible the entrance was already over.
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !started) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: ENTRY_DELAY });
       tl.from(bgRef.current, { opacity: 0, duration: 1.4, ease: "power2.out" });
@@ -137,7 +145,7 @@ export function HeroScrub({
       tl.from(titleBottomRef.current, { opacity: 0, y: -30, duration: 1, ease: "expo.out" }, 0.62);
     }, sectionRef);
     return () => ctx.revert();
-  }, [reduced]);
+  }, [reduced, started]);
 
   // Scroll-driven choreography — uses sticky layout instead of ScrollTrigger pin
   useEffect(() => {
