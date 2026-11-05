@@ -29,8 +29,24 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy on Cloudflare Workers (main2)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This branch deploys to Cloudflare Workers via the [OpenNext adapter](https://opennext.js.org/cloudflare). It uses its **own Worker named `me-main2`** (see `wrangler.jsonc`) so it never overwrites the `main` branch's Worker (`me`).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Cloudflare dashboard setup (Workers Builds)
+
+1. **Workers & Pages → Create → Worker → Import a repository** → pick `tarun1sisodia/me`.
+2. Name the Worker **`me-main2`** (must match `name` in `wrangler.jsonc`) and select branch **`main2`** as the production branch.
+3. Build settings:
+   - **Build command:** `npx opennextjs-cloudflare build`
+   - **Deploy command:** `npx opennextjs-cloudflare deploy`
+   - **Root directory:** `/` (repo root)
+4. Push to `main2` (or press **Retry build** on the latest build) to trigger a deployment. Changing the branch alone does not redeploy.
+5. Open the Worker's own URL: `https://me-main2.<your-subdomain>.workers.dev`. The old `me.<your-subdomain>.workers.dev` URL belongs to the `main` branch and will keep showing the old UI.
+
+### Local commands
+
+```bash
+npm run preview   # build + run locally in the Workers runtime
+npm run deploy    # build + deploy to Cloudflare (requires wrangler login)
+```
