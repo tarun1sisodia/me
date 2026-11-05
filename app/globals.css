@@ -2269,6 +2269,36 @@ p {
   gap: 24px;
 }
 
+/* ---------- work stacked cards — start (remove this block + the work-stack markup in Work.tsx to remove) ---------- */
+
+.work-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each card sticks near the top while the next one scrolls up over it.
+   The small per-card offset leaves a stepped edge of the card underneath
+   visible, so the stack reads as cards covering cards. Sticky is layout,
+   not an animation, so scrolling back up runs it in reverse for free. */
+.work-stack-card {
+  position: sticky;
+  top: calc(84px + var(--i, 0) * 16px);
+  will-change: transform;
+  margin-bottom: clamp(20px, 3vh, 36px);
+}
+
+.work-stack-card .project-card {
+  box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 900px) {
+  .work-stack-card {
+    top: calc(72px + var(--i, 0) * 10px);
+  }
+}
+
+/* ---------- work stacked cards — end ---------- */
+
 /* ================= MAGNET GRID — start (remove this block + MagnetGrid.tsx + its mount line in Skills.tsx to remove) ================= */
 
 .magnet-section {

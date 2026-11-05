@@ -1,7 +1,9 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type MouseEvent } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Film, GraduationCap, HeartPulse, Music } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import LazyScene from "./LazyScene";
@@ -145,6 +147,7 @@ function ProjectCard({ project, featured = false }: { project: Project; featured
 
 export default function Work() {
   const [filter, setFilter] = useState<string | null>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onFilter = (e: Event) => {
@@ -154,13 +157,42 @@ export default function Work() {
     return () => window.removeEventListener("work:filter", onFilter);
   }, []);
 
+  // Stacked covering cards: each card sticks to the top while the next one
+  // scrolls up over it, and shrinks a touch as it gets covered. Scrubbed,
+  // so scrolling back up runs the whole thing in reverse.
+  useEffect(() => {
+    if (filter) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.registerPlugin(ScrollTrigger);
+    const cards = Array.from(
+      stackRef.current?.querySelectorAll<HTMLElement>(".work-stack-card") ?? []
+    );
+    const ctx = gsap.context(() => {
+      cards.forEach((card, i) => {
+        const next = cards[i + 1];
+        if (!next) return;
+        gsap.to(card, {
+          scale: 0.94,
+          transformOrigin: "center top",
+          ease: "none",
+          scrollTrigger: {
+            trigger: next,
+            start: "top bottom",
+            end: "top top+=140",
+            scrub: true,
+          },
+        });
+      });
+    }, stackRef);
+    return () => ctx.revert();
+  }, [filter]);
+
   const matches = filter
     ? PROJECTS.filter((p) =>
         p.stack.some((s) => s.toLowerCase().includes(filter.toLowerCase()))
       )
     : PROJECTS;
   const list = filter && matches.length === 0 ? PROJECTS : matches;
-  const [featured, ...rest] = PROJECTS;
 
   return (
     <section className="section work" id="work" aria-label="Work">
@@ -200,18 +232,17 @@ export default function Work() {
           </div>
         )}
         {!filter ? (
-          <>
-            <Reveal>
-              <ProjectCard project={featured} featured />
-            </Reveal>
-            <div className="project-grid">
-              {rest.map((p, i) => (
-                <Reveal key={p.name} delay={(i % 3) * 0.08}>
-                  <ProjectCard project={p} />
-                </Reveal>
-              ))}
-            </div>
-          </>
+          <div className="work-stack" ref={stackRef}>
+            {PROJECTS.map((p, i) => (
+              <div
+                key={p.name}
+                className="work-stack-card"
+                style={{ "--i": i } as CSSProperties}
+              >
+                <ProjectCard project={p} featured={i === 0} />
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="project-grid">
             {list.map((p, i) => (
