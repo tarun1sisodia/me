@@ -86,6 +86,8 @@ export interface Project {
   video?: string;
   videoId?: string;
   points: string[];
+  /** One-line sign-off for the signature footer at the end of the project page. */
+  signoff: string;
   timeline?: { top: TimelineItem[]; bottom: TimelineItem[] };
   icon?: "Music" | "Film" | "GraduationCap" | "HeartPulse";
   links: { label: string; href: string }[];
@@ -103,6 +105,8 @@ export const PROJECTS: Project[] = [
       "Full SEO pipeline — SSG, sitemap, canonicals, and Cloudflare deploys",
       "Hardened production backend — rate-limited, Dockerized, handling real money",
     ],
+    signoff:
+      "ArenaAI is live and taking bookings — fares, payments, and dispatch for a real travel business. If you want something like it for yours, my inbox is open.",
     timeline: {
       top: [
         { id: "2026-aug", year: "2026", month: "August", content: "Production backend goes live — Fastify, Razorpay payments, Supabase and MongoDB" },
@@ -128,6 +132,8 @@ export const PROJECTS: Project[] = [
       "Node.js and Express with MongoDB and Redis under the hood",
       "Audio served fast from Cloudflare R2",
     ],
+    signoff:
+      "FreeTune streams music on a backend built to scale — caching, rate limiting, and cloud audio. The code is on GitHub if you want to look inside.",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
@@ -141,6 +147,8 @@ export const PROJECTS: Project[] = [
       "React frontend talking to a FastAPI backend",
       "Scikit-learn ranking over a SQLite store",
     ],
+    signoff:
+      "CineMatch finds your next film with TF-IDF and cosine similarity — a full-stack recommender, frontend to ranking. Take a look at the code.",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
@@ -154,6 +162,8 @@ export const PROJECTS: Project[] = [
       "Teacher workflows with recording and analytics",
       "Flutter frontend, Node.js and MySQL backend",
     ],
+    signoff:
+      "SmartCampus puts attendance in teachers' pockets — recording, workflows, and analytics, cross-platform. The build is on GitHub.",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
@@ -167,6 +177,8 @@ export const PROJECTS: Project[] = [
       "Production-ready Node.js service",
       "Built to connect donors with people who need blood",
     ],
+    signoff:
+      "BloodConnect exists to connect donors with people who need blood — a production-ready backend for a cause that matters.",
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia/bloodconnectbackend" }],
   },
 ];

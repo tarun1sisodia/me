@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PROJECTS, projectSlug } from "@/lib/data";
 import GlyphPortal from "@/components/ui/glyph-portal";
 import Timeline from "@/components/ui/timeline";
+import SignaturePenFooter from "@/components/ui/signature-pen-footer";
 import VideoCard from "@/components/VideoCard";
 import ProjectPoints from "@/components/ProjectPoints";
 
@@ -130,6 +131,40 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           ← Back to home
         </Link>
       </div>
+
+      <SignaturePenFooter
+        word={project.name}
+        title={`Thank you for exploring ${project.name}`}
+        description={project.signoff}
+        actions={
+          live && github
+            ? [
+                { label: "View on GitHub", href: github.href, variant: "secondary" },
+                { label: "See it live", href: live.href, variant: "primary" },
+              ]
+            : github
+              ? [
+                  { label: "Back to home", href: "/", variant: "secondary" },
+                  { label: "View on GitHub", href: github.href, variant: "primary" },
+                ]
+              : []
+        }
+        brand="Tarun Sisodia"
+        links={[
+          { label: "GitHub", href: "https://github.com/tarun1sisodia" },
+          { label: "LinkedIn", href: "https://linkedin.com/in/tarun1sisodia" },
+          { label: "Instagram", href: "https://instagram.com/tarun1sisodia" },
+          { label: "Email", href: "mailto:coccoder999@gmail.com" },
+        ]}
+        legal="© 2026 Tarun Sisodia · Greater Noida, India"
+        theme="dark"
+        background="#0c0c0c"
+        foreground="#f5f5f5"
+        accent="#ff6b35"
+        inkFrom="#ffb38a"
+        inkTo="#ff6b35"
+        fontSans='"Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif'
+      />
     </main>
   );
 }
