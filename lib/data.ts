@@ -1,3 +1,5 @@
+import type { TimelineItem } from "@/components/ui/timeline";
+
 export const PROFILE = {
   name: "Tarun Sisodia",
   role: "full-stack developer",
@@ -82,6 +84,9 @@ export interface Project {
   image?: string;
   imageAlt?: string;
   video?: string;
+  videoId?: string;
+  points: string[];
+  timeline?: { top: TimelineItem[]; bottom: TimelineItem[] };
   icon?: "Music" | "Film" | "GraduationCap" | "HeartPulse";
   links: { label: string; href: string }[];
 }
@@ -93,6 +98,20 @@ export const PROJECTS: Project[] = [
     stack: ["React", "TypeScript", "Fastify", "PostgreSQL", "Razorpay", "Cloudflare"],
     image: "/photos/projects/arenai-travel.webp",
     imageAlt: "Taj Mahal at sunrise",
+    points: [
+      "Live bookings, fares, and Razorpay payments for a real travel business",
+      "Full SEO pipeline — SSG, sitemap, canonicals, and Cloudflare deploys",
+      "Hardened production backend — rate-limited, Dockerized, handling real money",
+    ],
+    timeline: {
+      top: [
+        { id: "2026-aug", year: "2026", month: "August", content: "Production backend goes live — Fastify, Razorpay payments, Supabase and MongoDB" },
+        { id: "2026-oct-seo", year: "2026", month: "October", content: "SEO overhaul ships — sitemap rebuilt, canonicals fixed, verified live" },
+      ],
+      bottom: [
+        { id: "2026-oct-booking", year: "2026", month: "October", content: "Booking flow restyle and prerender crash fix land on main" },
+      ],
+    },
     links: [
       { label: "GitHub", href: "https://github.com/tarun1sisodia/ArenaAI" },
       { label: "Live site", href: "https://agraskbagheltourandtravels.com" },
@@ -104,6 +123,11 @@ export const PROJECTS: Project[] = [
     stack: ["Node.js", "Express", "MongoDB", "Redis", "Cloudflare R2"],
     image: "/photos/projects/freetune-concert.webp",
     imageAlt: "Concert crowd under stage lights",
+    points: [
+      "Music-streaming backend with caching, rate limiting, and cloud audio storage",
+      "Node.js and Express with MongoDB and Redis under the hood",
+      "Audio served fast from Cloudflare R2",
+    ],
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
@@ -112,6 +136,11 @@ export const PROJECTS: Project[] = [
     stack: ["React", "FastAPI", "scikit-learn", "SQLite"],
     image: "/photos/projects/cinematch-cinema.webp",
     imageAlt: "Empty cinema theater seats",
+    points: [
+      "Content-based movie recommendations — TF-IDF plus cosine similarity",
+      "React frontend talking to a FastAPI backend",
+      "Scikit-learn ranking over a SQLite store",
+    ],
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
@@ -120,6 +149,11 @@ export const PROJECTS: Project[] = [
     stack: ["Flutter", "Node.js", "MySQL"],
     image: "/photos/projects/smartcampus-campus.webp",
     imageAlt: "University campus",
+    points: [
+      "Cross-platform attendance app for institutions",
+      "Teacher workflows with recording and analytics",
+      "Flutter frontend, Node.js and MySQL backend",
+    ],
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia" }],
   },
   {
@@ -128,6 +162,11 @@ export const PROJECTS: Project[] = [
     stack: ["JavaScript", "Node.js"],
     image: "/photos/projects/bloodconnect-donation.webp",
     imageAlt: "Blood bags ready for donation",
+    points: [
+      "Backend for a blood-donation connect app",
+      "Production-ready Node.js service",
+      "Built to connect donors with people who need blood",
+    ],
     links: [{ label: "GitHub", href: "https://github.com/tarun1sisodia/bloodconnectbackend" }],
   },
 ];
