@@ -77,6 +77,24 @@ export const JOURNEY: JourneyEntry[] = [
 
 export const projectSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "");
 
+/**
+ * The Path, as Timeline milestones — the same horizontal scrub animation as
+ * the project pages, fed with the real journey (degrees, internships,
+ * production systems) instead of the component's demo 2020–2026 storyline.
+ */
+export const PATH_TIMELINE: { top: TimelineItem[]; bottom: TimelineItem[] } = {
+  top: [
+    { id: "path-bca", year: "2022", month: "August", content: "BCA, Computer Science — Agra University. CS fundamentals, DSA, and the first lines of code that stuck." },
+    { id: "path-mca", year: "2025", month: "August", content: "MCA, Cyber Security — Galgotias University. Final year, going deep on security — GRC and VAPT direction." },
+    { id: "path-aarogya", year: "2026", month: "April", content: "Backend Developer Intern — Aarogya Virohan. Health-tech APIs with FastAPI + PostgreSQL, JWT auth with clinic-isolation middleware." },
+  ],
+  bottom: [
+    { id: "path-freelance", year: "2026", month: "August", content: "Freelance Backend Developer — tour & travel business. Production Fastify backend: fares, bookings, Razorpay, Dockerized on Render." },
+    { id: "path-arenaai", year: "2026", month: "October", content: "ArenaAI shipped — production travel platform. Live bookings, SEO pipeline, Cloudflare deploys." },
+    { id: "path-now", year: "2026", month: "November", content: "Building in public — open to work. Shipping, learning security, and looking for what's next." },
+  ],
+};
+
 export interface Project {
   name: string;
   outcome: string;
