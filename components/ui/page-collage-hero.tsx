@@ -31,10 +31,11 @@ gsap.registerPlugin(ScrollTrigger);
 //              driven by the ScrollTrigger's progress (see onUpdate), not
 //              by timeline tweens, so scrolling back reverses them cleanly.
 //   Mouse: the portrait slides opposite the cursor (mouse right → figure
-//   left), ~44px total range, no tilt — measured from the reference; the
-//   headline drifts the same way at half strength, the labels a little
-//   less. The portrait is a real cutout, so only Tarun shows against the
-//   gradient, with the headline in front of him.
+//   left), ~28px total range, no tilt — the reference moves about 52px,
+//   but Tarun found that too loose on his portrait, so it is kept small
+//   and tight. The headline drifts the same way at half strength, the
+//   labels a little less. The portrait is a real cutout, so only Tarun
+//   shows against the gradient, with the headline in front of him.
 // Scrolling back replays it all in reverse. Reduced motion gets a static
 // intro panel with the grid below it instead.
 
@@ -262,13 +263,13 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
     if (!stage || !section || !portrait || !head) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
-    const px = gsap.quickTo(portrait, "x", { duration: 1.1, ease: "power3" });
-    const py = gsap.quickTo(portrait, "y", { duration: 1.1, ease: "power3" });
-    const hx = gsap.quickTo(head, "x", { duration: 1.1, ease: "power3" });
-    const hy = gsap.quickTo(head, "y", { duration: 1.1, ease: "power3" });
+    const px = gsap.quickTo(portrait, "x", { duration: 0.8, ease: "power3" });
+    const py = gsap.quickTo(portrait, "y", { duration: 0.8, ease: "power3" });
+    const hx = gsap.quickTo(head, "x", { duration: 0.8, ease: "power3" });
+    const hy = gsap.quickTo(head, "y", { duration: 0.8, ease: "power3" });
     const labels = Array.from(section.querySelectorAll(".m3-label"));
-    const lx = labels.map((el) => gsap.quickTo(el, "x", { duration: 1.1, ease: "power3" }));
-    const ly = labels.map((el) => gsap.quickTo(el, "y", { duration: 1.1, ease: "power3" }));
+    const lx = labels.map((el) => gsap.quickTo(el, "x", { duration: 0.8, ease: "power3" }));
+    const ly = labels.map((el) => gsap.quickTo(el, "y", { duration: 0.8, ease: "power3" }));
 
     // The headline's vertical centring is the CSS `translate: 0 -50%`
     // property, not GSAP's y — GSAP's y is a pure mouse offset from 0.
@@ -283,20 +284,22 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       // so a fixed pixel offset would look weaker and weaker in the card.
       // Divide by the live scales so the figure moves the same on-screen
       // distance at every stage — the movement stays "entire" from the
-      // intro right through to the card.
+      // intro right through to the card. Kept small on purpose (Tarun
+      // found the old ±22px too loose): ±14px on the portrait, ±7px on
+      // the headline, ±6px on the labels.
       const panel = panelRef.current;
       const panelScale =
         (panel ? (gsap.getProperty(panel, "scaleX") as number) : 1) || 1;
       const portraitScale = (gsap.getProperty(portrait, "scaleX") as number) || 1;
       const total = portraitScale * panelScale;
-      px(nx * -44 / total); // ±22px on screen, opposite the mouse
-      py(ny * -44 / total);
+      px(nx * -14 / total); // ±14px on screen, opposite the mouse
+      py(ny * -14 / total);
       // The headline and labels live in the panel, not the portrait, so
       // they only divide by the panel's scale.
-      hx(nx * -22 / panelScale); // headline, half strength
-      hy(ny * -22 / panelScale);
-      lx.forEach((fn) => fn(nx * -20 / panelScale));
-      ly.forEach((fn) => fn(ny * -20 / panelScale));
+      hx(nx * -7 / panelScale); // headline, half strength
+      hy(ny * -7 / panelScale);
+      lx.forEach((fn) => fn(nx * -6 / panelScale));
+      ly.forEach((fn) => fn(ny * -6 / panelScale));
     };
     const onLeave = () => {
       px(0);
@@ -336,7 +339,6 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
         <div ref={panelRef} className="m3-panel">
           <div ref={portraitRef} className="m3-portrait" aria-hidden="true">
             <img src={HERO_PORTRAIT} alt="" draggable={false} fetchPriority="high" />
-            <span className="m3-portrait-grade" />
           </div>
 
           <div ref={headRef} className="m3-head">

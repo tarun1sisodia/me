@@ -1824,57 +1824,78 @@ p {
 
 /* ---------- about ---------- */
 
-.about-grid {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: clamp(36px, 6vw, 80px);
-  align-items: start;
+/* THE PERSON, rebuilt at Tarun's ask: no big photos, just centred text.
+   The story reads itself as you scroll (words light up one by one, like
+   reading), and hovering a line shows the photo behind it as a floating
+   preview that follows the cursor. */
+.about-center .sec-head {
+  text-align: center;
 }
 
-.about-photos {
-  display: grid;
-  gap: 22px;
+.about-center .sec-meta {
+  justify-content: center;
 }
 
-.about-portrait {
+.about-center .sec-blurb {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-read {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-read-line {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.4vw, 40px);
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 18px;
+}
+
+.about-word {
+  display: inline-block;
+  /* The gap between words. (A plain space after an inline-block word is
+     swallowed, so the words ran together — the margin is the space.) */
+  margin-right: 0.28em;
+}
+
+.about-word-accent {
+  color: var(--accent);
+}
+
+/* Floating photo preview: appears while a story line is hovered and
+   follows the cursor (GSAP owns its transform + opacity in About.tsx).
+   pointer-events none so it never blocks the text; hidden entirely on
+   touch, where there is no hover. */
+.about-float {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  width: min(300px, 34vw);
   aspect-ratio: 4 / 5;
-}
-
-.about-action-frame {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid var(--border);
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
 }
 
-.about-action-frame img {
-  object-fit: cover;
+.about-float img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.about-action figcaption {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 10px;
-  letter-spacing: 0.06em;
-}
-
-.about-line {
-  font-size: clamp(18px, 2.2vw, 23px);
-  line-height: 1.6;
-  font-weight: 500;
-  margin-bottom: 22px;
-}
-
-/* First line only is display-sized. (Each line sits in its own Reveal
-   wrapper, so :first-child on .about-line used to match all three.) */
-.about-copy > div:first-child .about-line {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 3vw, 34px);
-  letter-spacing: -0.01em;
+@media (hover: none) {
+  .about-float {
+    display: none;
+  }
 }
 
 /* ---------- journey ---------- */
@@ -2338,20 +2359,17 @@ p {
   height: 100%;
   object-fit: cover;
   object-position: 68% 12%;
-  filter: saturate(1.08) contrast(1.03) brightness(1.02);
+  /* Warm cast so a little of the hero's orange shows on his face, like
+     the reference's red light on her skin — kept light on purpose. The
+     tint lives in the filter (on the figure's own pixels) instead of an
+     overlay span, because the overlay's rectangle edge showed as a line
+     where its tint started against the panel's gradient. */
+  filter: saturate(1.12) contrast(1.03) brightness(1.03) sepia(0.2) hue-rotate(-8deg);
   /* The photo's head sits at its top edge; shrink the figure slightly,
      anchored to the bottom-right, so the hair clears the panel top with
      headroom above it (the reference frames her head fully in view). */
   transform: scale(0.92);
   transform-origin: 100% 100%;
-}
-
-.m3-portrait-grade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(155deg, rgba(255, 107, 53, 0.28), rgba(255, 107, 53, 0.04) 55%, rgba(32, 8, 10, 0.12));
-  mix-blend-mode: color;
-  pointer-events: none;
 }
 
 /* Headline sits in front of the portrait (like the reference, where the
@@ -3174,7 +3192,6 @@ select.field-input option {
     max-width: 420px;
   }
 
-  .about-grid,
   .journey-grid,
   .connect-grid {
     grid-template-columns: 1fr;
