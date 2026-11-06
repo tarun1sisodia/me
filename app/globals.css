@@ -2318,9 +2318,11 @@ p {
   will-change: transform;
 }
 
-/* Portrait, right side, cropped at the bottom edge; zooms into the face
-   on scroll, passing in front of the headline. Duotone grade + a left
-   fade so it melts into the gradient instead of sitting on it. */
+/* Portrait: a real cutout (transparent PNG), right side, cropped at the
+   bottom edge; zooms into the face on scroll, passing behind the headline.
+   No fade mask — the figure's silhouette is the edge, like the
+   reference's cutout. Light warm grade so he stays distinct from the
+   orange gradient instead of washing into it. */
 .m3-portrait {
   position: absolute;
   right: 0;
@@ -2329,8 +2331,6 @@ p {
   width: 54%;
   height: 112%;
   will-change: transform;
-  mask-image: linear-gradient(to right, transparent 0, #000 32%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32%);
 }
 
 .m3-portrait img {
@@ -2338,23 +2338,32 @@ p {
   height: 100%;
   object-fit: cover;
   object-position: 68% 12%;
-  filter: grayscale(1) contrast(1.06) brightness(0.94);
+  filter: saturate(1.08) contrast(1.03) brightness(1.02);
+  /* The photo's head sits at its top edge; shrink the figure slightly,
+     anchored to the bottom-right, so the hair clears the panel top with
+     headroom above it (the reference frames her head fully in view). */
+  transform: scale(0.92);
+  transform-origin: 100% 100%;
 }
 
 .m3-portrait-grade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(155deg, rgba(255, 107, 53, 0.55), rgba(255, 107, 53, 0.08) 55%, rgba(32, 8, 10, 0.25));
+  background: linear-gradient(155deg, rgba(255, 107, 53, 0.28), rgba(255, 107, 53, 0.04) 55%, rgba(32, 8, 10, 0.12));
   mix-blend-mode: color;
   pointer-events: none;
 }
 
+/* Headline sits in front of the portrait (like the reference, where the
+   headline overlaps the figure). Vertical centring uses the `translate`
+   property, not `transform`, so GSAP can own the element's y for the
+   mouse parallax without fighting a CSS translate. */
 .m3-head {
   position: absolute;
   left: 4.5%;
   top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
+  translate: 0 -50%;
+  z-index: 25;
   max-width: 52%;
 }
 
@@ -2397,6 +2406,17 @@ p {
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* The reference's pill inverts on hover: white turns black, text white. */
+.m3-pill:hover {
+  background: #111;
+  color: #fff;
+}
+
+.m3-pill:hover i {
+  background: #fff;
 }
 
 .m3-pill i {
@@ -2442,6 +2462,120 @@ p {
   will-change: transform;
 }
 
+/* What the wipe carries once it fills the stage: the work section's
+   title, a project list (first row filled dot, rest hollow, like the
+   reference), and a feature card for ArenaAI. Invisible while the panel
+   rises — GSAP fades it in only at the very end of the scroll timeline. */
+.m3-wipe-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 9svh 6% 6svh;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.m3-wipe-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3rem, 8.5vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 6svh;
+}
+
+.m3-wipe-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.m3-wipe-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.m3-wipe-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.m3-wipe-dot {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  transform: translateY(-1px);
+}
+
+.m3-wipe-dot-filled {
+  background: #fff;
+}
+
+.m3-wipe-name {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.m3-wipe-stack {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: nowrap;
+}
+
+.m3-wipe-card {
+  display: block;
+  width: min(430px, 42%);
+  flex: none;
+  background: #fdf8f5;
+  color: #111;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.m3-wipe-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.m3-wipe-card-name {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 16px 18px 4px;
+}
+
+.m3-wipe-card-line {
+  display: block;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(17, 17, 17, 0.72);
+  padding: 0 18px 18px;
+}
+
 @media (max-width: 767px) {
   .m3-portrait {
     width: 74%;
@@ -2480,6 +2614,29 @@ p {
   .m3-grid-static {
     gap: 12px;
     padding: 12px;
+  }
+
+  .m3-wipe-inner {
+    padding: 8svh 6% 5svh;
+  }
+
+  .m3-wipe-title {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    margin-bottom: 4svh;
+  }
+
+  .m3-wipe-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .m3-wipe-card {
+    width: 100%;
+  }
+
+  .m3-wipe-stack {
+    display: none;
   }
 }
 
