@@ -44,7 +44,6 @@ export default function MusicToggle() {
         <span />
         <span />
       </span>
-      BEAT {on ? "ON" : "OFF"}
     </button>
   );
 }

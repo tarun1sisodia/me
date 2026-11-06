@@ -27,8 +27,7 @@ export default function ThemeToggle() {
       aria-pressed={theme === "light"}
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
     >
-      {theme === "dark" ? <Sun size={14} aria-hidden="true" /> : <Moon size={14} aria-hidden="true" />}
-      {theme === "dark" ? "LIGHT" : "DARK"}
+      {theme === "dark" ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
     </button>
   );
 }

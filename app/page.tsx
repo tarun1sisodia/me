@@ -4,10 +4,8 @@ import Loader from "@/components/Loader";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
-import MotionToggle from "@/components/MotionToggle";
 import ThemeToggle from "@/components/ThemeToggle";
 import MusicToggle from "@/components/MusicToggle";
-import MiniNav from "@/components/MiniNav";
 import HeroSub from "@/components/HeroSub";
 import { preloadHeroFrames } from "@/lib/hero-preload";
 import { HeroScrub } from "@/components/ui/hero-scrub";
@@ -79,10 +77,8 @@ export default function Home() {
       <SmoothScroll />
       <CustomCursor />
       <ScrollProgress />
-      <MotionToggle />
       <ThemeToggle />
       <MusicToggle />
-      <MiniNav />
       <main>
         <div id="top">
           <HeroScrub
