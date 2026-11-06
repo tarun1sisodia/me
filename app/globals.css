@@ -2463,9 +2463,10 @@ p {
 }
 
 /* What the wipe carries once it fills the stage: the work section's
-   title, a project list (first row filled dot, rest hollow, like the
-   reference), and a feature card for ArenaAI. Invisible while the panel
-   rises — GSAP fades it in only at the very end of the scroll timeline. */
+   title, a project list (filled dot on the active project, hollow on the
+   rest, like the reference), and a feature card that cycles through the
+   five projects as you keep scrolling. Invisible while the panel rises —
+   GSAP fades it in only at the very end of the scroll timeline. */
 .m3-wipe-inner {
   position: absolute;
   inset: 0;
@@ -2503,6 +2504,16 @@ p {
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+/* The active project reads at full strength; the others dim, like the
+   reference's list, where only the current row is bright. */
+.m3-wipe-list li {
+  transition: opacity 0.3s ease;
+}
+
+.m3-wipe-list li:not(.m3-wipe-active) {
+  opacity: 0.55;
 }
 
 .m3-wipe-list a {
@@ -2549,6 +2560,20 @@ p {
   border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
+  /* Plays on mount and on every swap (the card remounts when the active
+     project changes), so each new project fades and rises into place. */
+  animation: m3-wipe-swap 0.45s ease;
+}
+
+@keyframes m3-wipe-swap {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .m3-wipe-card img {

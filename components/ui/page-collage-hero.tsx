@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 // screenshots. The reference's photo, name and copy are not used, and its
 // layout is reworked for his content and palette (burnt orange on black).
 //
-// Sequence (one scrubbed timeline over a 2.7-viewport section):
+// Sequence (one scrubbed timeline over a 3.55-viewport section):
 //   0.00–0.14  portrait zooms into the face, passing in front of the
 //              headline; the Get in touch pill fades out.
 //   0.14–0.34  the whole panel shrinks into a centred rounded card.
@@ -22,8 +22,14 @@ gsap.registerPlugin(ScrollTrigger);
 //              it drifts slowly upward.
 //   0.82–0.94  the card slides up out of view.
 //   0.88–1.00  a curved orange panel wipes up over the stage; its content
-//              (Selected Work title, project list, ArenaAI card) fades in
+//              (Selected Work title, project list, feature card) fades in
 //              only once the panel has filled the stage.
+//   1.00–1.50  the wipe stays on screen while scrolling cycles through
+//              the five projects, like the reference's Award Winning Work:
+//              the filled dot moves down the list and the feature card
+//              swaps to that project's image and one-liner. The steps are
+//              driven by the ScrollTrigger's progress (see onUpdate), not
+//              by timeline tweens, so scrolling back reverses them cleanly.
 //   Mouse: the portrait slides opposite the cursor (mouse right → figure
 //   left), ~44px total range, no tilt — measured from the reference; the
 //   headline drifts the same way at half strength, the labels a little
@@ -32,7 +38,12 @@ gsap.registerPlugin(ScrollTrigger);
 // Scrolling back replays it all in reverse. Reduced motion gets a static
 // intro panel with the grid below it instead.
 
-const PIN_VH = 2.7;
+const PIN_VH = 3.55;
+
+// Timeline positions (of 1.50 total) where the wipe steps to the next
+// project. In ScrollTrigger progress (position / 1.50): 0.68, 0.76, 0.84,
+// 0.92 — ArenaAI is the initial state, so four steps cover the other four.
+const WIPE_STEP_PROGRESS = [0.68, 0.76, 0.84, 0.92];
 
 // The grid shows each project twice (second copy reversed, so no two
 // neighbours in a column repeat) and drifts up as you scroll.
@@ -82,6 +93,10 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
   const gridRef = useRef<HTMLDivElement>(null);
   const wipeRef = useRef<HTMLDivElement>(null);
   const wipeContentRef = useRef<HTMLDivElement>(null);
+  // Which project the wipe's list + feature card currently show (0–4).
+  // Driven by the scroll timeline's progress; scrolling back reverses it.
+  const [wipeActive, setWipeActive] = useState(0);
+  const wipeActiveRef = useRef(0);
   const reduced = usePrefersReducedMotion();
 
   // Entry — gated on `started` (the Loader lifting): the portrait settles
@@ -131,6 +146,21 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
           end: "bottom bottom",
           scrub: 0.4,
           invalidateOnRefresh: true,
+          // The wipe steps: as the timeline's progress crosses each
+          // threshold, the list's filled dot moves and the feature card
+          // swaps to that project. Guarded by a ref so React only
+          // re-renders when the active project actually changes.
+          onUpdate: (self) => {
+            const p = self.progress;
+            let next = 0;
+            for (let i = 0; i < WIPE_STEP_PROGRESS.length; i++) {
+              if (p >= WIPE_STEP_PROGRESS[i]) next = i + 1;
+            }
+            if (next !== wipeActiveRef.current) {
+              wipeActiveRef.current = next;
+              setWipeActive(next);
+            }
+          },
         },
         defaults: { ease: "none" },
       });
@@ -179,6 +209,12 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       // fades in once it has filled the stage (like the reference, where
       // the heading appears after the wipe settles).
       master.to(wipeContentRef.current, { opacity: 1, duration: 0.04 }, 0.96);
+
+      // Hold the wipe on screen for the five project steps (1.00–1.50).
+      // A duration-only tween: it changes nothing, it just gives the
+      // steps scroll room. The steps themselves are driven by the
+      // ScrollTrigger's onUpdate above.
+      master.to(wipeRef.current, { duration: 0.5 }, 1.0);
 
       ScrollTrigger.refresh();
     }, sectionRef);
@@ -327,11 +363,11 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
               <div className="m3-wipe-row">
                 <ul className="m3-wipe-list">
                   {HERO_TILES.map((tile, i) => (
-                    <li key={tile.id}>
+                    <li key={tile.id} className={i === wipeActive ? "m3-wipe-active" : undefined}>
                       <a href={tile.href}>
                         <span
                           className={
-                            i === 0 ? "m3-wipe-dot m3-wipe-dot-filled" : "m3-wipe-dot"
+                            i === wipeActive ? "m3-wipe-dot m3-wipe-dot-filled" : "m3-wipe-dot"
                           }
                           aria-hidden="true"
                         />
@@ -341,12 +377,14 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
                     </li>
                   ))}
                 </ul>
-                <a className="m3-wipe-card" href="/projects/arenaai">
-                  <img src="/hero-pages/arenaai.jpg" alt="SK Baghel travel site homepage" />
-                  <span className="m3-wipe-card-name">ArenaAI</span>
-                  <span className="m3-wipe-card-line">
-                    The travel business backend — live bookings, Razorpay, real users.
-                  </span>
+                <a
+                  key={HERO_TILES[wipeActive].id}
+                  className="m3-wipe-card"
+                  href={HERO_TILES[wipeActive].href}
+                >
+                  <img src={HERO_TILES[wipeActive].src} alt={HERO_TILES[wipeActive].alt} />
+                  <span className="m3-wipe-card-name">{HERO_TILES[wipeActive].name}</span>
+                  <span className="m3-wipe-card-line">{HERO_TILES[wipeActive].line}</span>
                 </a>
               </div>
             </div>
