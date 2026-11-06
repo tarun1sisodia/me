@@ -24,7 +24,7 @@ export default function Interlude() {
       <div className="container">
         <ScrubText
           className="interlude-statement"
-          text="I turn ambiguous ideas into production systems — designed, hardened, and shipped."
+          text="AI CAN WRITE but who will tell where to stop. that's where i come and that's how i build system."
         />
       </div>
     </div>

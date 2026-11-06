@@ -1824,23 +1824,12 @@ p {
 
 /* ---------- about ---------- */
 
-/* THE PERSON, rebuilt at Tarun's ask: no big photos, just centred text.
-   The story reads itself as you scroll (words light up one by one, like
-   reading), and hovering a line shows the photo behind it as a floating
-   preview that follows the cursor. */
-.about-center .sec-head {
-  text-align: center;
-}
-
-.about-center .sec-meta {
-  justify-content: center;
-}
-
-.about-center .sec-blurb {
-  margin-left: auto;
-  margin-right: auto;
-}
-
+/* THE PERSON, rebuilt at Tarun's ask: no big photos, just the story text
+   centred. The heading stays top-left like every other section (Tarun
+   caught it centred — that was wrong); only the reading lines are
+   centred. The story reads itself as you scroll (words light up one by
+   one, like reading), and hovering a line shows the photo behind it as
+   a floating preview that follows the cursor. */
 .about-read {
   max-width: 900px;
   margin: 0 auto;
@@ -2181,6 +2170,10 @@ p {
 }
 
 .work-stack-card .project-card {
+  /* Solid background: --panel is only 3% opaque, so the card below
+     showed straight through and the stacked text was unreadable.
+     The card on top must fully cover the ones underneath. */
+  background: var(--bg);
   box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.45);
 }
 
