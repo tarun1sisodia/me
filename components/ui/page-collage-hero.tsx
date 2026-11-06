@@ -143,10 +143,19 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       );
       master.to(pillRef.current, { opacity: 0, y: -12, duration: 0.1 }, 0);
 
-      // The whole panel shrinks into a centred rounded card.
+      // The whole panel shrinks into a centred rounded card. While it
+      // shrinks, the portrait zooms further and re-centres, so the face
+      // fills the card like the reference's card (a tight face crop, not
+      // the whole figure shrunk small). Face sits near (74%, 25%) of the
+      // panel; the shifts below land it centred-right in the card.
       master.to(
         panelRef.current,
         { scale: 0.52, borderRadius: 28, duration: 0.2 },
+        0.14
+      );
+      master.to(
+        portraitRef.current,
+        { scale: 2.5, xPercent: -1, yPercent: 4, duration: 0.2 },
         0.14
       );
 
@@ -154,7 +163,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       master.to(panelRef.current, { scale: 0.48, duration: 0.16 }, 0.34);
       master.to(
         gridRef.current,
-        { y: () => -window.innerHeight * 0.26, duration: 0.48 },
+        { yPercent: -15.3, duration: 0.48 },
         0.34
       );
 
@@ -175,6 +184,26 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
     }, sectionRef);
 
     return () => ctx.revert();
+  }, [reduced]);
+
+  // Auto background — the collage grid behind the hero drifts slowly on
+  // its own, even when the user is not scrolling (Tarun asked for an
+  // auto-moving background). It animates the grid's `y` while the scrub
+  // timeline owns `yPercent`, so the two never fight.
+  useEffect(() => {
+    if (reduced) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+    const drift = gsap.to(grid, {
+      y: -70,
+      duration: 12,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
+    return () => {
+      drift.kill();
+    };
   }, [reduced]);
 
   // Mouse parallax — measured from the reference, not guessed. Its
@@ -205,24 +234,33 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
     const lx = labels.map((el) => gsap.quickTo(el, "x", { duration: 1.1, ease: "power3" }));
     const ly = labels.map((el) => gsap.quickTo(el, "y", { duration: 1.1, ease: "power3" }));
 
-    // GSAP caches the headline's y once (the -50% centring, parsed as
-    // pixels). Re-sync it on resize, or a window resize would leave the
-    // headline sitting off-centre by half the height change.
-    const syncHeadBase = () => {
-      hy(-head.offsetHeight / 2);
-    };
-    window.addEventListener("resize", syncHeadBase);
+    // The headline's vertical centring is the CSS `translate: 0 -50%`
+    // property, not GSAP's y — GSAP's y is a pure mouse offset from 0.
+    // (An earlier resize listener set y to -height/2, double-shifting the
+    // headline on every resize; it is gone now.)
 
     const onMove = (e: MouseEvent) => {
       const r = stage.getBoundingClientRect();
       const nx = (e.clientX - r.left) / r.width - 0.5; // -0.5..0.5
       const ny = (e.clientY - r.top) / r.height - 0.5;
-      px(nx * -44); // ±22px, opposite the mouse
-      py(ny * -44);
-      hx(nx * -22); // headline, half strength
-      hy(ny * -22);
-      lx.forEach((fn) => fn(nx * -20));
-      ly.forEach((fn) => fn(ny * -20));
+      // The panel (and the portrait inside it) shrink as the hero scrolls,
+      // so a fixed pixel offset would look weaker and weaker in the card.
+      // Divide by the live scales so the figure moves the same on-screen
+      // distance at every stage — the movement stays "entire" from the
+      // intro right through to the card.
+      const panel = panelRef.current;
+      const panelScale =
+        (panel ? (gsap.getProperty(panel, "scaleX") as number) : 1) || 1;
+      const portraitScale = (gsap.getProperty(portrait, "scaleX") as number) || 1;
+      const total = portraitScale * panelScale;
+      px(nx * -44 / total); // ±22px on screen, opposite the mouse
+      py(ny * -44 / total);
+      // The headline and labels live in the panel, not the portrait, so
+      // they only divide by the panel's scale.
+      hx(nx * -22 / panelScale); // headline, half strength
+      hy(ny * -22 / panelScale);
+      lx.forEach((fn) => fn(nx * -20 / panelScale));
+      ly.forEach((fn) => fn(ny * -20 / panelScale));
     };
     const onLeave = () => {
       px(0);
@@ -237,7 +275,6 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
     return () => {
       stage.removeEventListener("mousemove", onMove);
       stage.removeEventListener("mouseleave", onLeave);
-      window.removeEventListener("resize", syncHeadBase);
     };
   }, [reduced]);
 
@@ -305,7 +342,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
                   ))}
                 </ul>
                 <a className="m3-wipe-card" href="/projects/arenaai">
-                  <img src="/hero-pages/arenaai.jpg" alt="ArenaAI project page" />
+                  <img src="/hero-pages/arenaai.jpg" alt="SK Baghel travel site homepage" />
                   <span className="m3-wipe-card-name">ArenaAI</span>
                   <span className="m3-wipe-card-line">
                     The travel business backend — live bookings, Razorpay, real users.
