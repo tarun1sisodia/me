@@ -201,19 +201,7 @@ export const PROJECTS: Project[] = [
   },
 ];
 
-export const SKILL_GROUPS: { title: string; items: string[] }[] = [
-  { title: "Languages", items: ["JavaScript", "TypeScript", "Python", "SQL"] },
-  { title: "Backend", items: ["Node.js", "Express.js", "Fastify", "FastAPI", "REST APIs", "MVC"] },
-  { title: "Databases", items: ["PostgreSQL", "MongoDB", "MySQL", "SQLite", "Supabase", "SQLAlchemy", "Alembic"] },
-  { title: "Payments & Cloud", items: ["Razorpay", "Redis", "Cloudflare R2"] },
-  { title: "DevOps & Tools", items: ["Docker", "Render", "Git", "Linux", "Postman", "VS Code"] },
-  { title: "Testing", items: ["Vitest", "pytest"] },
-  { title: "AI / ML", items: ["Recommendation systems", "TF-IDF", "Cosine similarity"] },
-  { title: "Frontend / Mobile", items: ["React", "Flutter", "Android"] },
-  { title: "Fundamentals", items: ["DSA", "OOP", "DBMS", "Operating Systems", "Computer Networks"] },
-];
-
-// ARSENAL sphere: one node per technology in SKILL_GROUPS. Brand icons are
+// ARSENAL sphere: one node per technology. Brand icons are
 // self-hosted Simple Icons (CC0) in public/icons/tech; concepts with no brand
 // logo use a burnt-orange letter tile. Clicking a node opens its write-up.
 export const TECH_SPHERE: { id: string; src: string; alt: string; title: string; description: string }[] = [
@@ -258,14 +246,8 @@ export const TECH_SPHERE: { id: string; src: string; alt: string; title: string;
   { id: "networks", src: "/icons/tech/tile-networks.svg", alt: "Computer Networks", title: "Computer Networks", description: "How requests actually travel — DNS to TLS to the load balancer." },
 ];
 
-export const CURRENTLY = [
-  { label: "Studying", value: "MCA Cyber Security, final year — Galgotias University" },
-  { label: "Working", value: "Backend Intern — Aarogya Virohan" },
-  { label: "Next", value: "Going deeper into security (GRC & VAPT)" },
-];
-
 export const ABOUT_STORY = [
-  "I'm a full stack developer from Greater Noida who likes systems that actually ship.",
-  "I build backends that handle real money and real users: payments, bookings, auth — the unglamorous parts that have to work.",
-  "Right now I'm finishing my MCA in Cyber Security, and going deeper into the security side of everything I build.",
+  "Full stack developer — Greater Noida.",
+  "I build backends for real money and real users.",
+  "MCA Cyber Security — going deeper into security.",
 ];

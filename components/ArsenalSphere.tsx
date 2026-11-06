@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import SectionHeading from "./SectionHeading";
 import LazyScene from "./LazyScene";
 import SphereImageGrid from "@/components/ui/img-sphere";
-import { SKILL_GROUPS, TECH_SPHERE } from "@/lib/data";
+import { TECH_SPHERE } from "@/lib/data";
 
 export default function ArsenalSphere() {
   const [size, setSize] = useState(600);
@@ -50,20 +50,6 @@ export default function ArsenalSphere() {
           </LazyScene>
         </div>
         <p className="arsenal-hint">Drag to spin &middot; Click a tech to read about it</p>
-        <div className="arsenal-groups">
-          {SKILL_GROUPS.map((group) => (
-            <div key={group.title} className="arsenal-group">
-              <h3 className="arsenal-group-title">{group.title}</h3>
-              <div className="pills">
-                {group.items.map((item) => (
-                  <span key={item} className="pill">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

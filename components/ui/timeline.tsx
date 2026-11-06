@@ -452,10 +452,6 @@ export default function Timeline({
           <div className="relative h-full w-full">
             <div className="w-full absolute left-0 top-[49%] tranlate-y-[-50%] flex items-center h-fit">
               <div
-                className="h-[.8vw] max-[600px]:h-[2vw] max-[600px]:w-[2vw] w-[.8vw] rounded-full"
-                style={activeStyle}
-              ></div>
-              <div
                 className="h-px w-[0%] rounded-full journey-line"
                 style={activeStyle}
               ></div>
