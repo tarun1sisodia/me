@@ -256,11 +256,12 @@ export const HERO_TILES: { id: string; src: string; alt: string; name: string; s
   { id: "bloodconnect", src: "/hero-pages/bloodconnect.jpg", alt: "BloodConnect project page", name: "BloodConnect", stack: "JavaScript · Node.js", href: "/projects/bloodconnect" },
 ];
 
-// main3 hero portrait: Tarun's own smile close-up (sunglasses), cut out
-// from its background (rembg u2net) so only he shows against the orange
-// gradient, like the reference's cutout portrait. Also preloaded in
-// app/layout.tsx.
-export const HERO_PORTRAIT = "/photos/tarun-smile-closeup-cutout.png";
+// main3 hero portrait: Tarun's arms-crossed smile (sunglasses), cut out
+// from its background (rembg u2net). Chosen 2026-11-06 because it is the
+// sharpest portrait available: face sharpness ~3x the smile close-up it
+// replaces, face 360px wide natively so it renders without upscaling.
+// Also preloaded in app/layout.tsx.
+export const HERO_PORTRAIT = "/photos/tarun-arms-crossed-cutout.png";
 
 export const ABOUT_STORY = [
   "Full stack developer — Greater Noida.",
