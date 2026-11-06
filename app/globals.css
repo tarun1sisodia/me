@@ -2225,43 +2225,62 @@ p {
 
 /* ---------- work stacked cards — end ---------- */
 
-/* ================= MAGNET GRID — start (remove this block + MagnetGrid.tsx + its mount line in Skills.tsx to remove) ================= */
+/* ================= ARSENAL SPHERE — start (remove this block + ArsenalSphere.tsx + its mount line in Skills.tsx to remove) ================= */
 
-.magnet-section {
-  position: relative;
+.arsenal-sphere-wrap {
+  margin: 8px auto 0;
 }
 
-.magnet-grid {
-  position: relative;
+/* LazyScene collapses to height 0 for canvas scenes; the sphere needs its
+   real height, reserved up front so nothing shifts when it mounts. */
+.arsenal-sphere-wrap .lazy-scene {
+  height: 100%;
+}
+
+.arsenal-sphere {
+  display: flex;
+  justify-content: center;
+  margin: 8px auto 0;
+}
+
+.arsenal-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--muted);
+  margin: 4px 0 48px;
+}
+
+.arsenal-groups {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  z-index: 1;
+  gap: 28px 20px;
 }
 
-.magnet-card {
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--panel);
-  padding: 26px;
-  will-change: transform;
-  transition: border-color 0.3s ease;
-}
-
-.magnet-card:hover {
-  border-color: rgba(var(--accent-rgb), 0.4);
-}
-
-.magnet-title {
+.arsenal-group-title {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--accent);
-  margin: 0 0 16px;
+  margin: 0 0 12px;
 }
 
-/* ================= MAGNET GRID — end ================= */
+@media (max-width: 1024px) {
+  .arsenal-groups {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .arsenal-groups {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= ARSENAL SPHERE — end ================= */
 
 /* ---------- connect ---------- */
 
@@ -2759,10 +2778,6 @@ select.field-input option {
   .project-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .magnet-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 900px) {
@@ -2800,8 +2815,7 @@ select.field-input option {
     gap: 14px;
   }
 
-  .project-grid,
-  .magnet-grid {
+  .project-grid {
     grid-template-columns: 1fr;
   }
 

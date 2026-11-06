@@ -1,5 +1,5 @@
-import MagnetGrid from "./MagnetGrid";
+import ArsenalSphere from "./ArsenalSphere";
 
 export default function Skills() {
-  return <MagnetGrid />;
+  return <ArsenalSphere />;
 }

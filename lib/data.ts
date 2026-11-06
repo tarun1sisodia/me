@@ -213,6 +213,51 @@ export const SKILL_GROUPS: { title: string; items: string[] }[] = [
   { title: "Fundamentals", items: ["DSA", "OOP", "DBMS", "Operating Systems", "Computer Networks"] },
 ];
 
+// ARSENAL sphere: one node per technology in SKILL_GROUPS. Brand icons are
+// self-hosted Simple Icons (CC0) in public/icons/tech; concepts with no brand
+// logo use a burnt-orange letter tile. Clicking a node opens its write-up.
+export const TECH_SPHERE: { id: string; src: string; alt: string; title: string; description: string }[] = [
+  { id: "javascript", src: "/icons/tech/javascript.svg", alt: "JavaScript", title: "JavaScript", description: "The base language — Node services, React pages, and this portfolio." },
+  { id: "typescript", src: "/icons/tech/typescript.svg", alt: "TypeScript", title: "TypeScript", description: "The production travel backend — Fastify, fares, bookings, Razorpay." },
+  { id: "python", src: "/icons/tech/python.svg", alt: "Python", title: "Python", description: "FastAPI backends and the CineMatch recommender." },
+  { id: "sql", src: "/icons/tech/tile-sql.svg", alt: "SQL", title: "SQL", description: "The queries behind bookings, clinic records, and attendance." },
+  { id: "nodejs", src: "/icons/tech/nodedotjs.svg", alt: "Node.js", title: "Node.js", description: "Express and Fastify services, live on Render." },
+  { id: "express", src: "/icons/tech/express.svg", alt: "Express.js", title: "Express.js", description: "FreeTune's music-streaming backend." },
+  { id: "fastify", src: "/icons/tech/fastify.svg", alt: "Fastify", title: "Fastify", description: "ArenaAI's production backend — routes, fares, payments." },
+  { id: "fastapi", src: "/icons/tech/fastapi.svg", alt: "FastAPI", title: "FastAPI", description: "Health-tech APIs at Aarogya Virohan, and CineMatch." },
+  { id: "rest-apis", src: "/icons/tech/tile-api.svg", alt: "REST APIs", title: "REST APIs", description: "The contract every frontend and service talks through." },
+  { id: "mvc", src: "/icons/tech/tile-mvc.svg", alt: "MVC", title: "MVC", description: "The shape I keep backends in — routes, logic, data." },
+  { id: "postgresql", src: "/icons/tech/postgresql.svg", alt: "PostgreSQL", title: "PostgreSQL", description: "Clinic data, travel bookings, and the auction store." },
+  { id: "mongodb", src: "/icons/tech/mongodb.svg", alt: "MongoDB", title: "MongoDB", description: "Travel data and FreeTune's catalogue." },
+  { id: "mysql", src: "/icons/tech/mysql.svg", alt: "MySQL", title: "MySQL", description: "SmartCampus attendance records." },
+  { id: "sqlite", src: "/icons/tech/sqlite.svg", alt: "SQLite", title: "SQLite", description: "CineMatch's local ranking store." },
+  { id: "supabase", src: "/icons/tech/supabase.svg", alt: "Supabase", title: "Supabase", description: "Postgres with auth — the travel backend and the auction's future store." },
+  { id: "sqlalchemy", src: "/icons/tech/sqlalchemy.svg", alt: "SQLAlchemy", title: "SQLAlchemy", description: "The ORM behind the clinic backend." },
+  { id: "alembic", src: "/icons/tech/tile-alembic.svg", alt: "Alembic", title: "Alembic", description: "Migrations for the clinic database." },
+  { id: "razorpay", src: "/icons/tech/razorpay.svg", alt: "Razorpay", title: "Razorpay", description: "Real money — travel bookings, live in production." },
+  { id: "redis", src: "/icons/tech/redis.svg", alt: "Redis", title: "Redis", description: "Caching and rate limits for FreeTune." },
+  { id: "cloudflare-r2", src: "/icons/tech/cloudflare.svg", alt: "Cloudflare R2", title: "Cloudflare R2", description: "Audio for FreeTune, deploys for this portfolio." },
+  { id: "docker", src: "/icons/tech/docker.svg", alt: "Docker", title: "Docker", description: "Every backend ships in a container." },
+  { id: "render", src: "/icons/tech/render.svg", alt: "Render", title: "Render", description: "Where the backends live." },
+  { id: "git", src: "/icons/tech/git.svg", alt: "Git", title: "Git", description: "Everything versioned — every push reviewed live." },
+  { id: "linux", src: "/icons/tech/linux.svg", alt: "Linux", title: "Linux", description: "Home turf — Bandit levels, servers, and the local AI box." },
+  { id: "postman", src: "/icons/tech/postman.svg", alt: "Postman", title: "Postman", description: "APIs tested before they ship." },
+  { id: "vscode", src: "/icons/tech/visualstudiocode.svg", alt: "VS Code", title: "VS Code", description: "The editor." },
+  { id: "vitest", src: "/icons/tech/vitest.svg", alt: "Vitest", title: "Vitest", description: "Tests for the TypeScript backend." },
+  { id: "pytest", src: "/icons/tech/pytest.svg", alt: "pytest", title: "pytest", description: "Tests for the FastAPI services." },
+  { id: "recommenders", src: "/icons/tech/tile-ml.svg", alt: "Recommendation systems", title: "Recommendation systems", description: "CineMatch — TF-IDF and cosine similarity over movie text." },
+  { id: "tfidf", src: "/icons/tech/tile-tfidf.svg", alt: "TF-IDF", title: "TF-IDF", description: "How CineMatch weighs what makes a movie distinct." },
+  { id: "cosine", src: "/icons/tech/tile-cosine.svg", alt: "Cosine similarity", title: "Cosine similarity", description: "How CineMatch measures one movie against another." },
+  { id: "react", src: "/icons/tech/react.svg", alt: "React", title: "React", description: "This portfolio, CineMatch, and ArenaAI's frontend." },
+  { id: "flutter", src: "/icons/tech/flutter.svg", alt: "Flutter", title: "Flutter", description: "SmartCampus, cross-platform." },
+  { id: "android", src: "/icons/tech/android.svg", alt: "Android", title: "Android", description: "APK reverse engineering — learning the platform from the inside." },
+  { id: "dsa", src: "/icons/tech/tile-dsa.svg", alt: "DSA", title: "DSA", description: "The practice behind every interview and every faster query." },
+  { id: "oop", src: "/icons/tech/tile-oop.svg", alt: "OOP", title: "OOP", description: "The design habit — small classes, clear owners." },
+  { id: "dbms", src: "/icons/tech/tile-dbms.svg", alt: "DBMS", title: "DBMS", description: "The theory behind the databases I run in production." },
+  { id: "os", src: "/icons/tech/tile-os.svg", alt: "Operating Systems", title: "Operating Systems", description: "The layer under everything — processes, memory, scheduling." },
+  { id: "networks", src: "/icons/tech/tile-networks.svg", alt: "Computer Networks", title: "Computer Networks", description: "How requests actually travel — DNS to TLS to the load balancer." },
+];
+
 export const CURRENTLY = [
   { label: "Studying", value: "MCA Cyber Security, final year — Galgotias University" },
   { label: "Working", value: "Backend Intern — Aarogya Virohan" },
