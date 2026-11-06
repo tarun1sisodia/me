@@ -1869,66 +1869,12 @@ p {
   margin-bottom: 22px;
 }
 
-.about-line:first-child {
+/* First line only is display-sized. (Each line sits in its own Reveal
+   wrapper, so :first-child on .about-line used to match all three.) */
+.about-copy > div:first-child .about-line {
   font-family: var(--font-display);
   font-size: clamp(24px, 3vw, 34px);
   letter-spacing: -0.01em;
-}
-
-.currently-card {
-  margin-top: 34px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--panel);
-  padding: 28px;
-  position: relative;
-  overflow: hidden;
-}
-
-.currently-card::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--accent);
-}
-
-.card-label {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--accent);
-  letter-spacing: 0.1em;
-  margin-bottom: 18px;
-}
-
-.currently-card ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 14px;
-}
-
-.currently-card li {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 14px;
-  font-size: 15px;
-}
-
-.currently-key {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--accent);
-  padding-top: 3px;
-}
-
-.currently-val {
-  color: var(--text);
 }
 
 /* ---------- journey ---------- */
@@ -2250,34 +2196,7 @@ p {
   text-transform: uppercase;
   text-align: center;
   color: var(--muted);
-  margin: 4px 0 48px;
-}
-
-.arsenal-groups {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px 20px;
-}
-
-.arsenal-group-title {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 12px;
-}
-
-@media (max-width: 1024px) {
-  .arsenal-groups {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .arsenal-groups {
-    grid-template-columns: 1fr;
-  }
+  margin: 4px 0 0;
 }
 
 /* ================= ARSENAL SPHERE — end ================= */
@@ -2975,11 +2894,6 @@ select.field-input option {
 
   .hero-ctas .magnetic {
     width: 100%;
-  }
-
-  .currently-card li {
-    grid-template-columns: 1fr;
-    gap: 4px;
   }
 
   .connect-photo {

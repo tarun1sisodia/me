@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 import Parallax from "./Parallax";
 import Reveal from "./Reveal";
 import DotWave from "./DotWave";
-import { ABOUT_STORY, CURRENTLY } from "@/lib/data";
+import { ABOUT_STORY } from "@/lib/data";
 
 export default function About() {
   return (
@@ -52,19 +52,6 @@ export default function About() {
                 <p className="about-line">{line}</p>
               </Reveal>
             ))}
-            <Reveal delay={0.18}>
-              <div className="currently-card">
-                <p className="card-label">{"// currently"}</p>
-                <ul>
-                  {CURRENTLY.map((c) => (
-                    <li key={c.label}>
-                      <span className="currently-key">{c.label}</span>
-                      <span className="currently-val">{c.value}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
           </div>
         </div>
         <DotWave />
