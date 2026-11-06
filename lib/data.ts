@@ -246,7 +246,7 @@ export const TECH_SPHERE: { id: string; src: string; alt: string; title: string;
   { id: "networks", src: "/icons/tech/tile-networks.svg", alt: "Computer Networks", title: "Computer Networks", description: "How requests actually travel — DNS to TLS to the load balancer." },
 ];
 
-// main3 hero collage: screenshots of Tarun's own project pages, captured
+// main3 hero: screenshots of Tarun's own project pages, captured
 // from the local build. Each tile links to its project page.
 export const HERO_TILES: { id: string; src: string; alt: string; name: string; stack: string; href: string }[] = [
   { id: "arenaai", src: "/hero-pages/arenaai.jpg", alt: "ArenaAI project page", name: "ArenaAI", stack: "TypeScript · Fastify · PostgreSQL", href: "/projects/arenaai" },
@@ -255,6 +255,10 @@ export const HERO_TILES: { id: string; src: string; alt: string; name: string; s
   { id: "smartcampus", src: "/hero-pages/smartcampus.jpg", alt: "SmartCampus project page", name: "SmartCampus", stack: "Flutter · Node.js · MySQL", href: "/projects/smartcampus" },
   { id: "bloodconnect", src: "/hero-pages/bloodconnect.jpg", alt: "BloodConnect project page", name: "BloodConnect", stack: "JavaScript · Node.js", href: "/projects/bloodconnect" },
 ];
+
+// main3 hero portrait: Tarun's own smile close-up (sunglasses), used as the
+// full-bleed portrait in the intro panel. Also preloaded in app/layout.tsx.
+export const HERO_PORTRAIT = "/photos/tarun-smile-closeup.jpg";
 
 export const ABOUT_STORY = [
   "Full stack developer — Greater Noida.",

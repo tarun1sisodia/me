@@ -2201,79 +2201,74 @@ p {
 
 /* ================= ARSENAL SPHERE — end ================= */
 
-/* ================= PAGE COLLAGE HERO (main3) — start (remove this block + page-collage-hero.tsx + its mount line in app/page.tsx to remove) ================= */
+/* ================= MAIN3 HERO (full sequence) — start (remove this block + page-collage-hero.tsx + its mount line in app/page.tsx to remove) ================= */
 
-.collage-hero {
+.m3-hero {
   position: relative;
   width: 100%;
   overflow: clip;
-  background: var(--bg);
+  background: #000;
 }
 
-.collage-head {
+.m3-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.m3-stage-static {
+  position: relative;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Screenshot grid behind the panel: 2 columns on black, taller than the
+   viewport so it can drift up as you scroll. */
+.m3-grid {
   position: absolute;
-  left: 50%;
-  top: 4.5%;
-  transform: translateX(-50%);
-  z-index: 5;
-  width: min(92vw, 900px);
-  text-align: center;
-  pointer-events: none;
-}
-
-.collage-kicker {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin: 0 0 14px;
-}
-
-.collage-title {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(2.4rem, 6vw, 5.2rem);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  color: var(--text);
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.collage-title-accent {
-  color: var(--accent);
-}
-
-.collage-sub {
-  font-size: 14px;
-  color: var(--muted);
-  margin: 16px 0 0;
-}
-
-.collage-tile {
-  position: absolute;
-  z-index: 2;
+  inset: 0;
+  z-index: 0;
+  background: #050505;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  padding: 22px;
+  height: 170svh;
+  align-content: start;
   will-change: transform;
 }
 
-.collage-card {
+.m3-grid-static {
+  background: #050505;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  padding: 22px;
+}
+
+.m3-tile {
+  min-width: 0;
+}
+
+.m3-card {
   display: block;
   position: relative;
   overflow: hidden;
   border-radius: 12px;
-  background: var(--panel);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
-  outline: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111;
+  outline: 1px solid rgba(255, 255, 255, 0.1);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.collage-card:hover {
+.m3-card:hover {
   transform: translateY(-6px) scale(1.02);
   box-shadow: 0 34px 90px rgba(0, 0, 0, 0.65);
 }
 
-.collage-card img {
+.m3-card img {
   display: block;
   width: 100%;
   height: auto;
@@ -2281,7 +2276,7 @@ p {
   object-fit: cover;
 }
 
-.collage-caption {
+.m3-caption {
   position: absolute;
   left: 0;
   right: 0;
@@ -2295,7 +2290,7 @@ p {
   pointer-events: none;
 }
 
-.collage-caption-name {
+.m3-caption-name {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.18em;
@@ -2304,7 +2299,7 @@ p {
   white-space: nowrap;
 }
 
-.collage-caption-stack {
+.m3-caption-stack {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.72);
   white-space: nowrap;
@@ -2312,43 +2307,183 @@ p {
   text-overflow: ellipsis;
 }
 
-.collage-scroll {
+/* Intro panel: full-bleed burnt-orange gradient, shrinks into a card. */
+.m3-panel {
   position: absolute;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
-  z-index: 5;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 0;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  border-radius: 0;
+  background: linear-gradient(135deg, #ff6b35 0%, #e8490f 30%, #8f2a06 62%, #20080a 100%);
+  will-change: transform;
+}
+
+/* Portrait, right side, cropped at the bottom edge; zooms into the face
+   on scroll, passing in front of the headline. Duotone grade + a left
+   fade so it melts into the gradient instead of sitting on it. */
+.m3-portrait {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  width: 54%;
+  height: 112%;
+  will-change: transform;
+  mask-image: linear-gradient(to right, transparent 0, #000 32%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32%);
+}
+
+.m3-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 68% 12%;
+  filter: grayscale(1) contrast(1.06) brightness(0.94);
+}
+
+.m3-portrait-grade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, rgba(255, 107, 53, 0.55), rgba(255, 107, 53, 0.08) 55%, rgba(32, 8, 10, 0.25));
+  mix-blend-mode: color;
   pointer-events: none;
 }
 
-/* Tile placement — desktop */
-.tile-arenaai { left: 30%; top: 40%; width: 40%; z-index: 3; }
-.tile-cinematch { left: 3%; top: 32%; width: 26%; z-index: 2; }
-.tile-freetune { left: 71%; top: 30%; width: 26%; z-index: 2; }
-.tile-smartcampus { left: 5%; top: 67%; width: 25%; z-index: 2; }
-.tile-bloodconnect { left: 70%; top: 68%; width: 25%; z-index: 2; }
-
-@media (max-width: 767px) {
-  .collage-head {
-    top: 3.5%;
-  }
-  .collage-sub {
-    font-size: 13px;
-  }
-  .tile-arenaai { left: 8%; top: 38%; width: 84%; z-index: 3; }
-  .tile-cinematch { left: 2%; top: 24%; width: 52%; z-index: 2; }
-  .tile-freetune { left: 46%; top: 26%; width: 52%; z-index: 2; }
-  .tile-smartcampus { left: 3%; top: 66%; width: 48%; z-index: 2; }
-  .tile-bloodconnect { left: 49%; top: 68%; width: 48%; z-index: 2; }
+.m3-head {
+  position: absolute;
+  left: 4.5%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  max-width: 52%;
 }
 
-/* ================= PAGE COLLAGE HERO (main3) — end ================= */
+.m3-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 18px;
+}
+
+.m3-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.4rem, 9vw, 8.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.m3-title-line {
+  display: block;
+}
+
+.m3-pill {
+  position: absolute;
+  top: 26px;
+  right: 32px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  color: #111;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.m3-pill i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #111;
+}
+
+.m3-label {
+  position: absolute;
+  right: 32px;
+  z-index: 30;
+  max-width: 150px;
+  text-align: right;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.m3-label-a {
+  top: 42%;
+}
+
+.m3-label-b {
+  top: 66%;
+}
+
+/* Curved orange panel that wipes up over the stage at the end. Its
+   starting position (fully below the stage) is set by GSAP, not here:
+   a CSS translateY(100%) would be parsed as pixels and fight the
+   yPercent tween. */
+.m3-wipe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  height: 100svh;
+  background: linear-gradient(135deg, #ff6b35 0%, #e8490f 30%, #8f2a06 62%, #20080a 100%);
+  border-radius: 50% 50% 0 0 / 90px 90px 0 0;
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .m3-portrait {
+    width: 74%;
+    right: -8%;
+  }
+
+  /* Narrow container: shift the focal point right so the whole face
+     (right side of the photo) stays in frame. */
+  .m3-portrait img {
+    object-position: 85% 10%;
+  }
+
+  .m3-head {
+    left: 6%;
+    top: 46%;
+    max-width: 88%;
+    z-index: 25;
+  }
+
+  .m3-title {
+    font-size: clamp(2.6rem, 13.5vw, 4rem);
+  }
+
+  .m3-label {
+    display: none;
+  }
+
+  .m3-pill {
+    top: 18px;
+    right: 18px;
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  .m3-grid,
+  .m3-grid-static {
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+/* ================= MAIN3 HERO (full sequence) — end ================= */
 
 /* ---------- connect ---------- */
 

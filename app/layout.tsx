@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ShaderBackground from "@/components/ShaderBackground";
+import { HERO_PORTRAIT } from "@/lib/data";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -81,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="preload"
           as="image"
-          href="/hero-pages/arenaai.jpg"
+          href={HERO_PORTRAIT}
           fetchPriority="high"
         />
         <script

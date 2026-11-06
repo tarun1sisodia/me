@@ -7,7 +7,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import ThemeToggle from "@/components/ThemeToggle";
 import MusicToggle from "@/components/MusicToggle";
 import { preloadHeroFrames } from "@/lib/hero-preload";
-import { HERO_TILES } from "@/lib/data";
+import { HERO_PORTRAIT, HERO_TILES } from "@/lib/data";
 import PageCollageHero from "@/components/ui/page-collage-hero";
 import PerspectiveTunnelHero from "@/components/ui/perspective-tunnel-hero";
 import Marquee from "@/components/Marquee";
@@ -38,7 +38,7 @@ export default function Home() {
       if (!cancelled) setHeroReady(true);
     }, 6000);
     Promise.allSettled([
-      preloadHeroFrames(HERO_TILE_SRCS, 3),
+      preloadHeroFrames([HERO_PORTRAIT, ...HERO_TILE_SRCS], 3),
       document.fonts?.ready ?? Promise.resolve(),
     ]).then(() => {
       if (!cancelled) setHeroReady(true);
