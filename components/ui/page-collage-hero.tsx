@@ -157,6 +157,49 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
     return () => ctx.revert();
   }, [reduced]);
 
+  // Mouse parallax — the portrait drifts with the cursor like a physical
+  // object (the headline counter-moves slightly for depth). This is the
+  // piece the reference's hero has that the first rebuild missed: its
+  // portrait moves with the mouse, not just with scroll. Fine pointers
+  // only, never with reduced motion. The offsets are small on purpose
+  // (±14px portrait, ∓7px headline); the scroll zoom/scale live on
+  // separate transform components (scale, xPercent), so nothing fights.
+  useEffect(() => {
+    if (reduced) return;
+    const stage = stageRef.current;
+    const portrait = portraitRef.current;
+    const head = headRef.current;
+    if (!stage || !portrait || !head) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const px = gsap.quickTo(portrait, "x", { duration: 0.7, ease: "power3" });
+    const py = gsap.quickTo(portrait, "y", { duration: 0.7, ease: "power3" });
+    const pr = gsap.quickTo(portrait, "rotation", { duration: 0.9, ease: "power3" });
+    const hx = gsap.quickTo(head, "x", { duration: 0.7, ease: "power3" });
+
+    const onMove = (e: MouseEvent) => {
+      const r = stage.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width - 0.5; // -0.5..0.5
+      const ny = (e.clientY - r.top) / r.height - 0.5;
+      px(nx * 28);
+      py(ny * 20);
+      pr(nx * 1.6);
+      hx(nx * -14);
+    };
+    const onLeave = () => {
+      px(0);
+      py(0);
+      pr(0);
+      hx(0);
+    };
+    stage.addEventListener("mousemove", onMove);
+    stage.addEventListener("mouseleave", onLeave);
+    return () => {
+      stage.removeEventListener("mousemove", onMove);
+      stage.removeEventListener("mouseleave", onLeave);
+    };
+  }, [reduced]);
+
   const tallHeight = `${PIN_VH * 100}vh`;
 
   return (
