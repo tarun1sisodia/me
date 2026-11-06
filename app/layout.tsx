@@ -81,7 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link
           rel="preload"
           as="image"
-          href="/photos/tarun-white-wall.jpg"
+          href="/hero-pages/arenaai.jpg"
           fetchPriority="high"
         />
         <script

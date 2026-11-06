@@ -6,9 +6,9 @@ import CustomCursor from "@/components/CustomCursor";
 import ScrollProgress from "@/components/ScrollProgress";
 import ThemeToggle from "@/components/ThemeToggle";
 import MusicToggle from "@/components/MusicToggle";
-import HeroSub from "@/components/HeroSub";
 import { preloadHeroFrames } from "@/lib/hero-preload";
-import { HeroScrub } from "@/components/ui/hero-scrub";
+import { HERO_TILES } from "@/lib/data";
+import PageCollageHero from "@/components/ui/page-collage-hero";
 import PerspectiveTunnelHero from "@/components/ui/perspective-tunnel-hero";
 import Marquee from "@/components/Marquee";
 import StatsBand from "@/components/StatsBand";
@@ -23,22 +23,11 @@ import Now from "@/components/Now";
 import Connect from "@/components/Connect";
 import SiteFooter from "@/components/SiteFooter";
 
-const MAIN2_FRAMES = [
-  "/photos/tarun-white-wall.jpg",
-  "/photos/tarun-corridor-bw.jpg",
-  "/photos/tarun-night-crowd.jpg",
-  "/photos/tarun-arms-crossed-bw.jpg",
-  "/photos/tarun-galgotias-night.jpg",
-  "/photos/tarun-lobby-bench.jpg",
-  "/photos/tarun-fest-night-smile.jpg",
-  "/photos/tarun-smile-closeup.jpg",
-];
-
-const main2FrameUrl = (i: number) => MAIN2_FRAMES[i];
+const HERO_TILE_SRCS = HERO_TILES.map((t) => t.src);
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  // True once the first hero frames are decoded (and fonts are in). The
+  // True once the first hero tiles are decoded (and fonts are in). The
   // Loader waits on this, so it never lifts onto a blank hero; a 6s cap in
   // the Loader itself is the fallback if an asset fails.
   const [heroReady, setHeroReady] = useState(false);
@@ -49,7 +38,7 @@ export default function Home() {
       if (!cancelled) setHeroReady(true);
     }, 6000);
     Promise.allSettled([
-      preloadHeroFrames(MAIN2_FRAMES, 3),
+      preloadHeroFrames(HERO_TILE_SRCS, 3),
       document.fonts?.ready ?? Promise.resolve(),
     ]).then(() => {
       if (!cancelled) setHeroReady(true);
@@ -81,16 +70,8 @@ export default function Home() {
       <MusicToggle />
       <main>
         <div id="top">
-          <HeroScrub
-            frameCount={MAIN2_FRAMES.length}
-            frameUrl={main2FrameUrl}
-            titleTop="TARUN"
-            titleBottom="SISODIA"
-            defaultAspect={920 / 971}
-            started={loaded}
-          />
+          <PageCollageHero started={loaded} />
         </div>
-        <HeroSub started={loaded} />
         <section id="gallery" aria-label="Gallery" className="relative overflow-hidden">
           <PerspectiveTunnelHero />
         </section>

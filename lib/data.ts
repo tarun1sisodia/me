@@ -258,6 +258,16 @@ export const TECH_SPHERE: { id: string; src: string; alt: string; title: string;
   { id: "networks", src: "/icons/tech/tile-networks.svg", alt: "Computer Networks", title: "Computer Networks", description: "How requests actually travel — DNS to TLS to the load balancer." },
 ];
 
+// main3 hero collage: screenshots of Tarun's own project pages, captured
+// from the local build. Each tile links to its project page.
+export const HERO_TILES: { id: string; src: string; alt: string; name: string; stack: string; href: string }[] = [
+  { id: "arenaai", src: "/hero-pages/arenaai.jpg", alt: "ArenaAI project page", name: "ArenaAI", stack: "TypeScript · Fastify · PostgreSQL", href: "/projects/arenaai" },
+  { id: "cinematch", src: "/hero-pages/cinematch.jpg", alt: "CineMatch project page", name: "CineMatch", stack: "React · FastAPI · TF-IDF", href: "/projects/cinematch" },
+  { id: "freetune", src: "/hero-pages/freetune.jpg", alt: "FreeTune project page", name: "FreeTune", stack: "Node.js · Express · Redis", href: "/projects/freetune" },
+  { id: "smartcampus", src: "/hero-pages/smartcampus.jpg", alt: "SmartCampus project page", name: "SmartCampus", stack: "Flutter · Node.js · MySQL", href: "/projects/smartcampus" },
+  { id: "bloodconnect", src: "/hero-pages/bloodconnect.jpg", alt: "BloodConnect project page", name: "BloodConnect", stack: "JavaScript · Node.js", href: "/projects/bloodconnect" },
+];
+
 export const CURRENTLY = [
   { label: "Studying", value: "MCA Cyber Security, final year — Galgotias University" },
   { label: "Working", value: "Backend Intern — Aarogya Virohan" },
