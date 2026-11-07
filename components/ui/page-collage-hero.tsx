@@ -14,7 +14,10 @@ gsap.registerPlugin(ScrollTrigger);
 // screenshots. The reference's photo, name and copy are not used, and its
 // layout is reworked for his content and palette (burnt orange on black).
 //
-// Sequence (one scrubbed timeline over a 3.55-viewport section):
+// Sequence (one scrubbed timeline over a 3.55-viewport section), after a
+// sequenced entry: the text comes in first and slow (kicker, then the
+// title lines rising in), and only once the text has appeared is the
+// portrait uncovered top-down by a clip-path reveal.
 //   0.00–0.14  portrait zooms into the face, passing in front of the
 //              headline; the Get in touch pill fades out.
 //   0.14–0.34  the whole panel shrinks into a centred rounded card.
@@ -101,32 +104,45 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
   const wipeActiveRef = useRef(0);
   const reduced = usePrefersReducedMotion();
 
-  // Entry — gated on `started` (the Loader lifting): the portrait settles
-  // from slightly larger/closer (like the reference's first paint, where
-  // the portrait starts big and shrinks to rest), headline lines slide in,
-  // pill and labels fade in.
+  // Entry — gated on `started` (the Loader lifting), and sequenced:
+  // the TEXT appears first, slow, and only once it has appeared does the
+  // IMAGE come in, with a reveal. The kicker fades up, the title lines
+  // rise in slowly (1.3s each), the pill and labels fade in with them —
+  // then the portrait is uncovered top-down by a clip-path wipe, like
+  // being unveiled (the head appears first, then the shoulders and body).
+  // The reveal owns only clip-path, so it never fights the scroll
+  // timeline, which owns the portrait's scale and position.
   useEffect(() => {
     if (reduced || !started) return;
     const section = sectionRef.current;
     if (!section) return;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.15, defaults: { ease: "expo.out" } });
-      tl.from(
-        portraitRef.current,
-        { scale: 1.12, yPercent: 4, opacity: 0, duration: 1.1, overwrite: "auto" },
-        0
-      );
+      const tl = gsap.timeline({ delay: 0.15, defaults: { ease: "power3.out" } });
+      // The text first, slow.
+      tl.from(section.querySelectorAll(".m3-kicker"), {
+        y: 12,
+        opacity: 0,
+        duration: 0.9,
+      }, 0);
       tl.from(
         section.querySelectorAll(".m3-title-line"),
-        { y: 70, opacity: 0, duration: 1, stagger: 0.09 },
-        0.1
+        { y: 70, opacity: 0, duration: 1.3, stagger: 0.1 },
+        0.15
       );
-      tl.from(section.querySelectorAll(".m3-kicker, .m3-pill, .m3-label"), {
+      tl.from(section.querySelectorAll(".m3-pill, .m3-label"), {
         y: 12,
         opacity: 0,
         duration: 0.8,
         stagger: 0.07,
-      }, 0.25);
+      }, 0.5);
+      // Then the image, revealed top-down once the text has appeared
+      // (the title's second line finishes at ~1.55s).
+      tl.fromTo(
+        portraitRef.current,
+        { clipPath: "inset(0% 0% 100% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power3.inOut" },
+        1.6
+      );
     }, sectionRef);
     return () => ctx.revert();
   }, [reduced, started]);
