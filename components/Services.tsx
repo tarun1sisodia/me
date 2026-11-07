@@ -14,8 +14,6 @@ const DISCIPLINES = [
       "REST APIs with FastAPI and Fastify 5 — typed, tested, documented",
       "Auth with teeth: JWT plus clinic-isolation middleware",
       "Payments via Razorpay, PDFs via WeasyPrint",
-      "PostgreSQL, MongoDB, Redis — picked per workload, not habit",
-      "Dockerized and shipped on Render",
     ],
   },
   {
@@ -27,7 +25,6 @@ const DISCIPLINES = [
       "React + TypeScript frontends wired to real backends",
       "Travel platform live in production (ArenaAI)",
       "Flutter apps for mobile (SmartCampus)",
-      "End-to-end ownership — database to deploy",
     ],
   },
   {
@@ -36,10 +33,9 @@ const DISCIPLINES = [
     icon: ShieldCheck,
     title: "Threat-minded from line one.",
     points: [
-      "MCA in Cyber Security — not a buzzword, a degree",
+      "MCA in Cyber Security",
       "Hardened auth, isolated tenants, least privilege",
       "Security documentation and reporting (GRC / VAPT track)",
-      "Input validation and safe defaults everywhere",
     ],
   },
 ];
