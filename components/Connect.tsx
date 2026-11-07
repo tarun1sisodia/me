@@ -59,10 +59,16 @@ export default function Connect() {
         <h2 className="sr-only">Let&apos;s build something</h2>
         <div className="connect-grid">
           <Reveal>
-            <div className="duotone connect-photo">
+            {/* Electric Gaze portrait: Tarun's crowd-profile shot (flipped
+                so the face looks left, like the reference), rendered as
+                9px-cell dither dots with a cyan gaze line — original
+                implementation of the 21st.dev ASCII-editor spec, generated
+                by ~/workspace/lh/electric-gaze.py. No `duotone` class here:
+                its orange colour wash would kill the cyan line. */}
+            <div className="connect-photo">
               <Image
-                src="/photos/portrait-smiling-arms-crossed.jpg"
-                alt="Tarun Sisodia smiling with arms crossed"
+                src="/photos/tarun-electric-gaze.jpg"
+                alt="Tarun Sisodia in profile, rendered as a dithered Electric Gaze portrait"
                 fill
                 sizes="(max-width: 900px) 70vw, 24vw"
               />
