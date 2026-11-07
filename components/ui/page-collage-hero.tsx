@@ -8,7 +8,7 @@ import { HERO_PORTRAIT, HERO_TILES } from "@/lib/data";
 gsap.registerPlugin(ScrollTrigger);
 
 // main3 hero — the full sequence, rebuilt from the motion structure of the
-// reference Tarun sent (a pinned portrait hero that zooms, shrinks into a
+// reference Tarun sent (a pinned portrait hero that shrinks into a
 // card, uncovers a screenshot grid behind it, then wipes out). Everything
 // on screen is Tarun's own: his portrait, his headline, his project
 // screenshots. The reference's photo, name and copy are not used, and its
@@ -18,9 +18,12 @@ gsap.registerPlugin(ScrollTrigger);
 // sequenced entry: the text comes in first and slow (kicker, then the
 // title lines rising in), and only once the text has appeared is the
 // portrait uncovered top-down by a clip-path reveal.
-//   0.00–0.14  portrait zooms into the face, passing in front of the
-//              headline; the Get in touch pill fades out.
-//   0.14–0.34  the whole panel shrinks into a centred rounded card.
+//   0.00–0.14  the panel holds still; the Get in touch pill fades out.
+//              The portrait does NOT zoom — Tarun asked for the zoom
+//              removed (2026-11-08): the whole panel, figure included,
+//              simply shrinks as one piece further down the scroll.
+//   0.14–0.34  the whole panel shrinks into a centred rounded card,
+//              portrait and headline shrinking with it, unchanged.
 //   0.34–0.82  the card settles small while the screenshot grid behind
 //              it drifts slowly upward.
 //   0.82–0.94  the card slides up out of view.
@@ -117,7 +120,8 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
   // then the portrait is uncovered top-down by a clip-path wipe, like
   // being unveiled (the head appears first, then the shoulders and body).
   // The reveal owns only clip-path, so it never fights the scroll
-  // timeline, which owns the portrait's scale and position.
+  // timeline, which no longer touches the portrait at all (the zoom
+  // was removed — the panel shrinks as one piece instead).
   useEffect(() => {
     if (reduced || !started) return;
     const section = sectionRef.current;
@@ -189,27 +193,17 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
         defaults: { ease: "none" },
       });
 
-      // Zoom into the face; the pill leaves with the first scroll.
-      master.to(
-        portraitRef.current,
-        { scale: 1.8, xPercent: -6, transformOrigin: "70% 18%", duration: 0.14 },
-        0
-      );
+      // No portrait zoom here — the figure stays as it is and the whole
+      // panel shrinks as one piece below. The pill leaves with the first
+      // scroll.
       master.to(pillRef.current, { opacity: 0, y: -12, duration: 0.1 }, 0);
 
-      // The whole panel shrinks into a centred rounded card. While it
-      // shrinks, the portrait zooms further and re-centres, so the face
-      // fills the card like the reference's card (a tight face crop, not
-      // the whole figure shrunk small). Face sits near (74%, 25%) of the
-      // panel; the shifts below land it centred-right in the card.
+      // The whole panel shrinks into a centred rounded card — portrait,
+      // headline and labels all shrinking with it, unchanged. No extra
+      // portrait zoom: the figure stays whole in the card.
       master.to(
         panelRef.current,
         { scale: 0.52, borderRadius: 28, duration: 0.2 },
-        0.14
-      );
-      master.to(
-        portraitRef.current,
-        { scale: 2.5, xPercent: -1, yPercent: 4, duration: 0.2 },
         0.14
       );
 
@@ -277,9 +271,8 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
   // half strength, the side labels a little less. The earlier version had
   // this backwards (portrait following the mouse, plus a tilt the
   // reference never does). Fine pointers only, never with reduced motion.
-  // The offsets live on separate transform components from the scroll
-  // zoom/scale, so nothing fights; the headline's vertical centring uses
-  // the CSS `translate` property, so GSAP owns its y cleanly.
+  // The offsets live on the portrait's own x/y, which the scroll
+  // timeline never touches (no zoom anymore), so nothing fights.
   useEffect(() => {
     if (reduced) return;
     const stage = stageRef.current;
