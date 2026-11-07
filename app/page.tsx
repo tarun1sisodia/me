@@ -79,8 +79,8 @@ export default function Home() {
         <About />
         <Services />
         <Journey />
-        <Process />
         <Interlude />
+        <Process />
         <Skills />
         <Now />
         <Connect />
