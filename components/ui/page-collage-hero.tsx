@@ -31,7 +31,7 @@ gsap.registerPlugin(ScrollTrigger);
 //              (Selected Work title, project list, feature card) fades in
 //              only once the panel has filled the stage.
 //   1.00–1.50  the wipe stays on screen while scrolling cycles through
-//              the five projects, like the reference's Award Winning Work:
+//              the six projects, like the reference's Award Winning Work:
 //              the filled dot moves down the list and the feature card
 //              swaps to that project's image and one-liner. The steps are
 //              driven by the ScrollTrigger's progress (see onUpdate), not
@@ -55,9 +55,10 @@ gsap.registerPlugin(ScrollTrigger);
 const PIN_VH = 3.55;
 
 // Timeline positions (of 1.50 total) where the wipe steps to the next
-// project. In ScrollTrigger progress (position / 1.50): 0.68, 0.76, 0.84,
-// 0.92 — ArenaAI is the initial state, so four steps cover the other four.
-const WIPE_STEP_PROGRESS = [0.68, 0.76, 0.84, 0.92];
+// project. In ScrollTrigger progress (position / 1.50): 0.68, 0.75, 0.82,
+// 0.89, 0.96 — ArenaAI is the initial state, so five steps cover the
+// other five.
+const WIPE_STEP_PROGRESS = [0.68, 0.75, 0.82, 0.89, 0.96];
 
 // The grid shows each project twice (second copy reversed, so no two
 // neighbours in a column repeat) and drifts up as you scroll.
@@ -107,7 +108,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
   const gridRef = useRef<HTMLDivElement>(null);
   const wipeRef = useRef<HTMLDivElement>(null);
   const wipeContentRef = useRef<HTMLDivElement>(null);
-  // Which project the wipe's list + feature card currently show (0–4).
+  // Which project the wipe's list + feature card currently show (0–5).
   // Driven by the scroll timeline's progress; scrolling back reverses it.
   const [wipeActive, setWipeActive] = useState(0);
   const wipeActiveRef = useRef(0);
@@ -230,7 +231,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       // the heading appears after the wipe settles).
       master.to(wipeContentRef.current, { opacity: 1, duration: 0.04 }, 0.96);
 
-      // Hold the wipe on screen for the five project steps (1.00–1.50).
+      // Hold the wipe on screen for the six project steps (1.00–1.50).
       // A duration-only tween: it changes nothing, it just gives the
       // steps scroll room. The steps themselves are driven by the
       // ScrollTrigger's onUpdate above.
@@ -376,7 +377,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
             Get in touch
           </a>
 
-          <p className="m3-label m3-label-a">Five shipped projects</p>
+          <p className="m3-label m3-label-a">Six shipped projects</p>
           <p className="m3-label m3-label-b">Full-stack developer</p>
         </div>
 

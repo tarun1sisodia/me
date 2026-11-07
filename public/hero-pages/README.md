@@ -1,6 +1,6 @@
 # Hero grid tiles — provenance
 
-The five tiles in the main3 hero collage (and the ArenaAI card in the
+The six tiles in the main3 hero collage (and the ArenaAI card in the
 "Selected Work" wipe) are 1280×800. Sources and licences, recorded
 2026-11-06:
 
@@ -21,6 +21,12 @@ The five tiles in the main3 hero collage (and the ArenaAI card in the
 - `bloodconnect.jpg` — "Donating platelets at Swedish blood donation
   center April 2025", Wikimedia Commons, CC BY 4.0.
   https://commons.wikimedia.org/wiki/File:Donating_platelets_at_Swedish_blood_donation_center_April_2025.jpg
+- `webprobe.jpg` — a screenshot of the WebProbe security scanner
+  dashboard (jailbreaks.coccoder999.workers.dev), Tarun's own project.
+  Rendered locally from the site's own HTML/JS/CSS/assets because the
+  headless shell cannot reach external hosts; the live backend was
+  unreachable from the sandbox, so the shot shows the dashboard with
+  its example scans. Not a third-party image.
 
 CC0 images need no attribution. The two CC BY / CC BY-SA images are
 used under their licences; the portfolio is not a commercial
