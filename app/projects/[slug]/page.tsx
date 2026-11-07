@@ -135,7 +135,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <SignaturePenFooter
         word={project.name}
         title={`Thank you for exploring ${project.name}`}
-        description={project.signoff}
         actions={
           live && github
             ? [
