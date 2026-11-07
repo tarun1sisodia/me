@@ -18,7 +18,7 @@ export default function SiteFooter() {
     <DoodleCrewFooter
       wordmark="TARUN"
       brand="tarun"
-      blurb="Full-stack developer building production systems — travel platforms, clinic backends, and the portfolio you're standing in. Based in Greater Noida, open for work."
+      blurb="Full-stack developer — Greater Noida, open for work."
       tagline="Full-stack developer — shipped, not shelved."
       columns={[
         {
@@ -68,11 +68,11 @@ export default function SiteFooter() {
       }}
       fontFamily='"Space Grotesk", system-ui, sans-serif'
       crew={[
-        { kind: "yeti", letter: 0, seat: "front", offset: -0.32, name: "Bruno", says: "I lift the heavy backend stuff." },
-        { kind: "bird", letter: 1, seat: "top", offset: 0.02, name: "Pip", says: "Post me @tarun1sisodia." },
-        { kind: "mushroom", letter: 2, seat: "front", offset: 0.12, scale: 0.95, name: "Morel", says: "I'm a fun guy." },
-        { kind: "kid", letter: 3, seat: "top", offset: -0.05, name: "Juno", says: "Up here! Best seat in the house." },
-        { kind: "ghost", letter: 4, seat: "behind", offset: 0, name: "Boo", says: "Boo! …sorry. Hi." },
+        { kind: "yeti", letter: 0, seat: "front", offset: -0.32, name: "Bruno" },
+        { kind: "bird", letter: 1, seat: "top", offset: 0.02, name: "Pip" },
+        { kind: "mushroom", letter: 2, seat: "front", offset: 0.12, scale: 0.95, name: "Morel" },
+        { kind: "kid", letter: 3, seat: "top", offset: -0.05, name: "Juno" },
+        { kind: "ghost", letter: 4, seat: "behind", offset: 0, name: "Boo" },
       ]}
     />
   );
