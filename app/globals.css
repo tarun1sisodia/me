@@ -780,11 +780,18 @@ p {
 /* ---------- process: numbered accordion steps ---------- */
 
 .steps {
-  border-top: 1px solid var(--border);
+  position: relative;
 }
 
-.step {
-  border-bottom: 1px solid var(--border);
+/* The divider lines are guitar strings (see ProcessStrings): the SVG
+   overlay below draws them, so the borders are gone. */
+.process-strings {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
 }
 
 .step-head {
@@ -1058,29 +1065,45 @@ p {
   color: var(--muted);
 }
 
+/* ---------- guitar strings: plucked lines that bow from the middle ---------- */
+/* A real string is fixed at both ends, so it bows most at the center and
+   not at all at the ends. The path's Bezier control point is animated
+   (lib/guitar.ts); the resting stroke is set by the parent section. */
+.guitar-string {
+  fill: none;
+  stroke-width: 1;
+  transition:
+    stroke 0.5s ease,
+    filter 0.5s ease;
+}
+
+.guitar-string.plucked {
+  stroke: rgba(var(--accent-rgb), 0.55);
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.4));
+}
+
+/* Process divider lines rest at the normal border color. */
+.process-strings .guitar-string {
+  stroke: var(--border);
+}
+
 /* ---------- gridsweep: hairline columns with traveling light ---------- */
 
 .gridsweep {
   position: absolute;
   inset: 0;
-  display: flex;
-  justify-content: space-evenly;
   pointer-events: none;
   overflow: hidden;
 }
 
-.gridsweep-line {
-  width: 1px;
-  background: rgba(var(--tint), 0.055);
-  flex: none;
-  transition:
-    background 0.5s ease,
-    box-shadow 0.5s ease;
+.gridsweep-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
-.gridsweep-line.plucked {
-  background: rgba(var(--accent-rgb), 0.55);
-  box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.4);
+.gridsweep-svg .guitar-string {
+  stroke: rgba(var(--tint), 0.055);
 }
 
 .gridsweep-band {

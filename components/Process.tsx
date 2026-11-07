@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
+import ProcessStrings from "./ProcessStrings";
 
 const STEPS = [
   {
@@ -45,6 +46,7 @@ export default function Process() {
           title="Boring process, exciting results."
         />
         <div className="steps">
+          <ProcessStrings />
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.04}>
               <div className={`step${open === i ? " is-open" : ""}`}>
