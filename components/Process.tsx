@@ -8,27 +8,27 @@ const STEPS = [
   {
     n: "01",
     title: "Discover",
-    body: "We scope the real problem, not the requested feature. What breaks if this ships wrong? Who touches it daily? The answers shape everything downstream.",
+    body: "Scope the real problem first.",
   },
   {
     n: "02",
     title: "Design",
-    body: "API contracts, database schemas, and the threat surface — on paper before in code. Boring diagrams now prevent exciting incidents later.",
+    body: "Contracts and schemas before code.",
   },
   {
     n: "03",
     title: "Build",
-    body: "Typed, tested, reviewed. FastAPI or Fastify on the backend, React or Flutter on the front. Small commits, working software every week.",
+    body: "Typed, tested, reviewed. Shipped weekly.",
   },
   {
     n: "04",
     title: "Harden",
-    body: "Auth, tenant isolation, input validation, least privilege. The security degree isn't decoration — it's the checklist before launch.",
+    body: "Auth, isolation, validation before launch.",
   },
   {
     n: "05",
     title: "Ship",
-    body: "Dockerized, deployed, monitored. Then we watch real users and iterate. Shipped beats perfect; maintained beats shipped-and-forgotten.",
+    body: "Dockerized, deployed, monitored. Then iterate.",
   },
 ];
 
