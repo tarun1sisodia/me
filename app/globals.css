@@ -1073,6 +1073,14 @@ p {
   width: 1px;
   background: rgba(var(--tint), 0.055);
   flex: none;
+  transition:
+    background 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.gridsweep-line.plucked {
+  background: rgba(var(--accent-rgb), 0.55);
+  box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.4);
 }
 
 .gridsweep-band {
