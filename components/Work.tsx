@@ -205,7 +205,6 @@ export default function Work() {
           label="SELECTED WORK"
           kicker="PRODUCTION, NOT PROTOTYPES"
           title="Shipped, not shelved."
-          blurb="Real systems for real users — not tutorial projects."
         />
         <p className="work-count" aria-label={`Selected work, ${PROJECTS.length} projects`}>
           <span className="work-count-num">01</span>

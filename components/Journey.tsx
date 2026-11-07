@@ -15,7 +15,6 @@ export default function Journey() {
           label="THE PATH"
           kicker="STILL BECOMING"
           title="The road so far."
-          blurb="Degrees, internships, and production systems — in order."
         />
       </div>
       <Timeline

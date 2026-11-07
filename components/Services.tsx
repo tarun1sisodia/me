@@ -57,7 +57,6 @@ export default function Services() {
           label="WHAT I DO"
           kicker="PICK A DISCIPLINE"
           title="Three ways to ship."
-          blurb="One engineer, three disciplines. Switch hats below."
         />
         <Reveal>
           <div className="disc-toggle" role="tablist" aria-label="Disciplines">

@@ -105,7 +105,6 @@ export default function About() {
           label="THE PERSON"
           kicker="THE HUMAN BEHIND THE SYSTEMS"
           title="Not a template person."
-          blurb="The short version of a long story with computers."
         />
         <div
           className="about-read"

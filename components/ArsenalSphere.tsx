@@ -28,7 +28,6 @@ export default function ArsenalSphere() {
           label="ARSENAL"
           kicker="BATTLE-TESTED"
           title="The toolkit."
-          blurb="What I reach for when something needs to exist by Friday."
         />
         <div className="arsenal-sphere-wrap" style={{ height: size }}>
           <LazyScene>

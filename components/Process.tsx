@@ -43,7 +43,6 @@ export default function Process() {
           label="HOW I WORK"
           kicker="NO CHAOS, JUST CADENCE"
           title="Boring process, exciting results."
-          blurb="The same five steps behind every system on this page."
         />
         <div className="steps">
           {STEPS.map((s, i) => (

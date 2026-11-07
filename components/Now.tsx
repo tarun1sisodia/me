@@ -18,7 +18,6 @@ export default function Now() {
           label="NOW"
           kicker="LAST UPDATED · OCT 2026"
           title="Currently."
-          blurb="What has my attention this month."
         />
         <Reveal>
           <dl className="now-list">
