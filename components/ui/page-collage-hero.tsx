@@ -34,13 +34,18 @@ gsap.registerPlugin(ScrollTrigger);
 //              driven by the ScrollTrigger's progress (see onUpdate), not
 //              by timeline tweens, so scrolling back reverses them cleanly.
 //   Mouse: the portrait slides opposite the cursor (mouse right → figure
-//   left), ±14px at the extremes (28px across the full mouse travel),
-//   the headline ±7px, the labels ±6px, no tilt — the reference moves
-//   about 52px across, and Tarun asked for it clearly bigger after the
-//   old ±7px felt too minor. The headline drifts the same way at half
-//   strength, the labels a little less. The portrait is a real cutout,
-//   centred, with the big headline behind him — the type spans past the
-//   figure on both sides, so the words read around him.
+//   left), ±28px at the extremes (56px across the full mouse travel),
+//   the headline ±14px, the labels ±12px, no tilt — the reference moves
+//   about 57px across (its portrait sat at translate(-28.7px, 24.9px)),
+//   and Tarun asked for it clearly bigger after the old ±7px felt too
+//   minor. The headline drifts the same way at half strength, the
+//   labels a little less. The portrait is a real cutout, centred, with
+//   the big headline behind him — the type spans past the figure on both
+//   sides, so the words read around him.
+//   Grid: as you scroll and the card settles, the screenshot grid behind
+//   it fades and blurs (opacity 1 → 0.35, blur 0 → 18px), like the
+//   reference's grid layer (0.98 / ~1px → 0.35 / 24px) — the card takes
+//   focus while the grid softens behind it.
 // Scrolling back replays it all in reverse. Reduced motion gets a static
 // intro panel with the grid below it instead.
 
@@ -208,11 +213,13 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
         0.14
       );
 
-      // The card settles small; the grid drifts up behind it.
+      // The card settles small; the grid drifts up behind it — and fades
+      // and blurs as the card takes focus (the reference's grid layer
+      // goes from ~0.98 opacity / ~1px blur to 0.35 / 24px with scroll).
       master.to(panelRef.current, { scale: 0.48, duration: 0.16 }, 0.34);
       master.to(
         gridRef.current,
-        { yPercent: -15.3, duration: 0.48 },
+        { yPercent: -15.3, opacity: 0.35, filter: "blur(18px)", duration: 0.48 },
         0.34
       );
 
@@ -263,9 +270,10 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
 
   // Mouse parallax — measured from the reference, not guessed. Its
   // portrait slides OPPOSITE to the cursor (mouse right/down → portrait
-  // left/up), about 52px total across the full mouse travel, with no
-  // tilt, no rotation and no scale change — a slow, lazy drift that takes
-  // a second or two to settle. The headline drifts the same way at about
+  // left/up), about 57px total across the full mouse travel (its
+  // portrait sat at translate(-28.7px, 24.9px)), with no tilt, no
+  // rotation and no scale change — a slow, lazy drift that takes a
+  // second or two to settle. The headline drifts the same way at about
   // half strength, the side labels a little less. The earlier version had
   // this backwards (portrait following the mouse, plus a tilt the
   // reference never does). Fine pointers only, never with reduced motion.
@@ -303,23 +311,24 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       // Divide by the live scales so the figure moves the same on-screen
       // distance at every stage — the movement stays "entire" from the
       // intro right through to the card. Tarun asked for it clearly
-      // bigger (the old ±7px was too minor to feel): the portrait now
-      // moves ±14px at the extremes (28px across the full mouse travel),
-      // the headline ±7px, the labels ±6px. (nx runs -0.5..0.5, so the
-      // multiplier is twice the max offset.)
+      // bigger (the old ±7px was too minor to feel, and ±14px still
+      // read minor): the portrait now moves ±28px at the extremes
+      // (56px across the full mouse travel, matching the reference's
+      // ~29px), the headline ±14px, the labels ±12px. (nx runs
+      // -0.5..0.5, so the multiplier is twice the max offset.)
       const panel = panelRef.current;
       const panelScale =
         (panel ? (gsap.getProperty(panel, "scaleX") as number) : 1) || 1;
       const portraitScale = (gsap.getProperty(portrait, "scaleX") as number) || 1;
       const total = portraitScale * panelScale;
-      px(nx * -28 / total); // ±14px on screen, opposite the mouse
-      py(ny * -28 / total);
+      px(nx * -56 / total); // ±28px on screen, opposite the mouse
+      py(ny * -56 / total);
       // The headline and labels live in the panel, not the portrait, so
       // they only divide by the panel's scale.
-      hx(nx * -14 / panelScale); // headline, half strength
-      hy(ny * -14 / panelScale);
-      lx.forEach((fn) => fn(nx * -12 / panelScale));
-      ly.forEach((fn) => fn(ny * -12 / panelScale));
+      hx(nx * -28 / panelScale); // headline, half strength
+      hy(ny * -28 / panelScale);
+      lx.forEach((fn) => fn(nx * -24 / panelScale));
+      ly.forEach((fn) => fn(ny * -24 / panelScale));
     };
     const onLeave = () => {
       px(0);
