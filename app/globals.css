@@ -681,100 +681,53 @@ p {
   color: var(--accent);
 }
 
-/* ---------- services: discipline toggle ---------- */
+/* ---------- services: centred heading + full-bleed factory ---------- */
 
-.disc-toggle {
+.services-head .sec-head {
+  text-align: center;
+}
+
+.services-head .chapter-row {
+  justify-content: center;
+}
+
+.services-head .sec-meta {
+  justify-content: center;
+}
+
+.services-head .sec-title {
+  text-align: center;
+}
+
+.services-head .sec-blurb {
+  margin-inline: auto;
+}
+
+/* The machine breaks out of the 1180px container and spans the viewport,
+   82vh tall, so it fills at least 80% of the screen when it appears. */
+.factory-stage {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.factory-loading {
+  height: 82vh;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 8px 0 34px;
-  flex-wrap: wrap;
-}
-
-.disc-btn {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  justify-content: center;
+  gap: 12px;
   color: var(--muted);
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 12px 26px;
-  cursor: pointer;
-  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  font-size: 11px;
+  background: #000;
 }
 
-.disc-btn:hover {
-  color: var(--text);
-  border-color: rgba(var(--accent-rgb), 0.4);
-}
-
-.disc-btn.is-active {
-  color: #04121a;
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.disc-count {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.2em;
-  color: var(--muted);
-}
-
-.disc-panel {
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: clamp(26px, 4vw, 48px);
-  background: rgba(var(--tint), 0.015);
-  position: relative;
-  overflow: hidden;
-}
-
-.disc-head {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 26px;
-  color: var(--accent);
-}
-
-.disc-head h3 {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 3.4vw, 38px);
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-}
-
-.disc-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0;
-}
-
-.disc-list li {
-  padding: 16px 4px;
-  border-top: 1px solid var(--border);
-  font-size: 16px;
-  color: var(--muted);
-  display: flex;
-  gap: 14px;
-  align-items: baseline;
-}
-
-.disc-list li::before {
-  content: "▸";
-  color: var(--accent);
-  flex: none;
-}
-
-.disc-list li:last-child {
-  border-bottom: 1px solid var(--border);
+.factory-loading i {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-top-color: var(--accent);
+  animation: agentic-factory-3d-spin 1s linear infinite;
 }
 
 /* ---------- process: numbered accordion steps ---------- */

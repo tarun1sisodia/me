@@ -6,7 +6,7 @@ import SphereImageGrid from "@/components/ui/img-sphere";
 import { TECH_SPHERE } from "@/lib/data";
 
 export default function ArsenalSphere() {
-  const [size, setSize] = useState(600);
+  const [size, setSize] = useState(860);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function ArsenalSphere() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
         document.documentElement.classList.contains("motion-off")
     );
-    const update = () => setSize(Math.min(600, window.innerWidth - 32));
+    const update = () => setSize(Math.min(860, window.innerWidth - 32));
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
