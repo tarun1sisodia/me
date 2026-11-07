@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FallingLeaves } from "falling-leaves/react";
 import { HERO_PORTRAIT, HERO_TILES } from "@/lib/data";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -376,6 +377,27 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
 
           <p className="m3-label m3-label-a">Six shipped projects</p>
           <p className="m3-label m3-label-b">Full-stack developer</p>
+
+          {/* Falling leaves (ernkerr/falling-leaves, MIT, ~8KB, canvas,
+              no deps): a few autumn leaves drifting over the hero panel,
+              clipped to the panel so they ride inside the card as it
+              shrinks. Colours are the site's own orange family only, so
+              the 3-colour rule holds; sparse (14) and slow on purpose.
+              It respects reduced motion itself, and is skipped entirely
+              on the reduced path like the grid and wipe. Move it by
+              moving this block: Connect or Interlude for a seasonal
+              touch at one section, or fullScreen for the whole page. */}
+          {!reduced && (
+            <FallingLeaves
+              count={14}
+              shapes={["maple", "ginkgo"]}
+              colors={["#ff6b35", "#e8490f", "#d99a3e", "#c85a32"]}
+              size={[12, 24]}
+              speed={[0.5, 1.1]}
+              opacity={0.9}
+              zIndex={25}
+            />
+          )}
         </div>
 
         {!reduced && (
