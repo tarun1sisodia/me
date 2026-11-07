@@ -24,7 +24,7 @@ export default function SiteFooter() {
         {
           title: "Work",
           links: [
-            { label: "Selected work", href: "#work" },
+            { label: "Selected work", href: "#top" },
             { label: "GitHub", href: "https://github.com/tarun1sisodia" },
             { label: "LinkedIn", href: "https://www.linkedin.com/in/tarun1sisodia" },
           ],

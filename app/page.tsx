@@ -14,7 +14,6 @@ import Marquee from "@/components/Marquee";
 import StatsBand from "@/components/StatsBand";
 import About from "@/components/About";
 import Journey from "@/components/Journey";
-import Work from "@/components/Work";
 import Interlude from "@/components/Interlude";
 import Skills from "@/components/Skills";
 import Services from "@/components/Services";
@@ -80,7 +79,6 @@ export default function Home() {
         <About />
         <Services />
         <Journey />
-        <Work />
         <Process />
         <Interlude />
         <Skills />
