@@ -2352,12 +2352,12 @@ p {
   height: 100%;
   object-fit: cover;
   object-position: 68% 12%;
-  /* Warm cast so a little of the hero's orange shows on his face, like
-     the reference's red light on her skin — kept light on purpose. The
-     tint lives in the filter (on the figure's own pixels) instead of an
-     overlay span, because the overlay's rectangle edge showed as a line
-     where its tint started against the panel's gradient. */
-  filter: saturate(1.12) contrast(1.03) brightness(1.03) sepia(0.2) hue-rotate(-8deg);
+  /* The warm orange-red light is baked into the photo itself (a
+     directional grade, strongest on the left, like the reference's
+     edited shot) — so the filter stays neutral and only sharpens the
+     image. The old sepia tint is gone; it would double-tint on top of
+     the baked grade. */
+  filter: saturate(1.08) contrast(1.03) brightness(1.02);
   /* The photo's head sits at its top edge; shrink the figure slightly,
      anchored to the bottom-right, so the hair clears the panel top with
      headroom above it (the reference frames her head fully in view). */
