@@ -2,10 +2,9 @@ import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 
 const ITEMS = [
-  { k: "STUDYING", v: "MCA Cyber Security, Galgotias University — final year, 2027 batch" },
+  { k: "STUDYING", v: "MCA Cyber Security, Galgotias University — final year, 2027 batch · GRC & VAPT track" },
   { k: "INTERNSHIP", v: "Backend Developer Intern @ Aarogya Virohan — FastAPI, PostgreSQL" },
   { k: "FREELANCE", v: "Production backend for a travel business — Fastify, Razorpay, Supabase" },
-  { k: "LEARNING", v: "GRC & VAPT — grinding toward the security track" },
   { k: "STATUS", v: "Open for internships, freelance builds, and good conversations" },
 ];
 
@@ -16,7 +15,6 @@ export default function Now() {
         <SectionHeading
           index="08"
           label="NOW"
-          kicker="LAST UPDATED · OCT 2026"
           title="Currently."
         />
         <Reveal>

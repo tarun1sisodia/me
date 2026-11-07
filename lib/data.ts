@@ -27,53 +27,6 @@ export const STATS = [
   { value: 4, suffix: "", label: "years coding" },
 ];
 
-export interface JourneyEntry {
-  period: string;
-  title: string;
-  org: string;
-  detail: string;
-  current?: boolean;
-}
-
-export const JOURNEY: JourneyEntry[] = [
-  {
-    period: "2022 — 2025",
-    title: "BCA, Computer Science",
-    org: "Agra University",
-    detail: "Where it started. CS fundamentals, DSA, and the first lines of code that stuck.",
-  },
-  {
-    period: "2025 — 2027",
-    title: "MCA, Cyber Security",
-    org: "Galgotias University",
-    detail: "Final year. Going deep on security — GRC and VAPT direction.",
-  },
-  {
-    period: "Apr 2026 — Present",
-    title: "Backend Developer Intern",
-    org: "Aarogya Virohan",
-    detail: "Health-tech APIs with FastAPI + PostgreSQL. JWT auth with clinic-isolation middleware, prescription PDF builder.",
-  },
-  {
-    period: "Aug 2026 — Present",
-    title: "Freelance Backend Developer",
-    org: "Tour & travel business",
-    detail: "Production TypeScript + Fastify backend — fares, bookings, Razorpay payments, dispatch. Hardened, rate-limited, Dockerized on Render.",
-  },
-  {
-    period: "2026",
-    title: "ArenaAI shipped",
-    org: "Production travel platform",
-    detail: "Built and maintain a live travel platform — SSG, full SEO pipeline, Cloudflare deploys.",
-  },
-  {
-    period: "Now",
-    title: "Building in public",
-    org: "Open to work",
-    detail: "Shipping, learning security, and looking for what's next.",
-    current: true,
-  },
-];
 
 export const projectSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "");
 
@@ -84,14 +37,14 @@ export const projectSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-
  */
 export const PATH_TIMELINE: { top: TimelineItem[]; bottom: TimelineItem[] } = {
   top: [
-    { id: "path-bca", year: "2022", month: "August", content: "BCA, Computer Science — Agra University. CS fundamentals, DSA, and the first lines of code that stuck." },
-    { id: "path-mca", year: "2025", month: "August", content: "MCA, Cyber Security — Galgotias University. Final year, going deep on security — GRC and VAPT direction." },
-    { id: "path-aarogya", year: "2026", month: "April", content: "Backend Developer Intern — Aarogya Virohan. Health-tech APIs with FastAPI + PostgreSQL, JWT auth with clinic-isolation middleware." },
+    { id: "path-bca", year: "2022", month: "August", content: "BCA, Computer Science — Agra University." },
+    { id: "path-mca", year: "2025", month: "August", content: "MCA, Cyber Security — Galgotias University." },
+    { id: "path-aarogya", year: "2026", month: "April", content: "Backend Developer Intern — Aarogya Virohan. Health-tech APIs." },
   ],
   bottom: [
-    { id: "path-freelance", year: "2026", month: "August", content: "Freelance Backend Developer — tour & travel business. Production Fastify backend: fares, bookings, Razorpay, Dockerized on Render." },
-    { id: "path-arenaai", year: "2026", month: "October", content: "ArenaAI shipped — production travel platform. Live bookings, SEO pipeline, Cloudflare deploys." },
-    { id: "path-now", year: "2026", month: "November", content: "Building in public — open to work. Shipping, learning security, and looking for what's next." },
+    { id: "path-freelance", year: "2026", month: "August", content: "Freelance Backend Developer — tour & travel business." },
+    { id: "path-arenaai", year: "2026", month: "October", content: "ArenaAI shipped — production travel platform." },
+    { id: "path-now", year: "2026", month: "November", content: "Building in public — open to work." },
   ],
 };
 
