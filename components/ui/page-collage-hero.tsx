@@ -34,8 +34,9 @@ gsap.registerPlugin(ScrollTrigger);
 //   left), ~28px total range, no tilt — the reference moves about 52px,
 //   but Tarun found that too loose on his portrait, so it is kept small
 //   and tight. The headline drifts the same way at half strength, the
-//   labels a little less. The portrait is a real cutout, so only Tarun
-//   shows against the gradient, with the headline in front of him.
+//   labels a little less. The portrait is a real cutout, centred, with
+//   the big headline behind him — the type spans past the figure on both
+//   sides, so the words read around him.
 // Scrolling back replays it all in reverse. Reduced motion gets a static
 // intro panel with the grid below it instead.
 
