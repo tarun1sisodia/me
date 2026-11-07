@@ -300,23 +300,20 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       const r = stage.getBoundingClientRect();
       const nx = (e.clientX - r.left) / r.width - 0.5; // -0.5..0.5
       const ny = (e.clientY - r.top) / r.height - 0.5;
-      // The panel (and the portrait inside it) shrink as the hero scrolls,
-      // so a fixed pixel offset would look weaker and weaker in the card.
-      // Divide by the live scales so the figure moves the same on-screen
-      // distance at every stage — the movement stays "entire" from the
-      // intro right through to the card. Tarun asked for it clearly
-      // bigger (the old ±7px was too minor to feel, and ±14px still
-      // read minor): the portrait now moves ±28px at the extremes
-      // (56px across the full mouse travel, matching the reference's
-      // ~29px), the headline ±14px, the labels ±12px. (nx runs
-      // -0.5..0.5, so the multiplier is twice the max offset.)
+      // The panel (and the portrait inside it) shrink as the hero scrolls.
+      // The portrait's drift is NOT divided by the panel scale: it moves
+      // ±28px in the panel's own coordinates, so on screen it drifts less
+      // as the card shrinks — like the reference, whose card-stage drift
+      // is smaller. Dividing would push the figure ±45px in panel
+      // coordinates at card stage, more than the image's overscan can
+      // cover, and the figure's edge would lift off the card (the gap
+      // Tarun caught). The headline and labels keep their compensation:
+      // text has no image edge to expose.
       const panel = panelRef.current;
       const panelScale =
         (panel ? (gsap.getProperty(panel, "scaleX") as number) : 1) || 1;
-      const portraitScale = (gsap.getProperty(portrait, "scaleX") as number) || 1;
-      const total = portraitScale * panelScale;
-      px(nx * -56 / total); // ±28px on screen, opposite the mouse
-      py(ny * -56 / total);
+      px(nx * -56); // ±28px in panel coordinates, opposite the mouse
+      py(ny * -56);
       // The headline and labels live in the panel, not the portrait, so
       // they only divide by the panel's scale.
       hx(nx * -28 / panelScale); // headline, half strength

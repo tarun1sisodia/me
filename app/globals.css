@@ -2361,11 +2361,16 @@ p {
      image. The old sepia tint is gone; it would double-tint on top of
      the baked grade. */
   filter: saturate(1.08) contrast(1.03) brightness(1.02);
-  /* The photo's head sits at its top edge; shrink the figure slightly,
-     anchored to the bottom-centre, so the hair clears the panel top with
-     headroom above it (the reference frames her head fully in view). */
-  transform: scale(0.92);
+  /* The photo's head sits at its top edge. The image is deliberately
+     BIGGER than its frame and shifted down (translate 9% of its own
+     height): at scale 1.02 it overhangs the panel ~37px above and ~91px
+     below, so the mouse parallax (±28px) can never lift the figure off
+     the panel's bottom edge or drop its top edge below the panel top —
+     the cut edge Tarun caught in the card stage. The head stays put
+     because the extra size goes mostly below the frame, not above it. */
+  transform: scale(1.02);
   transform-origin: 50% 100%;
+  translate: 0 9%;
 }
 
 /* Headline sits BEHIND the portrait (Tarun asked for the figure centred
