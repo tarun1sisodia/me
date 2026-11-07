@@ -34,12 +34,13 @@ gsap.registerPlugin(ScrollTrigger);
 //              driven by the ScrollTrigger's progress (see onUpdate), not
 //              by timeline tweens, so scrolling back reverses them cleanly.
 //   Mouse: the portrait slides opposite the cursor (mouse right → figure
-//   left), ~28px total range, no tilt — the reference moves about 52px,
-//   but Tarun found that too loose on his portrait, so it is kept small
-//   and tight. The headline drifts the same way at half strength, the
-//   labels a little less. The portrait is a real cutout, centred, with
-//   the big headline behind him — the type spans past the figure on both
-//   sides, so the words read around him.
+//   left), ±14px at the extremes (28px across the full mouse travel),
+//   the headline ±7px, the labels ±6px, no tilt — the reference moves
+//   about 52px across, and Tarun asked for it clearly bigger after the
+//   old ±7px felt too minor. The headline drifts the same way at half
+//   strength, the labels a little less. The portrait is a real cutout,
+//   centred, with the big headline behind him — the type spans past the
+//   figure on both sides, so the words read around him.
 // Scrolling back replays it all in reverse. Reduced motion gets a static
 // intro panel with the grid below it instead.
 
@@ -301,22 +302,24 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       // so a fixed pixel offset would look weaker and weaker in the card.
       // Divide by the live scales so the figure moves the same on-screen
       // distance at every stage — the movement stays "entire" from the
-      // intro right through to the card. Kept small on purpose (Tarun
-      // found the old ±22px too loose): ±14px on the portrait, ±7px on
-      // the headline, ±6px on the labels.
+      // intro right through to the card. Tarun asked for it clearly
+      // bigger (the old ±7px was too minor to feel): the portrait now
+      // moves ±14px at the extremes (28px across the full mouse travel),
+      // the headline ±7px, the labels ±6px. (nx runs -0.5..0.5, so the
+      // multiplier is twice the max offset.)
       const panel = panelRef.current;
       const panelScale =
         (panel ? (gsap.getProperty(panel, "scaleX") as number) : 1) || 1;
       const portraitScale = (gsap.getProperty(portrait, "scaleX") as number) || 1;
       const total = portraitScale * panelScale;
-      px(nx * -14 / total); // ±14px on screen, opposite the mouse
-      py(ny * -14 / total);
+      px(nx * -28 / total); // ±14px on screen, opposite the mouse
+      py(ny * -28 / total);
       // The headline and labels live in the panel, not the portrait, so
       // they only divide by the panel's scale.
-      hx(nx * -7 / panelScale); // headline, half strength
-      hy(ny * -7 / panelScale);
-      lx.forEach((fn) => fn(nx * -6 / panelScale));
-      ly.forEach((fn) => fn(ny * -6 / panelScale));
+      hx(nx * -14 / panelScale); // headline, half strength
+      hy(ny * -14 / panelScale);
+      lx.forEach((fn) => fn(nx * -12 / panelScale));
+      ly.forEach((fn) => fn(ny * -12 / panelScale));
     };
     const onLeave = () => {
       px(0);

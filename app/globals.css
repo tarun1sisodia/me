@@ -2619,18 +2619,15 @@ p {
 }
 
 @media (max-width: 767px) {
-  /* Centred portrait, but smaller than desktop so the headline has room
-     to show around it — a full-height figure on a narrow screen would
-     hide the whole line. */
+  /* Centred portrait, sized so its frame matches the photo's own shape
+     (about 0.56 wide as it is tall) — a tall narrow frame made
+     object-fit: cover blow the image up past the screen edges, so the
+     figure was cut at the sides. Now the whole figure fits, head to
+     toe, with the bottom cropped only by the panel edge like desktop.
+     No object-position override needed: nothing is cropped sideways. */
   .m3-portrait {
-    width: 55%;
-    height: 82%;
-  }
-
-  /* Narrow container: shift the focal point right so the whole face
-     (right side of the photo) stays in frame. */
-  .m3-portrait img {
-    object-position: 72% 10%;
+    width: 70%;
+    height: 58%;
   }
 
   .m3-head {
@@ -2642,7 +2639,7 @@ p {
   }
 
   .m3-title {
-    font-size: clamp(2.4rem, 13vw, 3.6rem);
+    font-size: clamp(2.4rem, 12vw, 3.6rem);
   }
 
   .m3-label {
