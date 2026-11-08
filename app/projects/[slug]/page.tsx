@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { PROJECTS, projectSlug } from "@/lib/data";
+import BackToHome from "@/components/BackToHome";
 import GlyphPortal from "@/components/ui/glyph-portal";
 import Timeline from "@/components/ui/timeline";
 import SignaturePenFooter from "@/components/ui/signature-pen-footer";
@@ -127,9 +127,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       />
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-6 pb-20">
-        <Link href="/" className="plink">
-          ← Back to home
-        </Link>
+        <BackToHome />
       </div>
 
       <SignaturePenFooter
@@ -143,7 +141,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               ]
             : github
               ? [
-                  { label: "Back to home", href: "/", variant: "secondary" },
+                  { label: "Back to home", href: "/", variant: "secondary", tick: true },
                   { label: "View on GitHub", href: github.href, variant: "primary" },
                 ]
               : []

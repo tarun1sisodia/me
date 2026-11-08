@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useRouter } from "next/navigation";
 import { projectSlug } from "@/lib/data";
+import { saveHomeScroll } from "@/lib/return-home";
 
 // Which project each card opens. A card opens the project where its tech is
 // the headline: ArenaAI is the TypeScript / Docker / PostgreSQL platform with
@@ -314,6 +315,9 @@ export default function PerspectiveTunnelHero() {
         if (leavingRef.current) return;
         leavingRef.current = true;
         setLeaving(index);
+        // Remember where the user was, so coming back from the project
+        // lands on the exact same spot instead of the top.
+        saveHomeScroll();
         const slug = projectSlug(IMAGES[index].project);
         if (reduce || !innerEl) {
             router.push(`/projects/${slug}`);

@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FallingLeaves } from "falling-leaves/react";
 import { HERO_PORTRAIT, HERO_TILES } from "@/lib/data";
+import { saveHomeScroll } from "@/lib/return-home";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -77,29 +79,70 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+// Project tiles: internal projects go through next/link so opening one
+// never reloads the page (a plain <a> was the whole-site reload Tarun
+// felt on every project visit and every way back). The click also saves
+// the scroll position, so coming back lands on the exact same spot.
+// WebProbe is an external site, so it stays a plain <a>.
+function TileLink({ tile, className, children, ariaLabel }: {
+  tile: (typeof HERO_TILES)[number];
+  className?: string;
+  children: React.ReactNode;
+  ariaLabel?: string;
+}) {
+  if (!tile.href.startsWith("/")) {
+    return (
+      <a
+        className={className}
+        href={tile.href}
+        aria-label={ariaLabel}
+        onClick={saveHomeScroll}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link
+      className={className}
+      href={tile.href}
+      aria-label={ariaLabel}
+      onClick={saveHomeScroll}
+    >
+      {children}
+    </Link>
+  );
+}
+
 function GridTiles() {
   return (
     <>
       {GRID_TILES.map((tile, i) => (
         <div key={`${tile.id}-${i}`} className="m3-tile">
-          <a
+          <TileLink
+            tile={tile}
             className="m3-card"
-            href={tile.href}
-            aria-label={`${tile.name} — ${tile.stack}, open project`}
+            ariaLabel={`${tile.name} — ${tile.stack}, open project`}
           >
             <img src={tile.src} alt={tile.alt} draggable={false} loading="lazy" />
             <span className="m3-caption">
               <span className="m3-caption-name">{tile.name}</span>
               <span className="m3-caption-stack">{tile.stack}</span>
             </span>
-          </a>
+          </TileLink>
         </div>
       ))}
     </>
   );
 }
 
-export default function PageCollageHero({ started = true }: { started?: boolean }) {
+export default function PageCollageHero({ started = true, skipEntry = false }: {
+  started?: boolean;
+  // True when the user is coming BACK from a project: the entry
+  // animation is skipped so the hero is already in its final state
+  // instead of replaying the whole intro like a reload.
+  skipEntry?: boolean;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -125,7 +168,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
   // timeline, which no longer touches the portrait at all (the zoom
   // was removed — the panel shrinks as one piece instead).
   useEffect(() => {
-    if (reduced || !started) return;
+    if (reduced || !started || skipEntry) return;
     const section = sectionRef.current;
     if (!section) return;
     const ctx = gsap.context(() => {
@@ -157,7 +200,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
       );
     }, sectionRef);
     return () => ctx.revert();
-  }, [reduced, started]);
+  }, [reduced, started, skipEntry]);
 
   // Scroll choreography — tall section + sticky stage, scrubbed.
   useEffect(() => {
@@ -408,7 +451,7 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
                 <ul className="m3-wipe-list">
                   {HERO_TILES.map((tile, i) => (
                     <li key={tile.id} className={i === wipeActive ? "m3-wipe-active" : undefined}>
-                      <a href={tile.href}>
+                      <TileLink tile={tile}>
                         <span
                           className={
                             i === wipeActive ? "m3-wipe-dot m3-wipe-dot-filled" : "m3-wipe-dot"
@@ -417,19 +460,19 @@ export default function PageCollageHero({ started = true }: { started?: boolean 
                         />
                         <span className="m3-wipe-name">{tile.name}</span>
                         <span className="m3-wipe-stack">{tile.stack}</span>
-                      </a>
+                      </TileLink>
                     </li>
                   ))}
                 </ul>
-                <a
+                <TileLink
                   key={HERO_TILES[wipeActive].id}
+                  tile={HERO_TILES[wipeActive]}
                   className="m3-wipe-card"
-                  href={HERO_TILES[wipeActive].href}
                 >
                   <img src={HERO_TILES[wipeActive].src} alt={HERO_TILES[wipeActive].alt} />
                   <span className="m3-wipe-card-name">{HERO_TILES[wipeActive].name}</span>
                   <span className="m3-wipe-card-line">{HERO_TILES[wipeActive].line}</span>
-                </a>
+                </TileLink>
               </div>
             </div>
           </div>

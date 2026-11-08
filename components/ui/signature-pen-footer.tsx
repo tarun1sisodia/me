@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
+import { playTick } from "@/lib/guitar"
 
 /**
  * Signature Pen Footer — a closing sign-off where a white stylus writes one
@@ -412,6 +414,8 @@ export type FooterAction = {
   /** "primary" is the filled button. */
   variant?: "primary" | "secondary"
   onClick?: () => void
+  /** Play the back-navigation tick when this action is clicked. */
+  tick?: boolean
 }
 
 export type FooterLink = { label: string; href?: string }
@@ -1089,20 +1093,42 @@ export default function SignaturePenFooter({
         ) : null}
         {actions.length ? (
           <div className="spf-actions">
-            {actions.map((a, i) => (
-              <a
-                key={a.label + i}
-                href={a.href ?? "#"}
-                className={"spf-btn spf-r spf-btn-" + (a.variant ?? (i === actions.length - 1 ? "primary" : "secondary"))}
-                style={{ "--i": n + 3 + i } as React.CSSProperties}
-                onClick={(e) => {
-                  if (isHashLink(a.href)) e.preventDefault()
-                  a.onClick?.()
-                }}
-              >
-                {a.label}
-              </a>
-            ))}
+            {actions.map((a, i) => {
+              // Internal links go through next/link so they never reload
+              // the page; external ones stay plain anchors. A "back"
+              // action (tick) plays the short back-navigation tick.
+              const internal = !!a.href && a.href.startsWith("/");
+              const handleClick = (e: React.MouseEvent) => {
+                if (isHashLink(a.href)) e.preventDefault();
+                if (a.tick) playTick();
+                a.onClick?.();
+              };
+              const cls =
+                "spf-btn spf-r spf-btn-" +
+                (a.variant ?? (i === actions.length - 1 ? "primary" : "secondary"));
+              const style = { "--i": n + 3 + i } as React.CSSProperties;
+              return internal ? (
+                <Link
+                  key={a.label + i}
+                  href={a.href as string}
+                  className={cls}
+                  style={style}
+                  onClick={handleClick}
+                >
+                  {a.label}
+                </Link>
+              ) : (
+                <a
+                  key={a.label + i}
+                  href={a.href ?? "#"}
+                  className={cls}
+                  style={style}
+                  onClick={handleClick}
+                >
+                  {a.label}
+                </a>
+              );
+            })}
           </div>
         ) : null}
       </div>

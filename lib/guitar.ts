@@ -66,6 +66,29 @@ class GuitarAudio {
     this.ensure();
   }
 
+  // A single UI tick — the radio-button click heard when going back.
+  // One short sine blip (1800 Hz, ~60 ms, fast decay), quiet on
+  // purpose. Same engine and unlock rules as the strings: it is a
+  // bonus, so it never throws and never blocks navigation.
+  tick() {
+    if (!this.ensure() || !this.ctx || !this.master) return;
+    try {
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = 1800;
+      g.gain.setValueAtTime(0.14, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+      osc.connect(g);
+      g.connect(this.master);
+      osc.start(t);
+      osc.stop(t + 0.07);
+    } catch {
+      // Audio is a bonus; never break the page over it.
+    }
+  }
+
   play(freq: number) {
     if (!this.ensure() || !this.ctx || !this.master) return;
     try {
@@ -89,6 +112,11 @@ class GuitarAudio {
 
 // One shared audio engine for every guitar string on the page.
 export const guitarAudio = new GuitarAudio();
+
+// The back-navigation tick, as a plain function for click handlers.
+export function playTick() {
+  guitarAudio.tick();
+}
 
 export type StringGeometry = {
   // true = string runs left->right (bow is vertical),
