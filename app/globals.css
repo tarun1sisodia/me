@@ -2346,15 +2346,18 @@ p {
      the baked grade. */
   filter: saturate(1.08) contrast(1.03) brightness(1.02);
   /* The photo's head sits at its top edge. The image is deliberately
-     BIGGER than its frame and shifted down (translate 9% of its own
-     height): at scale 1.02 it overhangs the panel ~37px above and ~91px
-     below, so the mouse parallax (±28px) can never lift the figure off
-     the panel's bottom edge or drop its top edge below the panel top —
-     the cut edge Tarun caught in the card stage. The head stays put
-     because the extra size goes mostly below the frame, not above it. */
-  transform: scale(1.02);
+     BIGGER than its frame and shifted down (translate 34% of its own
+     height): at scale 1.32 it overhangs the panel ~106px above and
+     ~411px below, so the mouse parallax (±28px) can never lift the
+     figure off the panel's bottom edge or drop its top edge below the
+     panel top — the cut edge Tarun caught in the card stage. The head
+     stays put near the top (about 70px down) because the extra size
+     goes mostly below the frame, not above it. The face is ~1.3x the
+     size it was (about 280px wide at 1920), matching the zoomed
+     framing Tarun shared — text and pill are untouched. */
+  transform: scale(1.32);
   transform-origin: 50% 100%;
-  translate: 0 9%;
+  translate: 0 26%;
 }
 
 /* Headline sits BEHIND the portrait (Tarun asked for the figure centred
@@ -2617,6 +2620,13 @@ p {
   .m3-portrait {
     width: 70%;
     height: 58%;
+  }
+
+  /* Mobile keeps the old framing: the frame shows the whole figure
+     head to toe, so the desktop 1.32x zoom would cut the head. */
+  .m3-portrait img {
+    transform: scale(1.02);
+    translate: 0 9%;
   }
 
   .m3-head {
